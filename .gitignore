@@ -1,0 +1,8 @@
+# Skills Rundesk adds (managed by Rundesk)
+/.agents/skills/writing-skills
+/.agents/skills/testing-code
+/.agents/skills/using-python
+/.claude/skills/writing-skills
+/.claude/skills/testing-code
+/.claude/skills/using-python
+# End of the skills Rundesk adds

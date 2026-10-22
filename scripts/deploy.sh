@@ -24,10 +24,19 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CATALOG="$ROOT/skills"
 
+# Skills sit in groups, skills/<group>/<name>/; a name is unique across groups.
 list_skills() {
-  for d in "$CATALOG"/*/; do
+  for d in "$CATALOG"/*/*/; do
     [ -f "$d/SKILL.md" ] && basename "$d"
+  done | sort
+}
+
+skill_dir() {
+  local d
+  for d in "$CATALOG"/*/"$1"; do
+    [ -f "$d/SKILL.md" ] && { echo "$d"; return 0; }
   done
+  return 0   # not found prints nothing; under set -e a failing status would end the script
 }
 
 if [ "${1:-}" = "--list" ]; then
@@ -78,7 +87,7 @@ elif [ "${SPECS[0]}" = "--sync" ]; then
   for d in "$DEST/.agents/skills"/*/; do
     [ -f "$d/SKILL.md" ] || continue
     n="$(basename "$d")"
-    [ -d "$CATALOG/$n" ] || continue          # a skill of the project's own; leave it
+    [ -n "$(skill_dir "$n")" ] || continue   # a skill of the project's own; leave it
     SPECS+=("$n")
   done
   if [ "${#SPECS[@]}" -eq 0 ]; then
@@ -129,8 +138,8 @@ for spec in "${SPECS[@]}"; do
   variant=""
   [ "$spec" != "$name" ] && variant="${spec#*@}"
 
-  base="$CATALOG/$name"
-  if [ ! -f "$base/SKILL.md" ]; then
+  base="$(skill_dir "$name")"
+  if [ -z "$base" ]; then
     echo "  ! no such skill: $name" >&2
     continue
   fi

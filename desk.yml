@@ -1,0 +1,11 @@
+processes:
+  check:
+    command: ./scripts/check.sh
+    working_dir: null
+    auto_start: false
+    env: {}
+  tests:
+    command: ./tests/run.sh
+    working_dir: null
+    auto_start: false
+    env: {}

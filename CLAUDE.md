@@ -1,10 +1,10 @@
 # CLAUDE
 
-This repository is the one source of the skills Rundesk agents load: each skill is a folder under
-`skills/`, and `manifest.json` lists them all. Rundesk installs this repository as a package from its
-newest release tag and updates every project that has a skill when a new tag lands, so a change here
-reaches every project at once. The repository is public: everything committed is published, and
-git history keeps it after a later fix.
+This repository is a public catalog of skills for any coding agent: each skill is a folder under
+`skills/<group>/`, and `manifest.json` lists them all by path. The manifest is the format the
+Rundesk app and the Rundesk CLI install from: they take the newest release tag and update every
+project that has a skill when a new tag lands, so a change here reaches every project at once. The
+repository is public: everything committed is published, and git history keeps it after a later fix.
 
 `CLAUDE.md` is a byte-identical copy of this file except for its first line; `scripts/check.sh`
 fails when they drift.
@@ -52,7 +52,7 @@ fails when they drift.
   it, and a path or repository named in it points nowhere there. Describe the work instead ("the
   stack's own guidance").
 - **Change a skill only here.** A skill in a project's `.agents/skills` or `.claude/skills`, or in
-  Rundesk's library, is a copy the next release overwrites; an edit there is lost.
+  an installed package, is a copy the next release overwrites; an edit there is lost.
 - **Ask first** before deleting or renaming a skill (it disappears from every project that has it at
   the next release), adding a script or executable to a skill, changing a version, tag or release,
   or editing this file.
@@ -69,10 +69,10 @@ fails when they drift.
 ## Layout
 
 ```text
-skills/<name>/SKILL.md                a skill; a directory is a skill iff it holds this file
-skills/<name>/references/*.md         detail the skill links to, read only when the work reaches it
-skills/<name>/references/sources.md   the verified evidence behind the skill's rules
-skills/<name>/variants/<v>/           overlay files for a deliberate fork; never shipped as a skill
+skills/<group>/<name>/SKILL.md        a skill; a directory is a skill iff it holds this file
+skills/<group>/<name>/references/     detail the skill links to, read only when the work reaches it
+  references/sources.md               the verified evidence behind the skill's rules
+skills/<group>/<name>/variants/<v>/   overlay files for a deliberate fork; never shipped as a skill
 bench/<name>/cases/*.md               benchmark cases, rubric written before the first run
 bench/results/<name>/<date>.json      one file per benchmark run
 prompts/*.md                          task prompts for catalog work: new skill, benchmark, sources
@@ -81,17 +81,23 @@ scripts/deploy.sh                     copies skills into a scratch directory for
 manifest.json                         schema, name, version, description, and every skill by path
 ```
 
-- `manifest.json` lists exactly the skills in `skills/`, sorted by name; adding, removing or renaming
-  a skill updates it in the same change, and `scripts/check.sh` refuses a mismatch.
-- A skill's name is `<verb>-<object>` with a verb from the table in `writing-skills`; its frontmatter
-  holds only `name` and `description`, and the description starts `Use when`.
+- The groups are `development`, `writing`, `design`, `research`, `marketing`, `stacks` and
+  `games`. Every skill sits in exactly one, and a name is unique across all of them: projects get
+  skills flat by name, so the group exists only here. Move a skill between groups with `git mv`,
+  keeping its name.
+- `manifest.json` lists exactly the skills in `skills/`, by name and path, sorted by name; adding,
+  removing, renaming or moving a skill updates it in the same change, and `scripts/check.sh` refuses
+  a mismatch.
+- A skill's name starts with its group's prefix, listed in `skills/groups.txt`; development keeps
+  one verb per activity. Its frontmatter holds only `name` and `description`, and the description
+  starts `Use when`.
 - Adapted material keeps its upstream licence notice in the skill's `references/sources.md` and a
   line in `THIRD_PARTY_NOTICES.md`.
 
 ## Build, test & run
 
 ```sh
-./scripts/check.sh   # names, frontmatter, links, isolation, privacy, manifest, CLAUDE.md copy
+./scripts/check.sh   # groups, names, frontmatter, links, isolation, privacy, manifest, CLAUDE.md copy
 ./tests/run.sh       # deploy.sh and check.sh against fixtures and the real catalog
 ```
 
@@ -102,7 +108,7 @@ scratch directories outside any git checkout; `scripts/deploy.sh` refuses a chec
 
 Releasing is the owner's call. The version in `manifest.json` follows semver: a removed or renamed
 skill is major, a new skill minor, a change to an existing skill patch. Bump it in the pull request,
-merge, then tag `vX.Y.Z` on the merge commit. Rundesk installs the newest tag and ignores untagged
+merge, then tag `vX.Y.Z` on the merge commit. Installers take the newest tag and ignore untagged
 commits, so nothing reaches a project until the tag exists.
 
 ## Definition of done
