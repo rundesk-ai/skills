@@ -3,8 +3,9 @@
 #
 #   scripts/check.sh
 #
-# Refuses: a skill directory without SKILL.md, frontmatter that never closes, one whose name does not match
-# its directory or does not start with a listed verb, a missing or stub description or one not
+# Refuses: a skill outside a group (skills/<group>/<name>/), a name used in two groups, a skill
+# directory without SKILL.md, frontmatter that never closes, one whose name does not match
+# its directory or does not start with its group's prefix, a missing or stub description or one not
 # starting "Use when" (or "Use before"), a reference no link reaches, a sentence cut off mid-way, a
 # variant that overlays nothing or removes a file the base does not have, a rules file that has
 # drifted from its copy, a manifest that does not list exactly the skills in the tree,
@@ -43,14 +44,30 @@ ABSOLUTE = re.compile(r"(?:^|[\s`(\[])(?:/Users/|/home/|[A-Za-z]:\\\\)")
 
 problems = []
 names = []
-for n in sorted(os.listdir("skills")):
-    d = os.path.join("skills", n)
-    if not os.path.isdir(d):
+# Skills sit one level down, in a group: skills/<group>/<name>/. The group only organizes this
+# repository; every project gets skills flat by name, so a name is unique across all groups.
+dirs = {}
+for g in sorted(os.listdir("skills")):
+    gd = os.path.join("skills", g)
+    if not os.path.isdir(gd):
         continue
+    if os.path.isfile(os.path.join(gd, "SKILL.md")):
+        problems.append(f"{gd}: a skill directly under skills/ — put it in a group, skills/<group>/{g}/")
+        continue
+    for n in sorted(os.listdir(gd)):
+        d = os.path.join(gd, n)
+        if not os.path.isdir(d):
+            continue
+        if not os.path.isfile(os.path.join(d, "SKILL.md")):
+            problems.append(f"{d}: no SKILL.md (a directory is a skill iff it has one)")
+            continue
+        if n in dirs:
+            problems.append(f"{d}: the name {n!r} is already used by {dirs[n]} — names are unique across groups")
+            continue
+        dirs[n] = d
+for n in sorted(dirs):
+    d = dirs[n]
     skill = os.path.join(d, "SKILL.md")
-    if not os.path.isfile(skill):
-        problems.append(f"{n}: no SKILL.md (a directory is a skill iff it has one)")
-        continue
     names.append(n)
 
     with open(skill, encoding="utf-8") as f:
@@ -127,7 +144,7 @@ def prose(lines):
 INLINE = re.compile(r"\]\(\s*<?([^)\s>#]+)>?(?:#[^)\s]*)?(?:\s+[\"'(][^)]*)?\)")
 DEFINED = re.compile(r"^\s*\[[^\]]+\]:\s*<?([^\s>#]+)")
 for n in names:
-    d = os.path.realpath(os.path.join("skills", n))
+    d = os.path.realpath(dirs[n])
     refs = os.path.join(d, "references")
     if not os.path.isdir(refs):
         continue
@@ -152,7 +169,7 @@ for n in names:
 # name from the middle of a sentence leaves behind.
 DANGLING = re.compile(r"\b(to|with|and|or|Use|the|of|for|an|by|from|into|than|under)$|[;,]$")
 for n in names:
-    for dirpath, _, filenames in os.walk(os.path.join("skills", n)):
+    for dirpath, _, filenames in os.walk(dirs[n]):
         for fn in filenames:
             if not fn.endswith(".md"):
                 continue
@@ -168,23 +185,28 @@ for n in names:
                 if DANGLING.search(line.rstrip()) and breaks:
                     problems.append(f"{fp}:{i + 1}: sentence ends mid-way — finish it or cut it")
 
-# A name starts with a verb from writing-skills' "Name the work" table, the one list of them, so one
-# kind of work keeps one verb across the catalog.
-standard = os.path.join("skills", "writing-skills", "SKILL.md")
-if os.path.isfile(standard):
-    with open(standard, encoding="utf-8") as f:
-        section = f.read().partition("## Name the work")[2].partition("\n## ")[0]
-    verbs = set(re.findall(r"^\| `([a-z]+)-` \|", section, re.M))
-    if not verbs:
-        problems.append(f"{standard}: the Name the work table lists no verbs")
-    for n in names:
-        if n.split("-")[0] not in verbs:
-            problems.append(f"{n}: name must start with a verb from the Name the work table in {standard}")
+# Each group has the prefixes its names start with, listed once in skills/groups.txt, so a name
+# says which group it belongs to and one kind of work keeps one prefix.
+prefixes = {}
+try:
+    with open(os.path.join("skills", "groups.txt"), encoding="utf-8") as f:
+        for line in f:
+            parts = line.split("#", 1)[0].split()
+            if parts:
+                prefixes[parts[0]] = tuple(parts[1:])
+except OSError:
+    problems.append("skills/groups.txt: missing — it lists each group and its name prefixes")
+for n in names:
+    group = os.path.basename(os.path.dirname(dirs[n]))
+    if group not in prefixes:
+        problems.append(f"{dirs[n]}: the group {group!r} is not listed in skills/groups.txt")
+    elif not n.startswith(prefixes[group]):
+        problems.append(f"{n}: a name in {group} starts with {' or '.join(prefixes[group])} (skills/groups.txt)")
 
 # A skill is read wherever it lands, so it may name no machine and no sibling.
 name_pat = re.compile(r"\b(" + "|".join(re.escape(n) for n in names) + r")\b")
 for n in names:
-    d = os.path.join("skills", n)
+    d = dirs[n]
     for dirpath, _, filenames in os.walk(d):
         for fn in filenames:
             if not fn.endswith(".md"):
@@ -194,7 +216,8 @@ for n in names:
                 for i, line in enumerate(f, 1):
                     if ABSOLUTE.search(line):
                         problems.append(f"{fp}:{i}: absolute path — a skill runs anywhere")
-                    for m in name_pat.findall(line):
+                    # a URL may contain a skill's words (".../a-lesson-in-game-design-for...")
+                    for m in name_pat.findall(re.sub(r"https?://\S+", "", line)):
                         if m != n:
                             problems.append(
                                 f"{fp}:{i}: names the skill {m!r} — each skill stands alone")
@@ -203,7 +226,7 @@ for n in names:
 # can use when present is described by what it does, never by the name only that setup gives it.
 TOOL = re.compile(r"\bmcp__[A-Za-z0-9_-]+")
 for n in names:
-    for dirpath, _, filenames in os.walk(os.path.join("skills", n)):
+    for dirpath, _, filenames in os.walk(dirs[n]):
         for fn in filenames:
             if not fn.endswith(".md"):
                 continue
@@ -230,8 +253,8 @@ if manifest is not None:
     listed = manifest.get("skills") or []
     got_names = [s.get("name") for s in listed]
     for s in listed:
-        if s.get("path") != f"skills/{s.get('name')}":
-            problems.append(f"manifest.json: {s.get('name')!r} has path {s.get('path')!r}, expected skills/{s.get('name')}")
+        if s.get("name") in dirs and s.get("path") != dirs[s.get("name")]:
+            problems.append(f"manifest.json: {s.get('name')!r} has path {s.get('path')!r}, expected {dirs[s.get('name')]}")
     for m in sorted(set(names) - set(got_names)):
         problems.append(f"manifest.json: does not list the skill {m!r}")
     for m in sorted(set(got_names) - set(names)):

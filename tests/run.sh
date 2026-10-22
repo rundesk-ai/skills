@@ -55,25 +55,26 @@ run_case() {
 # case itself rather than buried in the real catalog.
 make_catalog() {
   local c="$1"
-  mkdir -p "$c/scripts" "$c/skills/alpha/references" "$c/skills/beta"
+  mkdir -p "$c/scripts" "$c/skills/core/alpha/references" "$c/skills/core/beta"
   cp "$ROOT/scripts/deploy.sh" "$ROOT/scripts/check.sh" "$c/scripts/"
   printf -- '---\nname: alpha\ndescription: Use when the alpha case needs proving in a test fixture catalog.\n---\n\n# Alpha\n\nRead [Base](references/base.md) for the base case.\n' \
-    > "$c/skills/alpha/SKILL.md"
-  printf 'base reference\n' > "$c/skills/alpha/references/base.md"
+    > "$c/skills/core/alpha/SKILL.md"
+  printf 'base reference\n' > "$c/skills/core/alpha/references/base.md"
   printf -- '---\nname: beta\ndescription: Use when the beta case needs proving in a test fixture catalog.\n---\n\n# Beta\n' \
-    > "$c/skills/beta/SKILL.md"
-  printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/alpha"}, {"name": "beta", "path": "skills/beta"}]}\n' \
+    > "$c/skills/core/beta/SKILL.md"
+  printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/core/alpha"}, {"name": "beta", "path": "skills/core/beta"}]}\n' \
     > "$c/manifest.json"
+  printf 'core alpha beta\n' > "$c/skills/groups.txt"
   printf '# AGENTS\n\nfixture\n' > "$c/AGENTS.md"
   sed '1s/AGENTS/CLAUDE/' "$c/AGENTS.md" > "$c/CLAUDE.md"
 }
 
 make_variant() {     # make_variant <catalog> — alpha@narrow replaces SKILL.md and drops base.md
   local c="$1"
-  mkdir -p "$c/skills/alpha/variants/narrow"
+  mkdir -p "$c/skills/core/alpha/variants/narrow"
   printf -- '---\nname: alpha\ndescription: Use when the narrowed alpha case needs proving in a fixture.\n---\n\n# Alpha (narrow)\n' \
-    > "$c/skills/alpha/variants/narrow/SKILL.md"
-  printf 'references/base.md\n' > "$c/skills/alpha/variants/narrow/.remove"
+    > "$c/skills/core/alpha/variants/narrow/SKILL.md"
+  printf 'references/base.md\n' > "$c/skills/core/alpha/variants/narrow/.remove"
 }
 
 new_target() { local d="$TMP/$CASE-target-$RANDOM"; mkdir -p "$d"; echo "$d"; }
@@ -95,7 +96,7 @@ case_pushes_an_exact_copy() {
   local c t; c="$(new_catalog)"; t="$(new_target)"
   "$c/scripts/deploy.sh" "$t" alpha >/dev/null
   assert "the pushed skill is byte-identical to the catalog" \
-    diff -r "$c/skills/alpha" "$t/.agents/skills/alpha"
+    diff -r "$c/skills/core/alpha" "$t/.agents/skills/alpha"
 }
 
 case_is_idempotent() {
@@ -257,33 +258,32 @@ check_rejects() {    # check_rejects <description> <expected message> <mutate fn
 }
 
 # Each mutation introduces exactly one fault into a sound fixture catalog.
-mutate_hollow_directory() { mkdir -p "$1/skills/hollow"; }
-mutate_name_mismatch()    { sed -i.bak "s/^name: alpha/name: wrong/" "$1/skills/alpha/SKILL.md"; }
-mutate_stub_description() { sed -i.bak "s/^description: .*/description: short/" "$1/skills/alpha/SKILL.md"; }
-mutate_verb_standard()    {   # the standard lists only writing-, so alpha and beta break it
-  mkdir -p "$1/skills/writing-skills"
-  printf -- '---\nname: writing-skills\ndescription: Use when the naming standard needs proving in a test fixture catalog.\n---\n\n# Writing\n\n## Name the work\n\n| Verb | The work |\n|---|---|\n| `writing-` | text |\n' \
-    > "$1/skills/writing-skills/SKILL.md"
-}
-mutate_not_use_when()     { sed -i.bak "s/^description: Use when/description: Helps when/" "$1/skills/alpha/SKILL.md"; }
-mutate_unlinked_reference() { printf 'orphan\n' > "$1/skills/alpha/references/orphan.md"; }
-mutate_cut_sentence()     { printf '\nSend that part of the work to\n' >> "$1/skills/alpha/SKILL.md"; }
-mutate_cross_reference()  { printf 'see `beta` for that\n' >> "$1/skills/alpha/SKILL.md"; }
-mutate_absolute_path()    { printf 'read /Users/someone/notes.md\n' >> "$1/skills/alpha/SKILL.md"; }
+mutate_hollow_directory() { mkdir -p "$1/skills/core/hollow"; }
+mutate_name_mismatch()    { sed -i.bak "s/^name: alpha/name: wrong/" "$1/skills/core/alpha/SKILL.md"; }
+mutate_stub_description() { sed -i.bak "s/^description: .*/description: short/" "$1/skills/core/alpha/SKILL.md"; }
+mutate_group_prefix()     { sed -i.bak "s/^core .*/core beta/" "$1/skills/groups.txt"; }   # alpha no longer fits
+mutate_unlisted_group()   { mkdir -p "$1/skills/extra"; mv "$1/skills/core/beta" "$1/skills/extra/beta"; sed -i.bak 's#skills/core/beta#skills/extra/beta#' "$1/manifest.json"; }
+mutate_not_use_when()     { sed -i.bak "s/^description: Use when/description: Helps when/" "$1/skills/core/alpha/SKILL.md"; }
+mutate_unlinked_reference() { printf 'orphan\n' > "$1/skills/core/alpha/references/orphan.md"; }
+mutate_cut_sentence()     { printf '\nSend that part of the work to\n' >> "$1/skills/core/alpha/SKILL.md"; }
+mutate_cross_reference()  { printf 'see `beta` for that\n' >> "$1/skills/core/alpha/SKILL.md"; }
+mutate_absolute_path()    { printf 'read /Users/someone/notes.md\n' >> "$1/skills/core/alpha/SKILL.md"; }
 mutate_rule_drift()       { printf 'drifted\n' >> "$1/CLAUDE.md"; }
-mutate_credential()       { printf 'token: ghp_abcdefghijklmnopqrstuvwxyz0123\n' >> "$1/skills/alpha/references/base.md"; }
-mutate_real_email()       { printf 'write to someone@company.com\n' >> "$1/skills/alpha/SKILL.md"; }
+mutate_ungrouped_skill()  { mkdir -p "$1/skills/loose"; printf -- '---\nname: loose\ndescription: Use when the loose case needs proving in a test fixture catalog.\n---\n' > "$1/skills/loose/SKILL.md"; }
+mutate_duplicate_name()   { mkdir -p "$1/skills/other/alpha"; cp "$1/skills/core/alpha/SKILL.md" "$1/skills/other/alpha/SKILL.md"; }
+mutate_credential()       { printf 'token: ghp_abcdefghijklmnopqrstuvwxyz0123\n' >> "$1/skills/core/alpha/references/base.md"; }
+mutate_real_email()       { printf 'write to someone@company.com\n' >> "$1/skills/core/alpha/SKILL.md"; }
 mutate_integration_tool() { printf 'call mcp__tracker__create_issue first
-' >> "$1/skills/alpha/SKILL.md"; }
-mutate_manifest_missing() { printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/alpha"}]}
+' >> "$1/skills/core/alpha/SKILL.md"; }
+mutate_manifest_missing() { printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/core/alpha"}]}
 ' > "$1/manifest.json"; }
-mutate_manifest_extra()   { printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/alpha"}, {"name": "beta", "path": "skills/beta"}, {"name": "gone", "path": "skills/gone"}]}
+mutate_manifest_extra()   { printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/core/alpha"}, {"name": "beta", "path": "skills/core/beta"}, {"name": "gone", "path": "skills/core/gone"}]}
 ' > "$1/manifest.json"; }
 mutate_manifest_version() { sed -i.bak 's/"1.0.0"/"v1"/' "$1/manifest.json"; }
 mutate_bad_removal() {
-  mkdir -p "$1/skills/alpha/variants/narrow"
-  printf -- '---\nname: alpha\n---\n' > "$1/skills/alpha/variants/narrow/SKILL.md"
-  printf 'references/never-existed.md\n' > "$1/skills/alpha/variants/narrow/.remove"
+  mkdir -p "$1/skills/core/alpha/variants/narrow"
+  printf -- '---\nname: alpha\n---\n' > "$1/skills/core/alpha/variants/narrow/SKILL.md"
+  printf 'references/never-existed.md\n' > "$1/skills/core/alpha/variants/narrow/.remove"
 }
 
 case_check_rejects_a_directory_without_skill_md() {
@@ -298,15 +298,18 @@ case_check_rejects_a_stub_description() {
 case_check_accepts_links_and_fences_written_other_ways() {
   local c out status; c="$(new_catalog)"
   printf -- '---\nname: alpha\ndescription: Use when the alpha case needs proving in a test fixture catalog.\n---\n\n# Alpha\n\nRead [Base](./references/base.md "the base case") first.\n\n~~~text\nSend that part of the work to\n~~~\n\n#### Notes\n' \
-    > "$c/skills/alpha/SKILL.md"
-  printf 'See [Deep][deep] for the rest.\n\n[deep]: <deep%%20dive.md>\n' > "$c/skills/alpha/references/base.md"
-  printf 'deep\n' > "$c/skills/alpha/references/deep dive.md"
+    > "$c/skills/core/alpha/SKILL.md"
+  printf 'See [Deep][deep] for the rest.\n\n[deep]: <deep%%20dive.md>\n' > "$c/skills/core/alpha/references/base.md"
+  printf 'deep\n' > "$c/skills/core/alpha/references/deep dive.md"
   out="$("$c/scripts/check.sh" 2>&1)"; status=$?
   assert_eq "a titled ./ link, a reference-style link reached through another reference, and a fenced cut line all pass" "0" "$status"
   [ "$status" -eq 0 ] || echo "$out" | grep '!!' >&2
 }
-case_check_rejects_a_name_without_a_listed_verb() {
-  check_rejects "a skill named without a verb from the standard" "must start with a verb" mutate_verb_standard
+case_check_rejects_a_name_without_its_group_prefix() {
+  check_rejects "a name that does not start with its group's prefix" "a name in core starts with" mutate_group_prefix
+}
+case_check_rejects_an_unlisted_group() {
+  check_rejects "a group folder groups.txt does not list" "is not listed in skills/groups.txt" mutate_unlisted_group
 }
 case_check_rejects_a_description_not_starting_use_when() {
   check_rejects "a description that does not open with Use when" "must start 'Use when'" mutate_not_use_when
@@ -330,6 +333,12 @@ case_check_rejects_a_variant_removing_a_missing_file() {
   check_rejects "a .remove naming a file the base lacks" "the base does not have" mutate_bad_removal
 }
 
+case_check_rejects_a_skill_outside_a_group() {
+  check_rejects "a skill directly under skills/" "put it in a group" mutate_ungrouped_skill
+}
+case_check_rejects_a_name_in_two_groups() {
+  check_rejects "one name in two groups" "unique across groups" mutate_duplicate_name
+}
 case_check_rejects_a_credential() {
   check_rejects "a credential in a reference" "looks like a credential" mutate_credential
 }
@@ -338,7 +347,7 @@ case_check_rejects_a_real_email() {
 }
 case_check_accepts_reserved_email_domains() {
   local c status; c="$(new_catalog)"
-  printf 'write to support@example.com or privacy@shop.example, never to a URL like https://docs.example.com/class_@gdscript.html\n' >> "$c/skills/alpha/SKILL.md"
+  printf 'write to support@example.com or privacy@shop.example, never to a URL like https://docs.example.com/class_@gdscript.html\n' >> "$c/skills/core/alpha/SKILL.md"
   "$c/scripts/check.sh" >/dev/null 2>&1; status=$?
   assert_eq "reserved domains and URL fragments pass" "0" "$status"
 }
@@ -371,7 +380,7 @@ case_real_catalog_pushes_and_resyncs() {
   n="$(ls "$t/.agents/skills" | wc -l | tr -d ' ')"
   assert_eq "every shipped skill pushes" "$("$ROOT/scripts/deploy.sh" --list | wc -l | tr -d ' ')" "$n"
   assert "a shipped skill arrives byte-identical" \
-    diff -r "$ROOT/skills/testing-code" "$t/.agents/skills/testing-code"
+    diff -r "$ROOT/skills/development/testing-code" "$t/.agents/skills/testing-code"
   "$ROOT/scripts/deploy.sh" "$t" --sync >/dev/null
   assert_eq "a resync leaves the same set" "$n" "$(ls "$t/.agents/skills" | wc -l | tr -d ' ')"
 }
@@ -392,11 +401,13 @@ echo "check.sh"
 for c in check_passes_a_sound_catalog check_rejects_a_directory_without_skill_md \
          check_accepts_links_and_fences_written_other_ways \
          check_rejects_a_description_not_starting_use_when check_rejects_an_unlinked_reference \
-         check_rejects_a_sentence_cut_short check_rejects_a_name_without_a_listed_verb \
+         check_rejects_a_sentence_cut_short check_rejects_a_name_without_its_group_prefix \
+         check_rejects_an_unlisted_group \
          check_rejects_a_name_mismatch check_rejects_a_stub_description \
          check_rejects_a_cross_skill_reference check_rejects_an_absolute_path \
          check_rejects_drifted_rule_files \
          check_rejects_a_variant_removing_a_missing_file \
+         check_rejects_a_skill_outside_a_group check_rejects_a_name_in_two_groups \
          check_rejects_a_credential check_rejects_a_real_email check_accepts_reserved_email_domains \
          check_rejects_an_integration_tool check_rejects_a_manifest_missing_a_skill \
          check_rejects_a_manifest_listing_a_missing_skill check_rejects_a_bad_manifest_version; do

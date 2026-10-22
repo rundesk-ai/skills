@@ -1,17 +1,20 @@
 # skills
 
-Skills for Rundesk agents: development, design, research, marketing, games and writing. Each skill
-is a folder under `skills/` with a `SKILL.md` an agent loads when it recognises the work, and
-references it reads only when the work reaches them.
+Skills for any coding agent, in seven groups under `skills/`: development, writing, design,
+research, marketing, stacks and games. Each skill is a folder with a `SKILL.md` an agent loads when
+it recognises the work, and references it reads only when the work reaches them.
 
 Every skill stands alone. None depends on another skill, and none needs an integration, account or
 key to work, so a project can take any subset.
 
-## Use it in Rundesk
+## Use them
 
-Add this repository as a skill package in Rundesk. It installs the skills listed in `manifest.json`
-from the newest release tag, and updates every project that has one when a new tag is released.
-Add skills to a project from the package; custom skills sit beside them.
+Copy any skill folder into the folder your agent reads skills from, such as `.agents/skills/` or
+`.claude/skills/`. Take the newest release tag rather than `main`.
+
+`manifest.json` lists every skill by name and path, in the format the Rundesk app and the Rundesk
+CLI read: add this repository as a skill package and they install the skills from the newest
+release tag, and update every project that has one when a new tag is released.
 
 ## Contribute
 

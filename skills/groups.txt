@@ -1,0 +1,10 @@
+# Each group under skills/ and the prefixes a skill name in it starts with. scripts/check.sh refuses
+# a group folder not listed here and a name that does not start with one of its group's prefixes.
+# Development keeps one verb per activity, because there the verb is what tells two skills apart.
+development  managing- debugging- testing- reviewing- engineering- naming-
+writing      writing-
+design       designing-
+research     researching-
+marketing    marketing-
+stacks       using-
+games        game-

@@ -15,7 +15,7 @@ every part exists, and not when a script ran without error.
 
 ## Before starting
 
-1. Load `designing-3d-models` and read `references/modular-kits.md` and
+1. Load `game-3d-models` and read `references/modular-kits.md` and
    `references/reference-imagery.md` in full. They own the method you are directing; this prompt is
    how it is run across several agents.
 2. Read the project's rules, its brief, and whatever it already declares about scale, camera and
@@ -78,7 +78,7 @@ part that does not fit:
 | The capture to return: which camera, which scale, what else is in frame | A part photographed alone proves nothing about the kit |
 | What it must **not** do — no new material, no new substance, no detail below the camera's reach | The failure is almost always a part authored more finely than the view can show |
 
-The author loads `designing-3d-models` and `using-blender`, and the engine skill for the import.
+The author loads `game-3d-models` and `using-blender`, and the engine skill for the import.
 
 ## 5. Run agents in parallel where it is safe
 
