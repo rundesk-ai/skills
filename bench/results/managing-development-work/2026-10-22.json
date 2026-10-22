@@ -1,0 +1,181 @@
+{
+ "date": "2026-10-22",
+ "skill": "managing-development-work",
+ "cases_version": 2,
+ "agents": {
+  "claude": {
+   "version": "2.1.308",
+   "model": "claude-opus-5-5",
+   "routing": "3/3",
+   "better": 9,
+   "same": 4,
+   "worse": 2,
+   "score": 0.6,
+   "quality": {
+    "q01-easy": {
+     "with": 1.0,
+     "without": 1.0,
+     "verdicts": [
+      "same",
+      "same",
+      "same"
+     ],
+     "tokens_with": 113570,
+     "tokens_without": 97429,
+     "fails_with": []
+    },
+    "q02-medium": {
+     "with": 0.38,
+     "without": 0.38,
+     "verdicts": [
+      "same",
+      "without",
+      "with"
+     ],
+     "tokens_with": 269722,
+     "tokens_without": 230416,
+     "fails_with": [
+      "conduct.1",
+      "conduct.2",
+      "conduct.3",
+      "conduct.4",
+      "result.4"
+     ]
+    },
+    "q03-complex": {
+     "with": 1.0,
+     "without": 0.71,
+     "verdicts": [
+      "with",
+      "with",
+      "with"
+     ],
+     "tokens_with": 115049,
+     "tokens_without": 90448,
+     "fails_with": []
+    },
+    "q04-ladder": {
+     "with": 0.83,
+     "without": 0.78,
+     "verdicts": [
+      "with",
+      "with",
+      "without"
+     ],
+     "tokens_with": 138333,
+     "tokens_without": 130012,
+     "fails_with": [
+      "conduct.1"
+     ]
+    },
+    "q05-ticket": {
+     "with": 1.0,
+     "without": 1.0,
+     "verdicts": [
+      "with",
+      "with",
+      "with"
+     ],
+     "tokens_with": 138129,
+     "tokens_without": 118056,
+     "fails_with": []
+    }
+   }
+  },
+  "codex": {
+   "version": "0.163.0",
+   "model": "gpt-6-astra (xhigh)",
+   "routing": "3/3",
+   "better": 10,
+   "same": 3,
+   "worse": 2,
+   "score": 0.67,
+   "quality": {
+    "q01-easy": {
+     "with": 0.93,
+     "without": 1.0,
+     "verdicts": [
+      "same",
+      "without",
+      "same"
+     ],
+     "tokens_with": 150890,
+     "tokens_without": 107103,
+     "fails_with": [
+      "conduct.1"
+     ]
+    },
+    "q02-medium": {
+     "with": 0.46,
+     "without": 0.25,
+     "verdicts": [
+      "with",
+      "with",
+      "with"
+     ],
+     "tokens_with": 468888,
+     "tokens_without": 380549,
+     "fails_with": [
+      "conduct.1",
+      "conduct.2",
+      "conduct.3",
+      "conduct.4",
+      "result.4"
+     ]
+    },
+    "q03-complex": {
+     "with": 0.92,
+     "without": 0.75,
+     "verdicts": [
+      "with",
+      "with",
+      "with"
+     ],
+     "tokens_with": 163794,
+     "tokens_without": 120414,
+     "fails_with": [
+      "result.3"
+     ]
+    },
+    "q04-ladder": {
+     "with": 0.83,
+     "without": 0.67,
+     "verdicts": [
+      "with",
+      "with",
+      "with"
+     ],
+     "tokens_with": 179412,
+     "tokens_without": 217057,
+     "fails_with": [
+      "conduct.1"
+     ]
+    },
+    "q05-ticket": {
+     "with": 0.73,
+     "without": 0.8,
+     "verdicts": [
+      "without",
+      "same",
+      "with"
+     ],
+     "tokens_with": 133093,
+     "tokens_without": 128513,
+     "fails_with": [
+      "conduct.1",
+      "result.4"
+     ]
+    }
+   }
+  }
+ },
+ "notes": [
+  "q01 bug fix: no difference; both arms fix it fully.",
+  "q02 recurring invoices: result quality equal and good, but neither arm states the outcome and proof first or writes a slice list before coding; the skill does not yet change that conduct in a one-shot run.",
+  "q03 reporting redesign: skilled better on both providers \u2014 the grab-bag is split into separate outcomes with a sliced first step.",
+  "q04 Excel export: both arms build CSV with the standard library and reuse the report code; skilled slightly better on codex. Neither reply says which existing code it reused (conduct.1).",
+  "q05 ticket: claude meets every Done when line either way; codex rarely maps each Done when line to evidence in its reply, with or without the skill.",
+  "Routing 3/3 on both. Codex loads managing-development-work and writing-implementation-plans together on planning requests, which is the intended composition."
+ ],
+ "score": 0.64
+}

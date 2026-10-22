@@ -1,0 +1,154 @@
+{
+ "date": "2026-10-22",
+ "skill": "writing-task-tickets",
+ "cases_version": 1,
+ "score": 1.0,
+ "cases": 8,
+ "agents": {
+  "claude": {
+   "version": "2.1.308",
+   "model": "claude-opus-5-5",
+   "fired": "12/12",
+   "near_miss_fired": false,
+   "routing": "4/4",
+   "better": 12,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0,
+   "quality": {
+    "easy": {
+     "with": 0.78,
+     "without": 0.28,
+     "delta": 0.5,
+     "spread_with": 0.33,
+     "tokens_with": 63399,
+     "tokens_without": 21622,
+     "value": 12.0,
+     "fails_with": [
+      "conduct.1",
+      "result.5"
+     ]
+    },
+    "medium": {
+     "with": 0.61,
+     "without": 0.22,
+     "delta": 0.39,
+     "spread_with": 0.5,
+     "tokens_with": 94767,
+     "tokens_without": 22723,
+     "value": 5.4,
+     "fails_with": [
+      "conduct.1",
+      "result.1",
+      "result.2",
+      "result.5"
+     ]
+    },
+    "complex": {
+     "with": 0.72,
+     "without": 0.11,
+     "delta": 0.61,
+     "spread_with": 0.5,
+     "tokens_with": 71404,
+     "tokens_without": 21954,
+     "value": 12.4,
+     "fails_with": [
+      "conduct.1",
+      "result.1",
+      "result.4"
+     ]
+    },
+    "complex-vague": {
+     "with": 1.0,
+     "without": 0.0,
+     "delta": 1.0,
+     "spread_with": 0.0,
+     "tokens_with": 59144,
+     "tokens_without": 28214,
+     "value": 32.3,
+     "fails_with": []
+    }
+   }
+  },
+  "codex": {
+   "version": "0.163.0",
+   "model": "gpt-6-astra (xhigh)",
+   "fired": "12/12",
+   "near_miss_fired": false,
+   "routing": "4/4",
+   "better": 12,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0,
+   "quality": {
+    "easy": {
+     "with": 0.89,
+     "without": 0.44,
+     "delta": 0.44,
+     "spread_with": 0.17,
+     "tokens_with": 61680,
+     "tokens_without": 19337,
+     "value": 10.5,
+     "fails_with": [
+      "result.5"
+     ]
+    },
+    "medium": {
+     "with": 0.56,
+     "without": 0.33,
+     "delta": 0.22,
+     "spread_with": 0.17,
+     "tokens_with": 62823,
+     "tokens_without": 19988,
+     "value": 5.2,
+     "fails_with": [
+      "result.1",
+      "result.2",
+      "result.3",
+      "result.5"
+     ]
+    },
+    "complex": {
+     "with": 0.5,
+     "without": 0.33,
+     "delta": 0.17,
+     "spread_with": 0.0,
+     "tokens_with": 58970,
+     "tokens_without": 19473,
+     "value": 4.2,
+     "fails_with": [
+      "result.1",
+      "result.2",
+      "result.4"
+     ]
+    },
+    "complex-vague": {
+     "with": 1.0,
+     "without": 0.0,
+     "delta": 1.0,
+     "spread_with": 0.0,
+     "tokens_with": 39651,
+     "tokens_without": 38779,
+     "value": 1146.4,
+     "fails_with": []
+    }
+   }
+  },
+  "grok": {
+   "skipped": "installed but not run; claude and codex were the providers requested"
+  }
+ },
+ "cost": {
+  "standing_tokens": 120,
+  "body_tokens": 1100,
+  "total_tokens": 4300
+ },
+ "judge": "claude-opus-5-5, arms unlabeled and order randomized; weakest skilled outputs read by hand and the failures confirmed",
+ "notes": [
+  "Measured before the skill was renamed from writing-tickets (later writing-tasks); the content measured is the writing-tickets version at that date.",
+  "q01: skilled tickets are short and outcome-based; unskilled keep acceptance-criteria mappings and names. Remaining skilled failure: common-sense lines (real consumer data) carried into Not included.",
+  "q02: skilled collapses the spec toward outcomes but still keeps one or two technical guarantees (duplicates, late events, sample events) as Done when lines.",
+  "q03: claude proposes the split in 2 of 3 runs; codex never splits and writes one combined ticket. Worst case left undefined rather than asked about.",
+  "q04: every skilled run asks questions and stops; every unskilled run drafts a full ticket from guesses."
+ ]
+}

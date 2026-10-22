@@ -1,0 +1,268 @@
+{
+  "schema": 1,
+  "name": "skills",
+  "version": "1.0.0",
+  "description": "General-purpose skills for Rundesk agents: development, design, research, marketing, games and writing. Each skill stands alone.",
+  "skills": [
+    {
+      "name": "analyzing-growth-data",
+      "path": "skills/analyzing-growth-data"
+    },
+    {
+      "name": "building-chrome-extensions",
+      "path": "skills/building-chrome-extensions"
+    },
+    {
+      "name": "building-ecommerce-storefronts",
+      "path": "skills/building-ecommerce-storefronts"
+    },
+    {
+      "name": "building-isometric-worlds",
+      "path": "skills/building-isometric-worlds"
+    },
+    {
+      "name": "building-tile-based-worlds",
+      "path": "skills/building-tile-based-worlds"
+    },
+    {
+      "name": "building-unreal-game-ui",
+      "path": "skills/building-unreal-game-ui"
+    },
+    {
+      "name": "creating-2d-game-art",
+      "path": "skills/creating-2d-game-art"
+    },
+    {
+      "name": "creating-design-assets",
+      "path": "skills/creating-design-assets"
+    },
+    {
+      "name": "creating-pdfs",
+      "path": "skills/creating-pdfs"
+    },
+    {
+      "name": "debugging-code",
+      "path": "skills/debugging-code"
+    },
+    {
+      "name": "designing-3d-models",
+      "path": "skills/designing-3d-models"
+    },
+    {
+      "name": "designing-apis",
+      "path": "skills/designing-apis"
+    },
+    {
+      "name": "designing-databases",
+      "path": "skills/designing-databases"
+    },
+    {
+      "name": "designing-game-cameras-and-controls",
+      "path": "skills/designing-game-cameras-and-controls"
+    },
+    {
+      "name": "designing-game-levels",
+      "path": "skills/designing-game-levels"
+    },
+    {
+      "name": "designing-games",
+      "path": "skills/designing-games"
+    },
+    {
+      "name": "designing-landing-pages",
+      "path": "skills/designing-landing-pages"
+    },
+    {
+      "name": "designing-player-experience",
+      "path": "skills/designing-player-experience"
+    },
+    {
+      "name": "designing-systemic-management-games",
+      "path": "skills/designing-systemic-management-games"
+    },
+    {
+      "name": "designing-ui-ux",
+      "path": "skills/designing-ui-ux"
+    },
+    {
+      "name": "editing-articles",
+      "path": "skills/editing-articles"
+    },
+    {
+      "name": "enforcing-lead-compliance",
+      "path": "skills/enforcing-lead-compliance"
+    },
+    {
+      "name": "engineering-2d-rendering",
+      "path": "skills/engineering-2d-rendering"
+    },
+    {
+      "name": "engineering-game-animation",
+      "path": "skills/engineering-game-animation"
+    },
+    {
+      "name": "engineering-gameplay-runtimes",
+      "path": "skills/engineering-gameplay-runtimes"
+    },
+    {
+      "name": "engineering-performance",
+      "path": "skills/engineering-performance"
+    },
+    {
+      "name": "engineering-world-simulations",
+      "path": "skills/engineering-world-simulations"
+    },
+    {
+      "name": "generating-game-worlds",
+      "path": "skills/generating-game-worlds"
+    },
+    {
+      "name": "generating-unreal-worlds",
+      "path": "skills/generating-unreal-worlds"
+    },
+    {
+      "name": "managing-development-work",
+      "path": "skills/managing-development-work"
+    },
+    {
+      "name": "managing-github",
+      "path": "skills/managing-github"
+    },
+    {
+      "name": "managing-marketing-work",
+      "path": "skills/managing-marketing-work"
+    },
+    {
+      "name": "naming-software-terms",
+      "path": "skills/naming-software-terms"
+    },
+    {
+      "name": "optimizing-search-visibility",
+      "path": "skills/optimizing-search-visibility"
+    },
+    {
+      "name": "researching-competitors",
+      "path": "skills/researching-competitors"
+    },
+    {
+      "name": "researching-customers",
+      "path": "skills/researching-customers"
+    },
+    {
+      "name": "researching-markets",
+      "path": "skills/researching-markets"
+    },
+    {
+      "name": "researching-topics",
+      "path": "skills/researching-topics"
+    },
+    {
+      "name": "reviewing-code",
+      "path": "skills/reviewing-code"
+    },
+    {
+      "name": "testing-code",
+      "path": "skills/testing-code"
+    },
+    {
+      "name": "using-axmol",
+      "path": "skills/using-axmol"
+    },
+    {
+      "name": "using-blender",
+      "path": "skills/using-blender"
+    },
+    {
+      "name": "using-cpp",
+      "path": "skills/using-cpp"
+    },
+    {
+      "name": "using-csharp",
+      "path": "skills/using-csharp"
+    },
+    {
+      "name": "using-gdscript",
+      "path": "skills/using-gdscript"
+    },
+    {
+      "name": "using-godot",
+      "path": "skills/using-godot"
+    },
+    {
+      "name": "using-inertia",
+      "path": "skills/using-inertia"
+    },
+    {
+      "name": "using-laravel",
+      "path": "skills/using-laravel"
+    },
+    {
+      "name": "using-mysql",
+      "path": "skills/using-mysql"
+    },
+    {
+      "name": "using-postgres",
+      "path": "skills/using-postgres"
+    },
+    {
+      "name": "using-python",
+      "path": "skills/using-python"
+    },
+    {
+      "name": "using-reactjs",
+      "path": "skills/using-reactjs"
+    },
+    {
+      "name": "using-rust",
+      "path": "skills/using-rust"
+    },
+    {
+      "name": "using-sqlite",
+      "path": "skills/using-sqlite"
+    },
+    {
+      "name": "using-tailwindcss",
+      "path": "skills/using-tailwindcss"
+    },
+    {
+      "name": "using-unreal-engine",
+      "path": "skills/using-unreal-engine"
+    },
+    {
+      "name": "using-vuejs",
+      "path": "skills/using-vuejs"
+    },
+    {
+      "name": "verifying-datasets",
+      "path": "skills/verifying-datasets"
+    },
+    {
+      "name": "writing-advertising-copy",
+      "path": "skills/writing-advertising-copy"
+    },
+    {
+      "name": "writing-agent-instructions",
+      "path": "skills/writing-agent-instructions"
+    },
+    {
+      "name": "writing-bug-tickets",
+      "path": "skills/writing-bug-tickets"
+    },
+    {
+      "name": "writing-implementation-plans",
+      "path": "skills/writing-implementation-plans"
+    },
+    {
+      "name": "writing-skills",
+      "path": "skills/writing-skills"
+    },
+    {
+      "name": "writing-social-content",
+      "path": "skills/writing-social-content"
+    },
+    {
+      "name": "writing-task-tickets",
+      "path": "skills/writing-task-tickets"
+    }
+  ]
+}

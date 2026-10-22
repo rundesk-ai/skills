@@ -1,0 +1,148 @@
+{
+ "date": "2026-10-22",
+ "skill": "writing-bug-tickets",
+ "cases_version": 1,
+ "score": 0.92,
+ "cases": 8,
+ "agents": {
+  "claude": {
+   "version": "2.1.308",
+   "model": "claude-opus-5-5",
+   "fired": "12/12",
+   "routing": "4/4",
+   "routing_detail": {
+    "r01-direct": [
+     "writing-bug-tickets"
+    ],
+    "r02-indirect": [
+     "writing-bug-tickets"
+    ],
+    "r03-near-miss": [
+     "writing-task-tickets"
+    ],
+    "r04-near-miss": []
+   },
+   "near_miss_fired": false,
+   "better": 12,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0,
+   "quality": {
+    "easy": {
+     "with": 1.0,
+     "without": 0.83,
+     "delta": 0.17,
+     "spread_with": 0.0,
+     "tokens_with": 44419,
+     "tokens_without": 20591,
+     "fails_with": []
+    },
+    "medium": {
+     "with": 1.0,
+     "without": 0.48,
+     "delta": 0.52,
+     "spread_with": 0.0,
+     "tokens_with": 44938,
+     "tokens_without": 20831,
+     "fails_with": []
+    },
+    "complex": {
+     "with": 0.87,
+     "without": 0.2,
+     "delta": 0.67,
+     "spread_with": 0.2,
+     "tokens_with": 78228,
+     "tokens_without": 20795,
+     "fails_with": [
+      "conduct.1",
+      "result.1"
+     ]
+    },
+    "complex-vague": {
+     "with": 1.0,
+     "without": 0.67,
+     "delta": 0.33,
+     "spread_with": 0.0,
+     "tokens_with": 43919,
+     "tokens_without": 41547,
+     "fails_with": []
+    }
+   }
+  },
+  "codex": {
+   "version": "0.163.0",
+   "model": "gpt-6-astra (xhigh)",
+   "fired": "12/12",
+   "routing": "4/4",
+   "routing_detail": {
+    "r01-direct": [
+     "writing-bug-tickets"
+    ],
+    "r02-indirect": [
+     "writing-bug-tickets"
+    ],
+    "r03-near-miss": [
+     "writing-task-tickets"
+    ],
+    "r04-near-miss": []
+   },
+   "near_miss_fired": false,
+   "better": 10,
+   "same": 1,
+   "worse": 1,
+   "score": 0.83,
+   "quality": {
+    "easy": {
+     "with": 1.0,
+     "without": 1.0,
+     "delta": 0.0,
+     "spread_with": 0.0,
+     "tokens_with": 60130,
+     "tokens_without": 25086,
+     "fails_with": []
+    },
+    "medium": {
+     "with": 1.0,
+     "without": 0.5,
+     "delta": 0.5,
+     "spread_with": 0.0,
+     "tokens_with": 60863,
+     "tokens_without": 39517,
+     "fails_with": []
+    },
+    "complex": {
+     "with": 0.8,
+     "without": 0.73,
+     "delta": 0.07,
+     "spread_with": 0.4,
+     "tokens_with": 100687,
+     "tokens_without": 80861,
+     "fails_with": [
+      "result.1",
+      "result.2"
+     ]
+    },
+    "complex-vague": {
+     "with": 1.0,
+     "without": 0.67,
+     "delta": 0.33,
+     "spread_with": 0.0,
+     "tokens_with": 43709,
+     "tokens_without": 75199,
+     "fails_with": []
+    }
+   }
+  },
+  "grok": {
+   "skipped": "installed but not run; claude and codex were the providers requested"
+  }
+ },
+ "setup": "With-skill arm had both writing-bug-tickets and writing-task-tickets installed, so routing also measures choosing between them.",
+ "judge": "claude-opus-5-5, arms unlabeled and order randomized",
+ "notes": [
+  "q01: skilled tickets keep the suspected cause as a labelled note and the save-progress request out of the bug; unskilled codex already scored full marks, so the easy case shows little delta there.",
+  "q02: skilled reports quote the exact error, record the pattern and frequency, and drop the customer's email and people's names; unskilled kept names or the email.",
+  "q03: claude splits in all three runs; codex splits inconsistently and once wrote one ticket. The split rule is the remaining weakness on codex.",
+  "q04: every skilled run asks and stops; unskilled runs mostly asked too but some drafted."
+ ]
+}

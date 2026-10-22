@@ -1,0 +1,55 @@
+{
+ "date": "2026-09-19",
+ "skill": "researching-topics",
+ "cases_version": 1,
+ "agent": "claude 2.1.278",
+ "model": "claude-opus-5[1m]",
+ "score": 0.4,
+ "routing": {
+  "score": 0.67,
+  "correct": 4,
+  "cases": 6,
+  "missed": [
+   "r02-indirect",
+   "r03-factcheck"
+  ],
+  "discovered": true
+ },
+ "quality": {
+  "easy": {
+   "with": 1.0,
+   "without": 0.6,
+   "delta": 0.4,
+   "tokens_with": 138772,
+   "tokens_without": 25205,
+   "value": 3.5,
+   "note": "A shows it actually opened the versioned docs (verbatim quote plus the matching postgresql.conf.sample line) and stays within what the docs say, while B paraphrases from apparent recall and adds unsup"
+  },
+  "medium": {
+   "with": 1.0,
+   "without": 0.57,
+   "delta": 0.43,
+   "tokens_with": 328720,
+   "tokens_without": 266080,
+   "value": 6.9,
+   "note": "A documents its sourcing \u2014 per-claim links, versions/dates, and an explicit list of what it couldn't confirm \u2014 while B is more accurate on the normative text (RFC 9114 \u00a710.9 really does say the RFC 84"
+  },
+  "complex": {
+   "with": 1.0,
+   "without": 0.62,
+   "delta": 0.38,
+   "tokens_with": 501731,
+   "tokens_without": 153503,
+   "value": 1.1,
+   "note": "A traces every number back to the specific study, percentile, and methodology that produced it (including flagging one figure it could not verify at a primary source and one study it counted once desp"
+  }
+ },
+ "cost": {
+  "standing_tokens": 129,
+  "body_tokens": 1590,
+  "total_tokens": 5396,
+  "extra_tokens": 524435
+ },
+ "value": 2.3,
+ "note": "The skill was named in the prompt for the graded cases, so those measure its contents; whether the description would have routed there unaided is the routing score beside them."
+}

@@ -1,0 +1,37 @@
+{
+ "date": "2026-10-22",
+ "skill": "writing-implementation-plans",
+ "cases_version": 1,
+ "score": 1.0,
+ "agents": {
+  "claude": {
+   "version": "2.1.308",
+   "model": "claude-opus-5-5",
+   "routing": "2/2",
+   "better": 3,
+   "same": 0,
+   "worse": 0,
+   "quality": {
+    "q01-plan": {
+     "with": 1.0,
+     "without": 0.67,
+     "verdicts": [
+      "with",
+      "with",
+      "with"
+     ],
+     "tokens_with": 99636,
+     "tokens_without": 102840,
+     "fails_with": []
+    }
+   }
+  },
+  "codex": {
+   "routing": "2/2",
+   "quality": "not graded: the run was stopped by the owner and five of the six quality runs were cut off mid-turn"
+  }
+ },
+ "notes": [
+  "Skilled plans reuse the model, store and id logic and list what is not built; unskilled plans add unrequested structure."
+ ]
+}
