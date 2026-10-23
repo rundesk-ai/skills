@@ -1,0 +1,110 @@
+{
+ "date": "2026-10-23",
+ "skill": "naming-software-terms",
+ "skill_hash": "f4931b86c2c7761e",
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "r01-direct",
+  "r02-indirect",
+  "r03-near-miss"
+ ],
+ "agents": {
+  "claude": {
+   "version": "2.1.309",
+   "model": "claude-opus-5-5",
+   "routing": "3/3",
+   "better": 2,
+   "same": 0,
+   "worse": 1,
+   "score": 0.67,
+   "quality": {
+    "q01-easy": {
+     "with": 1.0,
+     "without": 0.9,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      1.0
+     ],
+     "spread_without": [
+      0.8,
+      1.0
+     ],
+     "verdict": "better",
+     "tokens_with": 112568,
+     "tokens_without": 92106,
+     "fails_with": [],
+     "fails_without": [
+      "conduct.2"
+     ]
+    },
+    "q02-medium": {
+     "with": 0.86,
+     "without": 0.93,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.86,
+      0.86
+     ],
+     "spread_without": [
+      0.86,
+      1.0
+     ],
+     "verdict": "worse",
+     "tokens_with": 157105,
+     "tokens_without": 71344,
+     "fails_with": [
+      "conduct.1",
+      "result.4"
+     ],
+     "fails_without": [
+      "result.1"
+     ]
+    },
+    "q03-complex": {
+     "with": 0.9,
+     "without": 0.6,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      0.8
+     ],
+     "spread_without": [
+      0.6,
+      0.6
+     ],
+     "verdict": "better",
+     "tokens_with": 123595,
+     "tokens_without": 77294,
+     "fails_with": [
+      "result.2"
+     ],
+     "fails_without": [
+      "result.2",
+      "result.3"
+     ]
+    }
+   }
+  },
+  "codex": {
+   "version": "0.164.0",
+   "model": "gpt-6.1-sol (default effort)",
+   "routing": "3/3",
+   "quality": "not run: focused benchmark, routing only"
+  },
+  "grok": {
+   "skipped": "installed, not run: focused benchmark scoped to claude and codex by the owner"
+  }
+ },
+ "score": 0.67,
+ "notes": [
+  "First benchmark of this skill, after the description and structure changes. Quality on claude only, two runs per arm; routing on claude and codex. The score is claude's alone.",
+  "Isolation: both arms ran with user-level skills hidden (claude --setting-sources project; codex with a fresh HOME and CODEX_HOME).",
+  "q01 new close-reason field: both arms chose close_reason next to closed_at; one control run gave no reason for the name.",
+  "q02 cross-layer cleanup: both arms settled on customer, kept the published API and left the schema to the owner; one skilled run did not read schema.sql first, one left client_name in the template. Skilled used about 2.2x the tokens.",
+  "q03 delete confirmation: both control runs asserted ticket deletion and irreversibility the code does not establish and did not ask the owner; one skilled run withheld them and asked, the other asked but still asserted them in the copy.",
+  "Judging was blind: one judge per case graded every run's reply, diff, work tree and a trace with skill mentions removed."
+ ]
+}

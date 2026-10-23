@@ -78,6 +78,7 @@ bench/results/<name>/<date>.json      one file per benchmark run
 prompts/*.md                          task prompts for catalog work: new skill, benchmark, sources
 scripts/check.sh                      the catalog gate
 scripts/deploy.sh                     copies skills into a scratch directory for benchmarks only
+scripts/bench-status.sh               which skills a benchmark is due for, and which are current
 manifest.json                         schema, name, version, description, and every skill by path
 ```
 
@@ -98,11 +99,13 @@ manifest.json                         schema, name, version, description, and ev
 
 ```sh
 ./scripts/check.sh   # groups, names, frontmatter, links, isolation, privacy, manifest, CLAUDE.md copy
-./tests/run.sh       # deploy.sh and check.sh against fixtures and the real catalog
+./tests/run.sh       # deploy.sh, check.sh and bench-status.sh against fixtures and the catalog
 ```
 
 Both write only to a temporary directory. Benchmark a skill with `prompts/benchmark-skill.md`, in
 scratch directories outside any git checkout; `scripts/deploy.sh` refuses a checkout.
+`./scripts/bench-status.sh --due` lists the skills a benchmark is due for; one whose last result
+measured its current files is not run again.
 
 ## Releasing
 

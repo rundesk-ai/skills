@@ -11,9 +11,14 @@ the line above still reads as the instruction to replace it, ask which skill and
 
 ## Before starting
 
-1. Load `writing-skills` and read `references/evaluating.md` in full. It owns the method; this prompt
+1. Run `./scripts/bench-status.sh <skill>`. When it says `current`, the newest result already
+   measured these exact files — the skill, its cases and fixtures — within the age limit: stop,
+   report that result and its date, and run again only when the owner asks. A run repeated on
+   unchanged files spends the tokens and learns nothing. `changed`, `old` or `never` means a run is
+   due; `./scripts/bench-status.sh --due` lists every skill that needs one.
+2. Load `writing-skills` and read `references/evaluating.md` in full. It owns the method; this prompt
    adds the harness, the agents and the record.
-2. Hold to the design every benchmark here follows. It takes two measurements: whether the skill
+3. Hold to the design every benchmark here follows. It takes two measurements: whether the skill
    fires, since its description is the whole trigger and a skill that never loads cannot help; and
    whether it improves the work, by running each case twice, with the skill available and without, and
    having a judge grade both against the case's rubric. The control arm is what separates a skill that
@@ -21,7 +26,7 @@ the line above still reads as the instruction to replace it, ask which skill and
    `bench/<skill>/cases/`, with front matter naming the skill, the variant if any, and the rubric. No
    runner exists yet, so you are the runner until one does; before writing one, assess whether
    `claude plugin eval` fits, since it already hosts eval suites with a JSON report and a sandbox.
-3. Read the skill in full, so the cases test what it claims rather than what you assume.
+4. Read the skill in full, so the cases test what it claims rather than what you assume.
 
 ## What is measured
 
@@ -187,13 +192,17 @@ Three outcomes, and each means something different:
 
 ## Record it
 
-Write one file per run to `bench/results/<skill>/<YYYY-MM-DD>.json`. `date` and `score` are the
-two keys every later reader of the results relies on, so they are the contract:
+Write one file per run to `bench/results/<skill>/<YYYY-MM-DD>.json`. `date`, `score` and
+`skill_hash` are the keys every later reader of the results relies on, so they are the contract.
+`skill_hash` is what `./scripts/bench-status.sh --hash <skill>` prints for the files the run
+measured; take it before the first run and confirm it is unchanged after the last, because it is how
+the next benchmark knows this one need not be repeated:
 
 ```json
 {
   "date": "2026-09-19",
   "skill": "testing-code",
+  "skill_hash": "1af19ce061cdcc15",
   "score": 0.72,
   "cases": 4,
   "agents": {

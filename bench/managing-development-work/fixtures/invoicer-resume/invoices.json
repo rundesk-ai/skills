@@ -1,0 +1,184 @@
+[
+  {
+    "id": 1,
+    "client": "Beta",
+    "issued": "2026-09-03",
+    "due": "2026-10-03",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 10000
+      }
+    ],
+    "status": "paid"
+  },
+  {
+    "id": 2,
+    "client": "Cobalt",
+    "issued": "2026-09-05",
+    "due": "2026-10-05",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 20000
+      }
+    ],
+    "status": "paid"
+  },
+  {
+    "id": 3,
+    "client": "Dune",
+    "issued": "2026-09-07",
+    "due": "2026-10-07",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 30000
+      }
+    ],
+    "status": "paid"
+  },
+  {
+    "id": 4,
+    "client": "Acme",
+    "issued": "2026-09-09",
+    "due": "2026-10-09",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 40000
+      }
+    ],
+    "status": "paid"
+  },
+  {
+    "id": 5,
+    "client": "Beta",
+    "issued": "2026-09-11",
+    "due": "2026-10-11",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 50000
+      }
+    ],
+    "status": "open"
+  },
+  {
+    "id": 6,
+    "client": "Cobalt",
+    "issued": "2026-10-13",
+    "due": "2026-11-13",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 60000
+      }
+    ],
+    "status": "open"
+  },
+  {
+    "id": 7,
+    "client": "Dune",
+    "issued": "2026-10-15",
+    "due": "2026-11-15",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 70000
+      }
+    ],
+    "status": "open"
+  },
+  {
+    "id": 8,
+    "client": "Acme",
+    "issued": "2026-10-17",
+    "due": "2026-11-17",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 80000
+      }
+    ],
+    "status": "open"
+  },
+  {
+    "id": 9,
+    "client": "Beta",
+    "issued": "2026-10-19",
+    "due": "2026-11-19",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 90000
+      }
+    ],
+    "status": "open"
+  },
+  {
+    "id": 10,
+    "client": "Cobalt",
+    "issued": "2026-10-21",
+    "due": "2026-11-21",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 100000
+      }
+    ],
+    "status": "open"
+  },
+  {
+    "id": 11,
+    "client": "Dune",
+    "issued": "2026-10-23",
+    "due": "2026-11-23",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 110000
+      }
+    ],
+    "status": "open"
+  },
+  {
+    "id": 12,
+    "client": "Acme",
+    "issued": "2026-10-25",
+    "due": "2026-11-25",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 120000
+      }
+    ],
+    "status": "open"
+  },
+  {
+    "id": 13,
+    "client": "Beta",
+    "issued": "2026-10-27",
+    "due": "2026-11-27",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 130000
+      }
+    ],
+    "status": "open"
+  },
+  {
+    "id": 14,
+    "client": "Cobalt",
+    "issued": "2026-10-02",
+    "due": "2026-11-02",
+    "items": [
+      {
+        "description": "Services",
+        "amount_cents": 140000
+      }
+    ],
+    "status": "void"
+  }
+]

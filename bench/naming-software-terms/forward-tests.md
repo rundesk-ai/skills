@@ -2,7 +2,7 @@
 
 Moved from the skill's sources reference; a run record, not guidance.
 
-Neo ran first-hand CLI trials on 16 August 2026 against Codex, Claude, Antigravity, and Grok provider
+First-hand CLI trials ran on 16 August 2026 against Codex, Claude, Antigravity, and Grok provider
 adapters. Tasks covered cross-layer subscription vocabulary, published and vendor contracts,
 orthogonal states, nullable inheritance, accessibility labels, regulated wording, retry and event
 semantics, acronym casing, absence states, localization, lexicon scope, and code-flow comments.
@@ -19,8 +19,7 @@ semantics, acronym casing, absence states, localization, lexicon scope, and code
 - A later fresh Codex Laravel/PostgreSQL pass preserved framework defaults, explicit ORM mappings,
   vendor fields, and the public API while refusing to name or comment an unknown operation. It still
   promoted one model's configured table, primary key, and relationship exceptions into the project
-  lexicon; the lexicon reference now keeps such local ORM configuration with its model unless the
-  exception recurs or changes product vocabulary.
+  lexicon. The lexicon guidance was later removed; the skill now says never to build one.
 - The matching fresh Antigravity pass preserved the same convention boundaries and correctly refused
   an unsupported operation name and flow comment. It remained substantially longer than requested,
   restated supplied facts as verification, and added unneeded framework configuration and migration
@@ -31,8 +30,8 @@ semantics, acronym casing, absence states, localization, lexicon scope, and code
   those material facts were absent. Codex stayed bounded and read only the product-interface
   reference; Antigravity loaded the whole package and returned redundant status scaffolding. The
   passes exposed ambiguity around title/button objects, role-gated recovery, deadline wording, and
-  whether missing material facts block the modal; the product-interface and lexicon references now
-  state those decisions directly.
+  whether missing material facts block the modal; the product-interface reference now states those
+  decisions directly.
 - In the final fresh regression pass, both Codex and Antigravity stayed below a 120-word limit, read
   only the core skill and product-interface reference, rejected reassuring filler, withheld the
   unknown title and confirm action, supplied only the verified availability sentence and `Cancel`,
