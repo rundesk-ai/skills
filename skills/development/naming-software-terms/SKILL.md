@@ -1,12 +1,28 @@
 ---
 name: naming-software-terms
-description: Use when choosing, reviewing, or standardizing software terminology across source code, schemas, APIs, logs, and product interfaces, especially when one concept crosses several layers. It supplies the naming grammar for precise terms, layer-appropriate names, clear interface text, and compatibility-safe renames. Do not use for general prose editing, brand naming, marketing copy, or work where naming is incidental.
+description: Use when choosing, reviewing, or standardizing names and terminology in software — naming a new field, table, endpoint, event, function, setting or status, renaming one, or writing interface text such as labels, buttons, error messages and empty states — especially when one concept crosses several layers. It supplies the naming grammar for precise terms, one term per concept across layers, clear interface text, and compatibility-safe renames. Do not use for general prose editing, brand naming, or marketing copy.
 ---
 
 # Name software terms
 
 Keep one vocabulary per concept across code, data contracts, and product interfaces. Preserve
 intentional layer forms and compatibility mappings instead of forcing identical spelling.
+
+## Apply the conventions
+
+Before writing any name or user-facing string:
+
+1. **Identify what you are naming**: a stored value, a behavior, a type, an event, or a slot on screen. If you cannot say which, you do not yet know what you are writing.
+2. **Look up how the codebase already names the concept**, as [Look up terms](#look-up-terms-before-inventing-them) describes, before coining one.
+3. **Apply the form** for that kind of name (see the reference files).
+4. **Split, don't blend.** Name in the name; explanation in the docstring, comment, tooltip, or help text.
+5. **Check parity** across layers. Distinguish accidental drift from an intentional, documented mapping.
+6. **Scan the product defaults** below, and for interface text the voice defaults in the product interface reference.
+7. **Apply the fortieth-time test.**
+8. **Report proportionately.** Answer the requested naming scope first. Separate facts, assumptions,
+   owner decisions, and compatibility risks. Do not invent adjacent architecture or repeat the same
+   rationale for every layer. Omit executive summaries, status sections, checklists, and exhaustive
+   layer tables unless the user asks for them or they materially clarify the decision.
 
 ## Name the meaning
 
@@ -100,54 +116,13 @@ Use these as defaults for operator-style software. Follow a product's establishe
 
 | Don't | Do | Why |
 |---|---|---|
-| Em dashes used as routine asides | Period, parentheses, or restructure | Keeps operator text direct. A product may choose another punctuation style; `—` may also be its null marker |
 | Abbreviations that are not domain standard (`cust`, `qty_rcv`, `mgr`) | Full words | Saves keystrokes once, costs comprehension forever |
 | Negated names that merely invert a positive condition (`is_not_active`, `disable_notifications`, `hideCompleted`) | Positive form (`is_active`, `notifications_enabled`, `show_completed`) | Double negatives at every call site and an ambiguous "off" state; preserve a negative form when the domain fact or fixed contract is genuinely negative |
 | Type or class in the name (`strName`, `reason_text`, `InvoiceObject`, `user_list`) | The meaning (`name`, `reason`, `Invoice`, `users`) | The type is already declared, and it changes |
 | Grab-bag words (`data`, `info`, `item`, `thing`, `util`, `helper`, `manager`, `handler`, `stuff`, `temp`) | The specific thing | These are names that mean "I have not decided what this is" |
 | Numeric suffixes (`data2`, `processUser3`, `column_b`) | Distinct meanings, distinct names | The suffix is the missing distinction |
-| Vague pronouns for named entities (`Something here already exists`) | Name the entity | The system knows what it is; say it |
-| Unchosen first-person voice (`we couldn't find`, `our records`) | The product's defined voice or a factual statement | Prevents one screen from inventing a different speaker |
-| Marketing adjectives in functional text (powerful, seamless, robust, smart) | Nothing | Says nothing to someone doing the task |
-| Unchosen exclamation marks and emoji in system text | The product's defined feedback style | Prevents accidental tone changes in operational text |
-| Minimizers (simply, just, easily, only) | Omit | They add no recovery information and can understate difficulty |
-| Hedging (`it looks like`, `it seems`, `apparently`) | State what is known | Erodes trust in every other message |
 | Inconsistent verbs for one operation (`get` / `fetch` / `retrieve` for the same act) | One verb per meaning, product-wide | Every synonym implies a distinction that does not exist |
 | Stale names after a refactor | Classify the boundary, then rename privately or stage a compatible migration | A wrong name misleads, while an unsafe rename breaks consumers |
-
-## Choose the product register
-
-One decision per product, read from its existing interface and rules.
-
-| Register | Fits | Character |
-|---|---|---|
-| **Operator** (default) | Internal tools, admin panels, back office, developer tools | Dense, factual, terse; optimized for scanning |
-| **Practitioner** | Professional SaaS with self-serve onboarding | Same grammar, more explanation slots filled |
-| **Consumer** | Public apps, first-run flows | Same grammar, plainer vocabulary, more guidance |
-
-Register changes **how much explanation appears** and **how domain-specific the vocabulary is**.
-Keep each slot's purpose stable while allowing language, localization, accessibility, and established
-design-system grammar to shape the surface form. "Plain and human" is not the same as "chatty and vague."
-
-For new work with no product evidence, operator register is a fallback. In an existing product,
-inspect its interface and conventions before applying that fallback; keep recommendations
-conditional when the evidence is unavailable.
-
-## Apply the conventions
-
-Before writing any name or user-facing string:
-
-1. **Identify what you are naming**: a stored value, a behavior, a type, an event, or a slot on screen. If you cannot say which, you do not yet know what you are writing.
-2. **Look up how the codebase already names every recurring concept.** Missing? Propose the smallest supported term to the owner before coining a synonym.
-3. **Apply the form** for that kind of name (see the reference files).
-4. **Split, don't blend.** Name in the name; explanation in the docstring, comment, tooltip, or help text.
-5. **Check parity** across layers. Distinguish accidental drift from an intentional, documented mapping.
-6. **Scan the product defaults.**
-7. **Apply the fortieth-time test.**
-8. **Report proportionately.** Answer the requested naming scope first. Separate facts, assumptions,
-   owner decisions, and compatibility risks. Do not invent adjacent architecture or repeat the same
-   rationale for every layer. Omit executive summaries, status sections, checklists, and exhaustive
-   layer tables unless the user asks for them or they materially clarify the decision.
 
 ## Resolve the convention stack
 

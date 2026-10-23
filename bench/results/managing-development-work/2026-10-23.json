@@ -1,0 +1,206 @@
+{
+ "date": "2026-10-23",
+ "skill": "managing-development-work",
+ "skill_hash": "e5e966cadaf6d111",
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q06-resume",
+  "q07-handoff",
+  "r01-direct",
+  "r02-indirect",
+  "r03-near-miss",
+  "r04-resume"
+ ],
+ "agents": {
+  "claude": {
+   "version": "2.1.309",
+   "model": "claude-opus-5-5",
+   "routing": "4/4",
+   "better": 2,
+   "same": 1,
+   "worse": 1,
+   "score": 0.5,
+   "quality": {
+    "q01-easy": {
+     "with": 1.0,
+     "without": 1.0,
+     "runs_per_arm": 1,
+     "spread_with": [
+      1.0
+     ],
+     "spread_without": [
+      1.0
+     ],
+     "verdict": "same",
+     "tokens_with": 186751,
+     "tokens_without": 122649,
+     "fails_with": [],
+     "fails_without": []
+    },
+    "q02-medium": {
+     "with": 0.75,
+     "without": 0.5,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.75,
+      0.75
+     ],
+     "spread_without": [
+      0.5,
+      0.5
+     ],
+     "verdict": "with",
+     "tokens_with": 439834,
+     "tokens_without": 230288,
+     "fails_with": [
+      "conduct.1",
+      "result.4"
+     ],
+     "fails_without": [
+      "conduct.1",
+      "conduct.2",
+      "conduct.4",
+      "result.4"
+     ]
+    },
+    "q06-resume": {
+     "with": 0.75,
+     "without": 0.83,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.67,
+      0.83
+     ],
+     "spread_without": [
+      0.83,
+      0.83
+     ],
+     "verdict": "without",
+     "tokens_with": 306128,
+     "tokens_without": 231640,
+     "fails_with": [
+      "conduct.2",
+      "result.3"
+     ],
+     "fails_without": [
+      "result.3"
+     ]
+    },
+    "q07-handoff": {
+     "with": 1.0,
+     "without": 0.83,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      1.0
+     ],
+     "spread_without": [
+      0.83,
+      0.83
+     ],
+     "verdict": "with",
+     "tokens_with": 329426,
+     "tokens_without": 250947,
+     "fails_with": [],
+     "fails_without": [
+      "conduct.1"
+     ]
+    }
+   }
+  },
+  "codex": {
+   "version": "0.164.0",
+   "model": "gpt-6.1-sol (default effort)",
+   "runs_per_arm": 1,
+   "routing": "4/4",
+   "better": 3,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0,
+   "quality": {
+    "q02-medium": {
+     "with": 1.0,
+     "without": 0.38,
+     "runs_per_arm": 1,
+     "spread_with": [
+      1.0
+     ],
+     "spread_without": [
+      0.38
+     ],
+     "verdict": "with",
+     "tokens_with": 228637,
+     "tokens_without": 119969,
+     "fails_with": [],
+     "fails_without": [
+      "conduct.1",
+      "conduct.2",
+      "conduct.4",
+      "result.3",
+      "result.4"
+     ]
+    },
+    "q06-resume": {
+     "with": 0.67,
+     "without": 0.5,
+     "runs_per_arm": 1,
+     "spread_with": [
+      0.67
+     ],
+     "spread_without": [
+      0.5
+     ],
+     "verdict": "with",
+     "tokens_with": 272518,
+     "tokens_without": 134207,
+     "fails_with": [
+      "conduct.2",
+      "result.3"
+     ],
+     "fails_without": [
+      "conduct.2",
+      "result.3",
+      "result.4"
+     ]
+    },
+    "q07-handoff": {
+     "with": 0.83,
+     "without": 0.5,
+     "runs_per_arm": 1,
+     "spread_with": [
+      0.83
+     ],
+     "spread_without": [
+      0.5
+     ],
+     "verdict": "with",
+     "tokens_with": 158611,
+     "tokens_without": 118943,
+     "fails_with": [
+      "result.4"
+     ],
+     "fails_without": [
+      "conduct.1",
+      "result.3",
+      "result.4"
+     ]
+    }
+   }
+  },
+  "grok": {
+   "skipped": "installed, not run: focused benchmark scoped to claude and codex by the owner"
+  }
+ },
+ "score": 0.75,
+ "notes": [
+  "Focused run after the sizing, brief and report changes: q01, q02 and the new q06/q07, plus routing. q03-q05 were not rerun; their 2026-10-22 numbers measured the earlier skill.",
+  "Isolation: both arms ran with user-level skills hidden (claude --setting-sources project; codex with a fresh HOME and CODEX_HOME). Without that, the user-level copies of the skill load in the control arm.",
+  "q01 known-cause fix: identical, no ceremony in either arm; the skill costs about 64k more tokens.",
+  "q02 recurring invoices: claude now slices and proves one slice before the next in both skilled runs (conduct.2, conduct.4), which neither control did; neither arm states outcome and proof before code or gives deferred slices their proof. codex skilled run met every item, control 0.38. One skilled claude run kept a brief in its memory store; no control did.",
+  "q06 resume: every run in both arms read the brief and resumed at slice 2; every run also built pause (slice 3), failing result.3, which may be stricter than 'carry on' warrants. One skilled claude run missed the stale next action.",
+  "q07 handoff: every run wrote a separate brief, since the fixture's AGENTS.md names the location; skilled runs wrote the contract or brief before code (conduct.1), controls mostly did not.",
+  "codex model differs from the 2026-10-22 run (gpt-6-astra xhigh then), so codex numbers do not compare across the two results.",
+  "Judging was blind: one judge per case graded every run's reply, diff, work tree and a trace with skill mentions removed."
+ ]
+}

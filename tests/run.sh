@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tests for scripts/deploy.sh and scripts/check.sh.
+# Tests for scripts/deploy.sh, scripts/check.sh and scripts/bench-status.sh.
 #
 #   tests/run.sh            run everything
 #   tests/run.sh <pattern>  run cases whose name matches
@@ -56,7 +56,7 @@ run_case() {
 make_catalog() {
   local c="$1"
   mkdir -p "$c/scripts" "$c/skills/core/alpha/references" "$c/skills/core/beta"
-  cp "$ROOT/scripts/deploy.sh" "$ROOT/scripts/check.sh" "$c/scripts/"
+  cp "$ROOT/scripts/deploy.sh" "$ROOT/scripts/check.sh" "$ROOT/scripts/bench-status.sh" "$c/scripts/"
   printf -- '---\nname: alpha\ndescription: Use when the alpha case needs proving in a test fixture catalog.\n---\n\n# Alpha\n\nRead [Base](references/base.md) for the base case.\n' \
     > "$c/skills/core/alpha/SKILL.md"
   printf 'base reference\n' > "$c/skills/core/alpha/references/base.md"
@@ -364,6 +364,75 @@ case_check_rejects_a_bad_manifest_version() {
   check_rejects "a manifest version that is not MAJOR.MINOR.PATCH" "MAJOR.MINOR.PATCH" mutate_manifest_version
 }
 
+# --- bench-status.sh --------------------------------------------------------
+
+record_result() {    # record_result <catalog> <skill> <date> [hash] — a result file as a run writes it
+  local hash="${4:-}"
+  mkdir -p "$1/bench/results/$2"
+  if [ -n "$hash" ]; then
+    printf '{"date": "%s", "skill": "%s", "skill_hash": "%s", "score": 0.5}\n' "$3" "$2" "$hash"
+  else
+    printf '{"date": "%s", "skill": "%s", "score": 0.5}\n' "$3" "$2"
+  fi > "$1/bench/results/$2/$3.json"
+}
+bench_status() {     # bench_status <catalog> <args...> — prints "<status> <exit code>" for the first skill
+  local c="$1" out status; shift
+  out="$("$c/scripts/bench-status.sh" "$@")"; status=$?
+  echo "$(echo "$out" | awk 'NR == 1 { print $2 }') $status"
+}
+fixture_git() { git -C "$1" -c user.name=test -c user.email=test@example.com "${@:2}" >/dev/null 2>&1; }
+
+case_bench_status_reports_a_skill_never_run() {
+  local c; c="$(new_catalog)"
+  assert_eq "no result means a run is due" "never 1" "$(bench_status "$c" alpha)"
+}
+case_bench_status_skips_a_recent_unchanged_result() {
+  local c; c="$(new_catalog)"
+  record_result "$c" alpha "$(date +%F)" "$("$c/scripts/bench-status.sh" --hash alpha)"
+  assert_eq "a result measuring what is there now is current" "current 0" "$(bench_status "$c" alpha)"
+}
+case_bench_status_reruns_a_changed_skill() {
+  local c; c="$(new_catalog)"
+  record_result "$c" alpha "$(date +%F)" "$("$c/scripts/bench-status.sh" --hash alpha)"
+  printf 'one more rule\n' >> "$c/skills/core/alpha/SKILL.md"
+  assert_eq "an edited skill is due" "changed 1" "$(bench_status "$c" alpha)"
+}
+case_bench_status_reruns_changed_cases() {
+  local c; c="$(new_catalog)"
+  record_result "$c" alpha "$(date +%F)" "$("$c/scripts/bench-status.sh" --hash alpha)"
+  mkdir -p "$c/bench/alpha/cases" && printf 'a new case\n' > "$c/bench/alpha/cases/q09.md"
+  assert_eq "a new case makes the skill due" "changed 1" "$(bench_status "$c" alpha)"
+}
+case_bench_status_reruns_an_old_result() {
+  local c; c="$(new_catalog)"
+  record_result "$c" alpha 2020-01-01 "$("$c/scripts/bench-status.sh" --hash alpha)"
+  assert_eq "an unchanged result past the age limit is due" "old 1" "$(bench_status "$c" alpha)"
+  assert_eq "--max-age moves the limit" "current 0" "$(bench_status "$c" --max-age 100000 alpha)"
+}
+case_bench_status_ignores_a_group_move() {
+  local c; c="$(new_catalog)"
+  record_result "$c" alpha "$(date +%F)" "$("$c/scripts/bench-status.sh" --hash alpha)"
+  mkdir -p "$c/skills/other" && mv "$c/skills/core/alpha" "$c/skills/other/alpha"
+  assert_eq "moving a skill between groups is not a change" "current 0" "$(bench_status "$c" alpha)"
+}
+case_bench_status_ignores_bytecode() {
+  local c; c="$(new_catalog)"
+  record_result "$c" alpha "$(date +%F)" "$("$c/scripts/bench-status.sh" --hash alpha)"
+  mkdir -p "$c/bench/alpha/fixtures/app/__pycache__" && printf 'x' > "$c/bench/alpha/fixtures/app/__pycache__/m.pyc"
+  assert_eq "bytecode a test run leaves is not a change" "current 0" "$(bench_status "$c" alpha)"
+}
+case_bench_status_compares_an_unhashed_result_with_its_commit() {
+  # Results written before skill_hash existed: the commit that added the result is what it measured.
+  local c; c="$(new_catalog)"
+  record_result "$c" alpha "$(date +%F)"
+  fixture_git "$c" init -q && fixture_git "$c" add -A && fixture_git "$c" commit -qm measured
+  assert_eq "unchanged since the result's commit" "current 0" "$(bench_status "$c" alpha)"
+  mkdir -p "$c/skills/other" && fixture_git "$c" mv skills/core/alpha skills/other/alpha
+  assert_eq "a group move since that commit is not a change" "current 0" "$(bench_status "$c" alpha)"
+  printf 'one more rule\n' >> "$c/skills/other/alpha/SKILL.md"
+  assert_eq "an edit since that commit is" "changed 1" "$(bench_status "$c" alpha)"
+}
+
 # --- the real catalog -------------------------------------------------------
 # The fixture cases prove the contract; this one proves the catalog that ships
 # actually satisfies it.
@@ -411,6 +480,14 @@ for c in check_passes_a_sound_catalog check_rejects_a_directory_without_skill_md
          check_rejects_a_credential check_rejects_a_real_email check_accepts_reserved_email_domains \
          check_rejects_an_integration_tool check_rejects_a_manifest_missing_a_skill \
          check_rejects_a_manifest_listing_a_missing_skill check_rejects_a_bad_manifest_version; do
+  run_case "$c"
+done
+
+echo "bench-status.sh"
+for c in bench_status_reports_a_skill_never_run bench_status_skips_a_recent_unchanged_result \
+         bench_status_reruns_a_changed_skill bench_status_reruns_changed_cases \
+         bench_status_reruns_an_old_result bench_status_ignores_a_group_move bench_status_ignores_bytecode \
+         bench_status_compares_an_unhashed_result_with_its_commit; do
   run_case "$c"
 done
 

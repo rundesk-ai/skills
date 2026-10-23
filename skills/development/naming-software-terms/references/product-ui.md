@@ -4,6 +4,38 @@ Dos and don'ts for every string a person reads on screen. Read `data-and-contrac
 
 **Every string occupies a slot. Each slot has one job and one grammatical form.** Almost all bad interface copy is a right sentence in the wrong slot: an explanation stuffed into a label, a story stuffed into an empty state, a feature description stuffed into a column header. The fix is rarely to rewrite the string. It is to split it and move the pieces to the slots that want them.
 
+## Product register
+
+One decision per product, read from its existing interface and rules.
+
+| Register | Fits | Character |
+|---|---|---|
+| **Operator** (default) | Internal tools, admin panels, back office, developer tools | Dense, factual, terse; optimized for scanning |
+| **Practitioner** | Professional SaaS with self-serve onboarding | Same grammar, more explanation slots filled |
+| **Consumer** | Public apps, first-run flows | Same grammar, plainer vocabulary, more guidance |
+
+Register changes **how much explanation appears** and **how domain-specific the vocabulary is**.
+Keep each slot's purpose stable while allowing language, localization, accessibility, and established
+design-system grammar to shape the surface form. "Plain and human" is not the same as "chatty and vague."
+
+For new work with no product evidence, operator register is a fallback. In an existing product,
+inspect its interface and conventions before applying that fallback; keep recommendations
+conditional when the evidence is unavailable.
+
+### Voice and tone defaults
+
+Defaults for system text in any register; a product's documented voice takes precedence.
+
+| Don't | Do | Why |
+|---|---|---|
+| Em dashes used as routine asides | Period, parentheses, or restructure | Keeps operator text direct. A product may choose another punctuation style; `—` may also be its null marker |
+| Vague pronouns for named entities (`Something here already exists`) | Name the entity | The system knows what it is; say it |
+| Unchosen first-person voice (`we couldn't find`, `our records`) | The product's defined voice or a factual statement | Prevents one screen from inventing a different speaker |
+| Marketing adjectives in functional text (powerful, seamless, robust, smart) | Nothing | Says nothing to someone doing the task |
+| Unchosen exclamation marks and emoji in system text | The product's defined feedback style | Prevents accidental tone changes in operational text |
+| Minimizers (simply, just, easily, only) | Omit | They add no recovery information and can understate difficulty |
+| Hedging (`it looks like`, `it seems`, `apparently`) | State what is known | Erodes trust in every other message |
+
 ## 1. Shared mechanics
 
 Use these as defaults when the product has no documented content style. Regulated wording, localization, platform conventions, and the established design system take precedence.

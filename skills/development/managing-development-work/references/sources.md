@@ -90,6 +90,15 @@ universal development ceremony.
 - Implementation and completed-change review require different role fit and evidence. The exact
   finished-change review brief is an operational conclusion derived from measurable acceptance, retained
   evidence, and the team's separation of implementation from independent judgment.
+- The sizing step — direct, bounded, sliced, planned or discovery, decided before a solution is
+  chosen — and its signals for large work (more than one outcome, several components, not provable
+  in one working session, a request to start or ship what is possible) are operational conclusions.
+  They follow the 2026-10-22 benchmark, where neither arm stated a contract or sliced the recurring
+  invoices case while the size decision sat after the slicing step.
+- Keeping a brief whenever a slice stays open, rather than when a compaction or later session is
+  expected, and keeping it where the next session looks rather than in session scratch, are
+  operational conclusions from the Anthropic harness report above: its fix was a progress record
+  written for the next session to read, which only works if that session finds it.
 - The slice-size rule — one outcome, its own proof, one working session — and the doubling
   threshold for re-slicing are operational conclusions. The sources establish small integrated
   slices and falling agent reliability with task length; they do not supply these thresholds.

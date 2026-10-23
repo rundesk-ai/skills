@@ -1,0 +1,12 @@
+<h1>All the tickets we have</h1>
+<table>
+  <thead>
+    <tr><th>#</th><th>Account</th><th>What is it about</th><th>Where it's at</th><th>Opened</th></tr>
+  </thead>
+  <tbody>
+    {% for t in tickets %}
+    <tr><td>{{ t.id }}</td><td>{{ t.client_name }}</td><td>{{ t.subject }}</td><td>{{ t.status }}</td><td>{{ t.created_at }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="empty">Looks like there's nothing here right now!</p>
