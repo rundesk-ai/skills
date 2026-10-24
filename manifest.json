@@ -248,5 +248,23 @@
       "name": "writing-task-tickets",
       "path": "skills/writing/writing-task-tickets"
     }
+  ],
+  "subagents": [
+    {
+      "name": "code-quality-reviewer",
+      "path": "subagents/code-quality-reviewer.md"
+    },
+    {
+      "name": "dry-simplicity-reviewer",
+      "path": "subagents/dry-simplicity-reviewer.md"
+    },
+    {
+      "name": "senior-code-reviewer",
+      "path": "subagents/senior-code-reviewer.md"
+    },
+    {
+      "name": "test-coverage-auditor",
+      "path": "subagents/test-coverage-auditor.md"
+    }
   ]
 }

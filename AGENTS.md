@@ -73,13 +73,14 @@ skills/<group>/<name>/SKILL.md        a skill; a directory is a skill iff it hol
 skills/<group>/<name>/references/     detail the skill links to, read only when the work reaches it
   references/sources.md               the verified evidence behind the skill's rules
 skills/<group>/<name>/variants/<v>/   overlay files for a deliberate fork; never shipped as a skill
+subagents/<name>.md                   a subagent, in the Rundesk subagent library's format
 bench/<name>/cases/*.md               benchmark cases, rubric written before the first run
 bench/results/<name>/<date>.json      one file per benchmark run
 prompts/*.md                          task prompts for catalog work: new skill, benchmark, sources
 scripts/check.sh                      the catalog gate
 scripts/deploy.sh                     copies skills into a scratch directory for benchmarks only
 scripts/bench-status.sh               which skills a benchmark is due for, and which are current
-manifest.json                         schema, name, version, description, and every skill by path
+manifest.json                         schema, name, version, description, every skill and subagent by path
 ```
 
 - The groups are `development`, `writing`, `design`, `research`, `marketing`, `stacks` and
@@ -88,7 +89,11 @@ manifest.json                         schema, name, version, description, and ev
   keeping its name.
 - `manifest.json` lists exactly the skills in `skills/`, by name and path, sorted by name; adding,
   removing, renaming or moving a skill updates it in the same change, and `scripts/check.sh` refuses
-  a mismatch.
+  a mismatch. Its `subagents` list does the same for `subagents/`.
+- A subagent is one file: frontmatter `name` (its file name), a `description` starting `Use when`,
+  and optionally one block of settings per agent CLI (`claude`, `codex`, `grok`, …); the body is its
+  instructions. Rundesk writes it into every agent CLI on the machine, so it stands alone as a skill
+  does, and the same privacy rules apply.
 - A skill's name starts with its group's prefix, listed in `skills/groups.txt`; development keeps
   one verb per activity. Its frontmatter holds only `name` and `description`, and the description
   starts `Use when`.

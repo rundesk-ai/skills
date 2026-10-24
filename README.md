@@ -16,6 +16,9 @@ Copy any skill folder into the folder your agent reads skills from, such as `.ag
 CLI read: add this repository as a skill package and they install the skills from the newest
 release tag, and update every project that has one when a new tag is released.
 
+`subagents/` holds review subagents, listed under `subagents` in the same manifest. A Rundesk app
+that reads them writes each into every agent CLI on the machine while its subagents setting is on.
+
 ## Contribute
 
 Read `AGENTS.md`. Change a skill only here, then run:
