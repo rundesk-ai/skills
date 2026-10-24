@@ -1,106 +1,108 @@
 ---
 name: using-godot
-description: Use when building, reviewing, debugging, configuring, or running a Godot 4 game in GDScript or C#, including the pinned engine version, nodes and scenes, node lifetime and freeing, signals, exported properties, resources and the import cache, `.uid` files, input handling, autoloads, the C# build and assembly boundary, cameras and instancing, `project.godot` settings, headless and command-line runs, and export presets. It supplies version-gated engine defaults, the traps and how to prove each one. Do not use it for another engine, or for GDScript or C# language questions that touch no engine behaviour.
+description: Use when building, reviewing, debugging, configuring, or running a Godot 4 game in GDScript or C#, including the pinned engine version, nodes and scenes, node lifetime and freeing, signals, exported properties, resources and the import cache, `.uid` files, input handling, autoloads, the C# build and assembly boundary, cameras and instancing, tile maps and isometric or hex grids, 2D and 3D at simulation scale, large or streamed chunked worlds, memory and leaks, threads, graphics settings, `project.godot` settings, project layout and naming, building scenes from the command line, headless runs, and export presets. It supplies version-gated engine defaults, the traps and how to prove each one. Do not use it for another engine, or for GDScript or C# language questions that touch no engine behaviour.
 ---
 
 # Use Godot
 
-Treat the pinned engine as the contract, and treat the boundary between the engine and your own code as
-the place where most defects live. API names below are the engine's `snake_case`; C# uses the same names
-in PascalCase (`queue_free` is `QueueFree`).
+Most Godot defects report success: a callback that errors is logged and skipped, a scene saved without
+its nodes returns `OK`, a path that will not exist in the export loads fine in the editor. Prove every
+change by a run whose output you read. API names below are `snake_case`; C# uses PascalCase
+(`queue_free` is `QueueFree`).
 
-## Establish the line before changing code
+## Establish the version before changing code
 
 `$GODOT` below is the engine binary: `command -v godot`, or wherever the project's rules say it lives.
 
 ```sh
 "$GODOT" --version                                  # the exact build
-grep -E "config_version|config/features" project.godot
+grep -E "config_version|config/features|physics_engine|rendering_method" project.godot
 ls *.csproj 2>/dev/null                             # present: read references/csharp-boundary.md
 ```
 
-Godot 4 and Godot 3 are different engines with the same name, and within Godot 4 a minor version
-changes node APIs, rendering defaults and the C# packages. A claim about 4.2 is not evidence about 4.7:
-the answer is the pinned version's documentation (`/en/<version>/`) or a run of the engine.
-
-## Work in this order
-
-1. **Read the repository's rules and the layer boundaries** it declares. A project that keeps an
-   engine-free simulation means it: no engine type belongs on that side.
-2. **Read the scene and the script that owns it** before changing either. A node's behaviour is split
-   between the `.tscn` — exported values, node paths, signal connections — and its script.
-3. **Make the change, then run it.** In C#, build first: the engine runs the last built assembly, never
-   your source.
-4. **Read the whole log, not the last lines.** See the first trap.
+A minor version changes node APIs, rendering defaults and the C# packages: a claim about another 4.x is
+not evidence. Read the pinned version's documentation (`/en/<version>/`) or run the engine. A node's
+behaviour is split between its script and the `.tscn` that holds its exported values, node paths and
+signal connections; read both before changing either.
 
 ## The traps, and how to prove each one
 
 | Trap | What you see | The proof |
 |---|---|---|
 | An error in `_ready`, `_process` or a signal handler **aborts that callback, is logged, and the game carries on** — GDScript and C# alike | The feature silently does nothing; the process exits 0 | `grep -n -e 'SCRIPT ERROR' -e 'ERROR:' -e 'Exception' run.log`. A headless run that exits 0 is not a run that worked |
+| C# code changed but not built | Yesterday's behaviour | The engine runs the last built assembly. `dotnet build` first, and read its errors — see [The C# boundary](references/csharp-boundary.md) |
 | A node used after `queue_free` | Still valid for the rest of the frame, then an error on a freed instance | `is_queued_for_deletion()` the same frame; `is_instance_valid()` for a reference you did not create; null your own field when you free it |
-| A freshly instantiated scene configured before `add_child` | "null instance" errors from a setup method; a field the scene shows empty | `get_node` already works on the new instance, but its `@onready` vars stay null until it enters the tree and runs `_ready`. Set plain properties first and apply them in `_ready`, or call setup after `add_child` |
-| `add_child` to a parent outside the tree | The child's `_ready` has not run on the next line | `_ready` runs only once the parent is in the tree; check `is_node_ready()` |
-| A `Resource` shared between instances | Changing one instance changes every other | `load()` returns one cached instance. `duplicate()` it, or set `resource_local_to_scene` for resources a scene instantiates |
-| Tree or physics state changed inside a physics callback or while a parent sets up children | "Can't change this state while flushing queries", or "Parent node is busy setting up children" | `call_deferred` / `set_deferred` for those changes. Adding a child in an ordinary handler is fine |
-| A `@tool` (`[Tool]`) script | The editor crashes, or a scene is saved with values the game never produced | Guard editor-time work with `Engine.is_editor_hint()`; everything else in the file runs while the scene is merely open |
-| A `.uid` or `.import` file left out of a commit | References break, or assets reimport differently, on the next clone | Commit `*.uid` (4.4+) and `*.import`; ignore only `.godot/` |
-| A clean checkout with no import cache | A resource loads as null; a `class_name` is "not declared" | `--headless --import` once before the first run |
-| Window size read in a headless run | A placeholder size, not the configured window | Read the design size from `display/window/size/viewport_width`/`_height`; follow the real size through the viewport's `size_changed` |
-| An exported member renamed | Scenes silently lose the saved value | Values are stored in the `.tscn` by name; grep the scenes and set them again |
-| A one-shot gameplay action read in `_input`, or polled without checking the GUI | Clicks on a menu also fire the weapon | Discrete actions go in `_unhandled_input`, by Input Map action name, so the GUI consumes its events first. Polling `Input.is_action_pressed` for continuous movement is fine |
+| A node configured before it is in the tree | "null instance" errors from a setup method; `_ready` has not run on the next line | `@onready` vars stay null and `_ready` waits until the node — and its parent — are in the tree. Set plain properties first and apply them in `_ready`, or call setup after `add_child` |
+| A `Resource` shared between instances | Changing one instance changes every other | `load()` returns one cached instance. `duplicate()` it (shallow; `duplicate_deep()` from 4.5), or set `resource_local_to_scene` |
+| Tree or physics state changed inside a physics callback | "Can't change this state while flushing queries" | `call_deferred` / `set_deferred` for those changes. Adding a child in an ordinary handler is fine |
+| A `@tool` (`[Tool]`) script | The editor crashes, or a scene is saved with values the game never produced | Guard editor-time work with `Engine.is_editor_hint()`; everything else runs while the scene is merely open |
+| A file moved or renamed outside the editor, or a `.uid` left out of a commit | The scene loads and the node silently has **no script** | Move the `.uid` with its file, commit `*.uid` and `*.import`, run `--import`, grep the old path — see [Organization and naming](references/organization-and-naming.md) |
+| No import cache: a clean checkout, or an asset or `class_name` added mid-task | A resource loads as null; "No loader found"; a class "not declared" | `"$GODOT" --headless --path . --import`, again after adding files |
+| A path whose case differs from the file | Loads in the editor; `null` or a parse error in the export | Grep a run log for `Case mismatch` (4.4+) and run an exported pack — see [Organization and naming](references/organization-and-naming.md) |
+| An exported member renamed | Scenes silently lose the saved value | Values are stored in the `.tscn` by name, and override the code default; grep the scenes and set them again |
+| A one-shot action read in `_input`, or polled without checking the GUI | Clicking a menu button also places a building | Discrete actions go in `_unhandled_input`, by Input Map action name, so the GUI consumes its events first |
+| A scene built and saved from a script | `pack` and `save` return `OK`, and nodes are missing from the file | A node without `owner` is dropped with its whole subtree; load the saved file and count — see [Building scenes headless](references/building-scenes-headless.md) |
+| `Engine.time_scale` used for 2×/4× speed | The simulation behaves differently at each speed | It stretches each tick instead of adding ticks; drive the simulation from your own accumulator |
+| Anything rendering measured headless | 0 draw calls, 0 video memory, zeros read back from a MultiMesh | Headless renders nothing; measure in a short windowed run, and profile an export rather than the editor binary |
+| A node removed with `remove_child`, a `RefCounted` cycle, a server RID | Memory and object counts climb over a session | None of them is freed for you; watch `OBJECT_ORPHAN_NODE_COUNT` and the exit's `leaked` lines — see [Performance and memory](references/performance-and-memory.md) |
+| A `.tres` or `.res` save loaded from `user://` | A shared or downloaded save runs code | Resource files can embed scripts; save plain data |
+| Physics engine unset in a hand-written or upgraded `project.godot` | Physics differs from a new project; Jolt settings do nothing | `"DEFAULT"` is GodotPhysics3D; only the 4.6+ project manager writes `"Jolt Physics"`. Set `physics/3d/physics_engine` explicitly |
 
-**Read [Nodes and lifetime](references/nodes-and-lifetime.md)** before writing a node, and
-**[The C# boundary](references/csharp-boundary.md)** in any project with a `.csproj`.
+## Simulation scale: the world is data, nodes are its view
+
+A city builder, a colony or agent simulation, a 4X map or a factory game outgrows one node per thing long
+before it outgrows the CPU. Keep the simulation in packed arrays or plain objects outside the tree, step
+it on a fixed tick, and give nodes only to what the player can see.
+
+| Things | Representation |
+|---|---|
+| up to a few thousand, each with behaviour | a node each, instanced from its scene |
+| tens of thousands of one look | a MultiMesh per chunk, RenderingServer instances, or one `_draw` per chunk |
+| proximity between thousands of agents | your own grid or spatial hash — not an `Area2D`/`Area3D` each |
+| paths for many units to one place | one distance field shared by all, not a path query each |
+| a map larger than memory or the screen | chunks of compact data, with views built only near the camera |
+
+A `MeshInstance3D` costs about 4.5 KB and a `TileMapLayer` cell about 360 bytes; the same cell in your own
+array is 1–4 bytes. Forward+ batches identical mesh-and-material nodes into one draw; Mobile and
+Compatibility do not.
+
+- [Performance and memory](references/performance-and-memory.md) — before choosing a representation, using
+  servers, threads, physics at scale, speed controls, or chasing a leak.
+- [Large worlds](references/large-worlds.md) — before streaming chunks or going far from the origin.
+- [Tiles and 2D](references/tiles-and-2d.md) — before a tile, isometric or hex map, picking cells,
+  y-sorting, grid pathfinding or many sprites.
+- [Rendering and instancing](references/rendering-and-instancing.md) — before a MultiMesh or an
+  orthographic camera.
+- [Graphics quality](references/graphics-quality.md) — before changing renderer, lighting, shadows or GI.
+- [Organization and naming](references/organization-and-naming.md) — before laying out folders, naming
+  classes, autoloads, groups or actions, or moving files.
 
 ## Defaults worth keeping
 
-- **Reach a node by a reference that survives a move.** A path string breaks silently when someone drags
-  a node; an exported node reference (`@export var target: Node3D`) or a scene-unique `%Name` does not.
-- **Call down, signal up.** A parent calls its children and listens to their signals; a child does not
-  reach up the tree, and siblings talk through their parent. A scene that assumes its parent cannot be
-  instanced anywhere else.
-- **Build the scene in a `.tscn` once its shape is settled, and in code while it is not.** A scene file is
-  a second home for every decision and a merge conflict; code is readable in a diff.
+- **Reach a node by an exported reference or a `%Unique` name**, never a `$A/B/C` path that breaks when
+  someone drags a node; `%Unique` finds only nodes the same scene owns.
 - **Autoloads are created in the order listed, before the main scene.** One that reads another in
   `_ready` depends on that order; keep them few and independent.
-- **`_physics_process` is a fixed step, `_process` is per frame**, and physics may run zero or several
-  times in one frame. A simulation that must replay owns its own accumulator.
-- **Many identical meshes are one `MultiMeshInstance3D`** when per-node CPU cost shows in the profiler.
-  Forward+ already batches identical mesh-and-material nodes into one draw; Mobile and Compatibility do
-  not. See [Rendering and instancing](references/rendering-and-instancing.md).
-- **Keep `project.godot` small and hand-read.** The editor adds to it; read what it added, because a
-  setting written by accident is a decision nobody made.
+- **After any editor or `--import` run, diff `project.godot`** and revert settings nobody chose.
+
+Read [Nodes and lifetime](references/nodes-and-lifetime.md) before writing signal or export code.
 
 ## Running it
 
 **Read [Command line and headless](references/command-line-and-headless.md)** for the flags and a smoke
-run that fails when the game is broken.
+run that fails when the game is broken, and
+[Building scenes headless](references/building-scenes-headless.md) to create scenes, resources or a
+project from the command line.
 
 ```sh
 "$GODOT" --path .                                         # run
-"$GODOT" --headless --path . --import                     # import on a clean checkout, then quit
+"$GODOT" --headless --path . --import                     # import, then quit
 "$GODOT" --headless --path . --fixed-fps 60 --quit-after 300 --log-file "$PWD/run.log" -- --smoke
-"$GODOT" --headless --path . --build-solutions --quit     # C#: build without staying in the editor
+dotnet build                                              # C#: the build, with its compiler errors
 "$GODOT" --path . --write-movie "$PWD/tmp/shot/f.png" --quit-after 90   # needs a window
 ```
 
-`--build-solutions` and `--import` both start the editor, and `--write-movie` needs a window; the
-reference has why.
+Pass `--quit-after` to every `--script` run: an error before `quit()` leaves it running forever.
 
-## Report what you changed and what proves it
-
-Name the node or scene, the file and method, and the run whose output shows the behaviour. For anything
-the owner judges by eye, a capture — never a description.
-
-## References
-
-- [Nodes and lifetime](references/nodes-and-lifetime.md) — the tree, `_ready` order, `queue_free`
-  versus `free`, signals, exports, pausing.
-- [The C# boundary](references/csharp-boundary.md) — building, swallowed exceptions, the wrapper and the
-  native object, assembly reload, marshalling, target framework.
-- [Rendering and instancing](references/rendering-and-instancing.md) — automatic instancing, MultiMesh,
-  materials, cameras and projection.
-- [Command line and headless](references/command-line-and-headless.md) — flags, import, determinism,
-  captures, smoke runs with teeth, exporting.
-- [Sources](references/sources.md) — the primary documentation behind these claims.
+For anything the owner judges by eye, report a capture, never a description.
+[Sources](references/sources.md) holds the evidence behind each rule.

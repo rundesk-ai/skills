@@ -7,51 +7,44 @@ it nothing to do.
 
 | Source | Why it allocates | Instead |
 |---|---|---|
-| `new List<T>()` per frame | A fresh array every time | Reuse a field, and `Clear()` it |
-| LINQ in a hot path | An enumerator, a closure, and usually an array | A `for` loop |
-| A lambda that captures a local | A closure object per call | A static lambda, or pass state as an argument |
-| String concatenation or interpolation | A new string each time | Build once when the text changes, not every frame |
-| Boxing a struct | A heap object wrapping the value | A generic method constrained to the struct type, instead of an interface or `object` parameter |
-| `params` arrays | An array per call | An overload with fixed arguments |
-| `foreach` over an interface | `IEnumerator<T>` is a class | `foreach` over the concrete type, whose enumerator is a struct |
-| `IEnumerable<T>` returns | Deferred execution allocates machinery | Fill a caller-supplied collection |
+| LINQ in a hot path | An enumerator, a closure, and usually an array; four to five times a loop | A `for` loop; LINQ in load, save and UI refresh |
+| A lambda that captures a local, or only `this` | A closure or delegate per call (64 bytes for `this` alone) | A `static` lambda with state passed as an argument, or a delegate cached in a field |
+| Text rebuilt every frame | A new string each time | Rebuild when the value changes; format into a reused `StringBuilder` or `TryFormat` into a span |
+| `Enum.ToString()`, `Enum.GetValues<T>()` | A string or array every call | A cached `string[]` indexed by value; a static field |
+| A struct passed as an interface or `object` | A 24-byte box per call | A generic method constrained to the interface |
+| `params T[]` | An array per call | `params ReadOnlySpan<T>` (C# 13), which allocates nothing |
+| `foreach` over an interface, `IEnumerable<T>` returns | A class enumerator; deferred machinery | The concrete type, whose enumerator is a struct; fill a caller-supplied collection |
 
-```csharp
-// Bad: three allocations per frame, every frame.
-public void Draw()
-{
-    var open = _grid.Cells.Where(c => c == CellState.Open).ToList();
-    _label.Text = $"open {open.Count}";
-}
-
-// Good: no allocation while nothing changes.
-private readonly List<int> _open = new();
-
-public void Draw()
-{
-    _open.Clear();
-    var cells = _grid.Cells;
-    for (var i = 0; i < cells.Length; i++)
-        if (cells[i] == CellState.Open) _open.Add(i);
-
-    if (_open.Count != _shownCount)
-    {
-        _shownCount = _open.Count;
-        _label.Text = "open " + _shownCount;
-    }
-}
-```
-
-## Span and pooling
-
-`Span<T>` and `ReadOnlySpan<T>` give a view over memory without copying it, and `stackalloc` gives a
-short buffer with no heap at all. They are the right tool for reading a grid, slicing a buffer, or
-parsing — and they cannot be stored in a field on a class, which is the compiler enforcing that they do
-not outlive the memory they point at.
+## Pools and stack buffers
 
 `ArrayPool<T>.Shared` rents an array and gives it back. It is worth it for large, short-lived buffers,
 and it is a liability for small ones: a rented array you forget to return is a leak, and one you return
-twice is a corruption.
+twice is a corruption. `Rent(100)` returns at least 100 elements — 128 here — still holding the
+previous renter's data, so slice to the length you asked for and clear what you read before writing.
+
+`stackalloc` only a small, fixed bound, and never inside a loop: each iteration grows the frame until
+the stack overflows, which cannot be caught. `Span<int> buf = n <= 256 ? stackalloc int[256] : rented;`
+is the pattern.
+
+## Prove a tick allocates nothing
+
+`GC.GetAllocatedBytesForCurrentThread()` is exact to the object — one `new object()` reads 24 bytes —
+so a test can hold the line once the hot path is clean:
+
+```csharp
+[Fact]
+public void TickDoesNotAllocate()
+{
+    var sim = Sim.Build(seed: 1, businesses: 10_000);
+    sim.Tick(); sim.Tick();                                // warm up: JIT, static constructors, lazy caches
+    var before = GC.GetAllocatedBytesForCurrentThread();
+    for (var i = 0; i < 100; i++) sim.Tick();
+    Assert.Equal(0, GC.GetAllocatedBytesForCurrentThread() - before);
+}
+```
+
+It counts the current thread only; work on other threads needs `GC.GetTotalAllocatedBytes(precise: true)`.
+Measure a Release build outside the debugger: Debug and tier-0 JIT code allocate and run differently.
 
 ## Measure before you change anything
 
@@ -66,12 +59,17 @@ dotnet-counters monitor --process-id <pid> --counters System.Runtime
 A frame hitch with a flat allocation rate is not a GC problem, and the time spent chasing it is the real
 cost of guessing.
 
-## Structs, and when they help
+## Collector settings
 
-A `struct` in an array is stored inline, so a grid of a million cells is one allocation and one
-cache-friendly walk. That is the single biggest structural win available to a simulation, and it is why
-a cell is a byte-sized enum rather than an object.
+The default — workstation, concurrent — is right for a game client; server GC trades pause shape for
+throughput. `GCLatencyMode.SustainedLowLatency` during play avoids blocking full collections at the cost
+of a larger heap; `GC.TryStartNoGCRegion` covers a load screen, not a session. Large chunk arrays and the
+large object heap are in [Data layout](data-layout.md). All of this, and the allocation counter above,
+is CoreCLR: a host on Mono or an ahead-of-time runtime has its own collector and ignores these settings.
 
-The counter-rules: a struct larger than a few words is copied on every pass, a mutable struct is a source
-of "I changed it and nothing happened", and a struct used through an interface is boxed — which returns
-every saving to the heap.
+## Hidden struct copies
+
+A large struct is copied when passed by value to a call that is not inlined, or through a hidden
+defensive copy — a non-`readonly` member called through an `in` parameter or a `readonly` field. Mark the
+struct or the member `readonly`. A plain read-only `foreach` over a struct array measured no slower than
+`ref readonly`: the JIT removes that copy, so do not rewrite loops for it.

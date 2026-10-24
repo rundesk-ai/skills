@@ -1,6 +1,6 @@
 ---
 name: using-gdscript
-description: Use when writing, reviewing, debugging, or refactoring GDScript in a Godot 4 project, including static typing and warnings, style and code order, signals, lambdas and `await`, exports and `@onready`, Resources versus nodes, errors without exceptions, Godot 3 or Python syntax that will not parse, per-frame performance, and headless checks or GUT and gdUnit4 tests. It supplies version-gated GDScript defaults and the traps with how to prove each. Do not use it for C# in Godot, or for scene, project-setting or export work that changes no script.
+description: Use when writing, reviewing, debugging, or refactoring GDScript in a Godot 4 project, including static typing and warnings, style and code order, signals, lambdas and `await`, exports and `@onready`, Resources versus nodes, errors without exceptions, Godot 3 or Python syntax that will not parse, per-frame performance, data layout and memory for simulations with thousands of agents or large chunked maps, threads, deterministic replays and save formats, and headless checks or GUT and gdUnit4 tests. It supplies version-gated GDScript defaults and the traps with how to prove each. Do not use it for C# in Godot, or for scene, project-setting or export work that changes no script.
 ---
 
 # Use GDScript
@@ -18,55 +18,41 @@ grep -E "config/features|gdscript/warnings" project.godot
 ls addons/ 2>/dev/null                          # gut, gdUnit4, and what else ships
 ```
 
-`config/features` names the version the project targets. Your recall of GDScript mixes Godot 3, early
-Godot 4 and Python; code from the wrong one either fails to parse or, worse, parses and means something
-else. Gate every newer feature on that version:
+Your recall mixes Godot 3, early Godot 4 and Python; gate newer features on `config/features`:
 
 | Since | Feature |
 |---|---|
-| 4.1 | `static var`, `_static_init()` |
-| 4.2 | typed `for` variables, `when` guards in `match`, raw strings `r"..."`, `UNTYPED_DECLARATION` |
-| 4.3 | `@export_storage`, `@export_custom` |
-| 4.4 | `Dictionary[K, V]`, `@export_tool_button`, `@warning_ignore_start`, `.uid` files |
+| 4.1 | `static var` |
+| 4.2 | typed `for` variables (`for e: Enemy in enemies`) |
+| 4.4 | `Dictionary[K, V]` |
 | 4.5 | `@abstract`, variadic `...args`, `duplicate_deep()` |
-| 4.6 | `MISSING_AWAIT` warning, `warnings/directory_rules` |
 
 Read [Syntax from elsewhere](references/syntax-from-elsewhere.md) whenever you are unsure a construct is
 Godot 4 GDScript — before writing it, not after the parser objects.
 
-## Work in this order
-
-1. **Read the script, its scene and its callers.** A script's behaviour is split with the `.tscn` that
-   sets its exported values and node paths; renaming either side breaks the other silently.
-2. **Match the project's style**, then the official order and naming below where it has none.
-3. **Type everything you write.** See the defaults.
-4. **Parse every changed script, then run the behaviour.** See [Prove it](#prove-it).
+A script's behaviour is split with the `.tscn` that sets its exported values, node paths and signal
+connections: read both before changing either, because renaming one side breaks the other silently.
 
 ## Defaults and the failure each prevents
 
 | Prefer | Avoid | Failure prevented |
 |---|---|---|
-| `var speed: float = 4.0`, `:=` only where the type is visible on the line, typed parameters and `-> void` | untyped `var`, `:=` on `get_node()` or a `Variant` | slower generic opcodes; errors found at runtime instead of parse time |
-| `Array[Enemy]`, `Dictionary[StringName, int]` (4.4+), `PackedFloat32Array` for numbers | bare `Array` and `Dictionary` | wrong element types travelling silently |
+| `var speed: float = 4.0`, `:=` only where the type is visible on the line, typed parameters and `-> void` | untyped `var`; `:=` on `get_node()`, `$Label` (infers `Node`) or a `Variant` | slower generic opcodes; errors found at runtime instead of parse time |
+| `Array[Enemy]`, `Dictionary[StringName, int]` (4.4+), packed arrays for numbers | bare `Array` and `Dictionary` | wrong element types travelling silently |
 | `if body is Enemy:` then use it | `body as Enemy` and carry on | `as` returns `null` on a failed object cast with no error |
-| `@onready var _bar: ProgressBar = %HealthBar`, or `@export var bar: ProgressBar` | `get_node("../../UI/Bar")` in `_process`, or a path string in many places | a path that breaks when a node moves, and a lookup every frame |
 | `signal health_changed(new_value: int)`; `health_changed.emit(hp)`; `sig.connect(_on_x)` | `emit_signal("...")`, `connect("sig", self, "m")`, `call`/`has_method` by name | typos that only fail at runtime, or never |
 | Return an `Error` or a typed result; `push_error()` on a broken invariant | expecting an exception | GDScript has no `try`; an error aborts the current function and the game carries on |
 | `assert(cond, "why")` with no side effects | `assert(_load_level())` | asserts are not evaluated in release exports, so the call disappears |
-| `RefCounted` or `Resource` for data; a `Node` only for something in the tree | a `Node` per data record; a plain `Object` | per-node processing cost; an `Object` leaks unless freed |
-| `class_name` plus static functions for helpers | an autoload for stateless utilities | global mutable state and load-order coupling |
-| Typed math (`clampf`, `absi`, `lerpf`), `is_equal_approx` for floats | `clamp`, `abs`, `==` on floats | `Variant` results; float comparisons that fail by one ulp |
+| Data in `RefCounted` or `Resource`; a `Node` only for something in the tree | a `Node` per data record; a bare `Object` | per-node processing cost; an `Object` leaks unless `free()`d |
+| `class_name` plus `static func` for helpers | an autoload for stateless utilities | global mutable state and load-order coupling |
+| Typed math (`clampf`, `absi`, `lerpf`), `is_equal_approx` for floats | `clamp`, `abs`, `==` on floats | `var x := clamp(...)` does not parse (`clamp` returns `Variant`); float comparisons that fail by one ulp |
 
-**Order and naming** (the official style guide): `@tool`/`@icon`, `class_name`, `extends`, `##` doc
-comment, signals, enums, constants, static vars, `@export` vars, other vars, `@onready` vars,
-`_static_init`, static methods, built-in virtuals (`_init`, `_enter_tree`, `_ready`, `_process`,
-`_physics_process`, …), other overrides, then public before private methods, inner classes last. Files
-`snake_case.gd` matching the `class_name`; classes and nodes `PascalCase`; functions, variables and
-signals `snake_case`, signals in the past tense; constants and enum members `CONSTANT_CASE`; a leading
-`_` for private members. Tabs, `and`/`or`/`not`, double quotes, two blank lines between functions.
+Follow the project's style, or the official style guide where it has none. Two naming rules have
+consequences beyond style: the file is the `class_name` in snake_case with acronyms as one word
+(`YAMLParser` in `yaml_parser.gd`), and **`class_name`s are one flat namespace across the project and its
+addons** — see the traps.
 
-Read [Idioms](references/idioms.md) for signals, lambdas, `await`, properties, exports, resources and
-performance, with paired good and bad code.
+Read [Idioms](references/idioms.md) for the signal, coroutine, setter and resource traps with code.
 
 ## The traps, and how to prove each one
 
@@ -74,17 +60,47 @@ performance, with paired good and bad code.
 |---|---|---|
 | A runtime error in a callback | The feature does nothing; the process exits 0 | The function aborted after logging `SCRIPT ERROR`. Grep the whole log: `grep -n -e 'SCRIPT ERROR' -e 'ERROR:' run.log` |
 | `--check-only` on a broken script | Exit 0 | It prints the parse error but does not fail the exit code on 4.7. Use the checker below, or grep its output |
-| A `class_name` "not declared" on a clean checkout | Parse errors in files that are fine in the editor | The global class cache lives in the ignored `.godot/`. Run `--headless --import` once first |
-| A lambda reassigning a captured local | The outer variable never changes | Locals are captured by value at creation; mutate an Array, Dictionary or member instead (`CONFUSABLE_CAPTURE_REASSIGNMENT`) |
+| A `--script` run that hits an error | The process never exits | `quit()` was never reached; always pass `--quit-after` |
+| A `class_name` "not declared" | Parse errors in files that are fine in the editor | The global class cache lives in the ignored `.godot/`. Run `--headless --import` on a clean checkout and after adding or moving a `class_name` file |
+| Two scripts with the same `class_name` | Nothing at run time; one silently wins | Only reloading the script reports "hides a global script class" — the checker below catches it. Prefix by domain: `BuildingDef`, `ItemDef` |
+| An autoload named like a `class_name` | Both fail to load, and every caller with them | "Class hides an autoload singleton". Keep the autoload name callers type; rename the class |
+| A lambda reassigning a captured local | The outer variable never changes | Locals are captured by value at creation; mutate an Array, Dictionary or member instead |
 | `await` on a signal of a node that is then freed | The coroutine never resumes, silently | Await only what is guaranteed to emit, or check `is_instance_valid` and use a timeout |
 | A function containing `await` called without it | The caller runs on before the work finishes | Any `await` makes the function a coroutine; callers needing its result must `await` it |
-| `var a: Array[int] = untyped_array` | An error and an empty or unchanged array | Typed and untyped arrays are distinct; `typed.assign(untyped)` converts, and logs on a bad element |
-| `5 / 2` | `2` | Integer division; write `5 / 2.0` or `float(a) / b` (`INTEGER_DIVISION`) |
-| `-7 % 3` | `-1` | `%` truncates toward zero; use `posmod`/`fposmod` |
+| `await` inside `_ready` | The parent and the `ready` signal see the node before its setup finished | Keep `_ready` synchronous, or emit your own signal when done |
+| `_init` or `_ready` overridden in a subclass | The parent's setup never runs | Neither chains, even with no arguments (observed on 4.7.2); only `_notification` runs on every level. Call `super()` |
+| `var a: Array[int] = untyped_array`; `typed.map(...)` | An error, an empty array, or an untyped result | Typed and untyped arrays are distinct, and `map` returns an untyped `Array` (`filter` keeps the type). `typed.assign(untyped)` converts, and logs on a bad element |
+| `5 / 2`; `-7 % 3` | `2`; `-1` | Integer division; `%` truncates toward zero — `posmod` and `floori` for grid coordinates |
+| `"1" == 1`, or any `==` between mismatched types | `SCRIPT ERROR`, and the function aborts | Not `false`: a runtime error. Convert first, or `is_same()` |
 | A shared `Resource` edited at runtime | Every instance changes together | Resources load once and are shared; `duplicate()` it or set `resource_local_to_scene` |
 | `duplicate()` on nested data | Inner arrays still shared | It is shallow; `duplicate(true)`, or `duplicate_deep()` from 4.5 for resources inside |
-| Erasing from an Array while iterating it | Skipped elements | Unsupported; iterate a copy, or build a new array with `filter` |
+| Two `RefCounted` objects referring to each other | Memory climbs; `leaked at exit` | Reference counting never frees a cycle — `building.residents` ↔ `citizen.home` is the usual one. Make one side a `WeakRef` or an id |
+| `line.points[0] = p` on an engine property | Nothing changes, silently | The property returns a copy; read, modify, assign back |
 | An exported member renamed | Scenes silently lose their saved value | Values are stored in the `.tscn` by name; grep the scenes and re-set them |
+| Data read back from JSON | Lookups miss, `match` skips every branch, a `'5.0'` key error | Every number comes back a `float` and every key a `String`; `int()` at the load boundary |
+| `randf`, `randi`, `shuffle`, `pick_random` in simulation code | A replay or a loaded save drifts | One global generator that anything can draw from; own a `RandomNumberGenerator` and save its `seed` and `state` |
+| Enum values in a save or a `.tres` | Reordering the enum changes every saved value | Enums are plain ints; see [Determinism and saves](references/determinism-and-saves.md) |
+
+## Simulation scale
+
+A simulation with thousands of agents or a large map lives in packed arrays, not objects:
+
+- **A grid is one flat packed array** indexed `y * width + x`: about 8 times faster than a `Dictionary`
+  keyed by `Vector2i` (7 times on a neighbour sum), at 1–4 bytes a cell against 82.
+- **Thousands of agents are columns** — one packed array per field — at 12 bytes an agent against about
+  1,000 for a script `RefCounted`, and four times faster to update.
+- **Every GDScript call costs about 40 ns in a release build**: inline the work in the loop the profiler
+  names, batch signals per tick, and never `sort_custom` thousands of objects per tick (141 ms against
+  4.8 ms for a packed-key sort).
+- **`WorkerThreadPool.add_group_task` with `high_priority = true`, one task per chunk** — the default low
+  priority stalled at 4 times on 16 cores.
+- `PackedInt32Array`, `PackedFloat32Array` and `Vector2` are 32-bit while `int` and `float` are 64-bit:
+  a counter wraps and a position loses precision far from the origin. Money and populations go in
+  `PackedInt64Array` or plain `int`.
+
+Read [Simulation scale](references/simulation-scale.md) before writing a grid, an agent list, a tick loop
+or a chunked world, and [Determinism and saves](references/determinism-and-saves.md) before a replay, a
+save format or anything seeded.
 
 ## Prove it
 
@@ -92,30 +108,17 @@ Warnings never reach a headless run, and errors rarely reach the exit code, so p
 steps:
 
 ```sh
-"$GODOT" --headless --path . --import                                   # once per clean checkout
-"$GODOT" --headless --path . --script <skill>/scripts/check_scripts.gd   # every .gd parses; exits 1 if not
-"$GODOT" --headless --path . --log-file run.log --quit-after 300         # then grep run.log for SCRIPT ERROR
+"$GODOT" --headless --path . --import                                   # clean checkout, or new files
+"$GODOT" --headless --path . --quit-after 600 --script <skill>/scripts/check_scripts.gd
+"$GODOT" --headless --path . --log-file "$PWD/run.log" --quit-after 300  # then grep run.log for SCRIPT ERROR
 ```
 
-`<skill>` is the directory this `SKILL.md` was loaded from. `scripts/check_scripts.gd` reloads every
-script under `res://`, addons included, or under the roots passed after `--`, with the project's
-autoloads registered, and prints `GDSCRIPT CHECKED n FAILED m`. Then run the project's tests. Read
-[Checking and testing](references/checking-and-testing.md) for warnings as errors, gdtoolkit, GUT and
-gdUnit4 commands, and a smoke run whose verdict line cannot pass by accident.
+`<skill>` is the directory this `SKILL.md` was loaded from; the checker prints
+`GDSCRIPT CHECKED n FAILED m` and exits 1 on any failure. Then run the project's tests. Read
+[Checking and testing](references/checking-and-testing.md) for what the checker covers, warnings as
+errors, test runners, and a smoke run whose verdict line cannot pass by accident; read
+[Typing and warnings](references/typing-and-warnings.md) before raising a warning to an error.
 
-## Report
-
-Name the script and function, the engine version, and the command whose output proves it: the checker's
-verdict line, the test run, or the log grep that came back empty. A visual result is the owner's to
-judge; say exactly what to look at.
-
-## References
-
-- [Idioms](references/idioms.md) — signals, lambdas, coroutines, properties, exports, resources versus
-  nodes, errors, performance; good and bad pairs.
-- [Typing and warnings](references/typing-and-warnings.md) — typed collections, casts, which warnings to
-  raise to errors and how.
-- [Syntax from elsewhere](references/syntax-from-elsewhere.md) — Godot 3 and Python constructs, and what
-  replaces each.
-- [Checking and testing](references/checking-and-testing.md) — headless checks, linters, test runners, CI.
-- [Sources](references/sources.md) — the evidence behind each claim, and what was observed on the engine.
+Report the engine version and the output that proves the change — the checker's verdict line, the test
+run, or the log grep that came back empty — and for a visual result, exactly what the owner should look
+at. [Sources](references/sources.md) holds the evidence behind each rule.

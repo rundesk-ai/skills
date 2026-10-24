@@ -1,67 +1,46 @@
-# C# anti-patterns
+# Traps that compile clean
 
-Each entry is a mistake, the failure it produces, and the replacement. The defaults in `SKILL.md`
-(nullability, mutable structs, `async void`) and the per-frame allocation table in
-[Allocation and collection](allocation-and-gc.md) are not repeated here.
+Each one builds without a warning and fails later, usually far from the line that caused it. The
+determinism, number and allocation traps have their own references; these are the rest.
 
-## State and types
+## Collections
 
-**A `public` field on a type others construct.** Nothing can be validated later without breaking callers.
-→ A property, and validate in the constructor.
+**Mutating a dictionary while iterating it no longer throws.** Since .NET Core 3.0, `Remove` and
+overwriting an existing key during `foreach` succeed — only adding a key throws — so the bug that used to
+announce itself now skips or reorders silently. Collect the changes, then apply them.
 
-**A collection property with a public setter.** Any caller can replace the whole collection.
-→ Expose `IReadOnlyList<T>`, or a `ReadOnlySpan<T>` for a hot read.
+**A key mutated after it went into a `HashSet` or `Dictionary`.** `Contains` returns false for an object
+that is still inside. Keys are immutable (`readonly record struct`), or hash only fields that never change.
 
-**`==` on a reference type expecting value comparison.** Two equal objects are not the same object.
-→ `record`, or implement `IEquatable<T>` deliberately.
+**`ConcurrentDictionary.GetOrAdd(key, factory)` with an expensive or side-effecting factory.** Under
+contention the factory ran eight times for one key; only one result is kept, and the other seven spawned
+entities or loaded assets anyway. Store `Lazy<T>` values so the work runs once.
 
-## Control flow
+## Records and structs
 
-**`catch (Exception)` with no rethrow.** The failure vanishes and the program continues in a state
-nobody designed.
-→ Catch the specific type you can handle; let the rest travel.
+**A record holding a `List<T>`.** Equality compares the list by reference, and `with` copies the
+reference: the "copy" made for undo, prediction or a what-if shares its list with the live state.
+Immutable collections, or deep-copy collections when cloning state.
 
-**`.Result` or `.Wait()` on a Task.** Deadlock on a context that needs the thread you just blocked.
-→ `await`.
+**A struct field initializer trusted everywhere.** `struct Cfg { public int Speed = 5; public Cfg() {} }`
+gives `5` from `new Cfg()` and `0` from `default` and from every element of a new array. Make the zero
+value valid, or always construct.
 
-**An exception used for ordinary control flow.** Slow, and it buries the real one in the log.
-→ A `TryX` method returning `bool`.
+## Events and lifetime
 
-**An empty `catch` block.** The single most expensive line in any codebase.
-→ Log it, or do not catch it.
+**An event subscription that outlives the subscriber.** The publisher keeps the subscriber alive, and it
+keeps receiving events after the object it represents is gone — in an engine host, after the native
+object was freed, where the next access throws. Unsubscribe where you subscribed, when the object leaves.
 
-## Collections and loops
+**`handler -= () => Refresh();` removes nothing.** A new lambda is a new delegate. Keep the delegate in a
+field, or subscribe a method, and remove that.
 
-**`Dictionary` or `HashSet` enumeration in simulation state.** Order is not part of the contract; see
-[Determinism](determinism.md).
-→ An ordered collection, or a sorted key snapshot.
+**`static` mutable state.** It survives between tests, so a suite passes in one order and fails in
+another, and between play sessions in a host that skips reloading the assembly. Instance state, owned by
+something that is created and discarded with the session.
 
-**`.Count()` on an `IEnumerable<T>`.** Walks the whole sequence; on a lazy one it may walk it twice.
-→ `.Count` on a collection.
+## A tick that throws halfway
 
-**Mutating a collection while iterating it.** An exception, or worse, a silently skipped element.
-→ Collect what to change, then change it.
-
-## Lifetime
-
-**A `static` mutable field.** Survives between tests, so a suite passes in one order and fails in
-another; and, in a host that reloads assemblies, it resets when nobody asked.
-→ Instance state, owned by something.
-
-**An event subscription never removed.** The subscriber cannot be collected, and it keeps receiving
-events after it should have stopped.
-→ Unsubscribe where you subscribed, or use a weak pattern deliberately.
-
-**`IDisposable` not disposed.** A handle or buffer held until the finalizer, which may be never.
-→ `using`.
-
-## Shape
-
-**A method that both decides and acts and reports.** It cannot be tested without doing all three.
-→ Split until each part can be proved alone.
-
-**A parameter that only chooses a branch.** `Build(grid, preview: true)` is two methods.
-→ Two methods.
-
-**A comment restating the code.** It goes stale and then it lies.
-→ Comment the *why*: the rule, the constraint, the failure this shape prevents.
+An exception in the middle of a tick leaves the simulation half-updated: some agents stepped, some not,
+a total out of step with its parts. Validate before mutating, or compute the next state into a buffer and
+swap it in only when the whole tick succeeded.

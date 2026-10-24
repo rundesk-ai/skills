@@ -36,23 +36,31 @@ Then read the exception completely, inner exceptions included, as `csharp.md` de
 
 ## Suspect the native lifetime before the C# one
 
-The most common Godot C# defect has no C# cause. A `Node` is a C# object wrapping a native object,
-and `QueueFree()` destroys the native one while the C# reference lives on until the GC collects it.
+The most common Godot C# defect has no C# cause. A `Node` is a C# object wrapping a native object.
+`QueueFree()` destroys the native one at the end of the frame, while the C# reference lives on until
+the GC collects it — so the failure appears a frame later, in code far from the free.
 
 ```csharp
-// Bad: the reference is non-null and the object behind it is gone.
 _panel.QueueFree();
-_panel.Visible = false;          // ObjectDisposedException, or a native null dereference
+_panel.Visible = false;          // still works: the node is valid until the frame ends
 
-// Good: ask the engine, not the reference.
-if (GodotObject.IsInstanceValid(_panel))
+// Next frame, from a timer, a signal or _Process:
+_panel.Visible = false;          // ObjectDisposedException — the reference is non-null
+
+// Ask the engine, not the reference, and drop references you own when you free them.
+if (GodotObject.IsInstanceValid(_panel) && !_panel.IsQueuedForDeletion())
     _panel.Visible = false;
 ```
+
+`IsInstanceValid` is also false after `Dispose()`, which drops only the wrapper: the node is still in the
+tree and still drawing. A node that "is invalid" yet visible on screen was disposed, not freed.
 
 The same boundary explains three more symptoms: a signal handler that stops firing after an assembly
 reload (the delegate was bound to an assembly that no longer exists); a `static` field that resets
 for no visible reason (the editor reloaded the assembly and static state does not survive it); and a
-lambda connected to a signal that keeps its captured target alive longer than the scene.
+lambda connected to a signal that keeps firing after the nodes it captured are freed, throwing
+`ObjectDisposedException` — as does a method subscribed with `+=` to a custom `[Signal]`, which is not
+disconnected when its receiver is freed.
 
 When the stack has no managed frames at all, the fault is in the engine or in marshalling. Symbolize
 the OS crash report and read the faulting thread before assuming the C# is at fault:
@@ -61,10 +69,11 @@ the OS crash report and read the faulting thread before assuming the C# is at fa
 <godot-binary> --verbose --headless --path . 2>&1 | tail -80
 ```
 
-## Attach the debugger the way Godot expects
+## Launch the debugger the way Godot expects
 
-Godot's C# debugging is an attach: the editor or CLI exposes the debugger and the IDE connects to
-it. Launching the game from the IDE rather than from Godot is what makes breakpoints bind. Use
+The documented setup launches the Godot binary from the IDE as the debuggee — a `coreclr` launch
+configuration whose program is the engine, with `--path` to the project and a `dotnet build` before it —
+rather than attaching to a game Godot started. Breakpoints bind in the assembly that build produced. Use
 `dotnet-counters` and `dotnet-dump` against the Godot process id as `csharp.md` describes.
 
 A simulation running inside Godot is where the determinism traps in `csharp.md` bite hardest: keep
