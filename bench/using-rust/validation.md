@@ -21,3 +21,5 @@ Each fixture's seeded defects were reproduced before its rubric was written:
   unbuffered `println!` for 80,000 rows, and a `bench.sh` that times a debug build (11.7 s against
   1.24 s in release). A std-only rewrite produced byte-identical output in 0.29 s (4.3x).
 - `pystats` (routing near miss): a Python division by zero beside an untouched Rust crate.
+
+2026-10-24: see `bench/results/using-rust/2026-10-24.json`.

@@ -14,3 +14,5 @@ the renderer's friendly messages never show; `app:open-link` passes any string t
 `shell.openExternal`; the page is loaded from `file://` with no CSP and no fuses configured.
 
 `csvtotal` (routing near miss) is a plain Node CLI whose `reduce` concatenates strings.
+
+2026-10-24: see `bench/results/using-electron/2026-10-24.json`.

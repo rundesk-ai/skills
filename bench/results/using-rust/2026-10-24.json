@@ -1,0 +1,127 @@
+{
+ "date": "2026-10-24",
+ "skill": "using-rust",
+ "skill_hash": "b13008a76373be4e",
+ "score": 0.25,
+ "cases": 7,
+ "cases_version": 1,
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "q04-complex",
+  "r01-direct",
+  "r02-indirect",
+  "r03-near-miss"
+ ],
+ "agents": {
+  "claude": {
+   "version": "2.1.310",
+   "model": "claude-opus-5-5",
+   "routing": "3/3",
+   "near_miss_fired": false,
+   "fired_on_quality": "8/8",
+   "better": 1,
+   "same": 3,
+   "worse": 0,
+   "score": 0.25,
+   "quality": {
+    "q01-easy": {
+     "with": 1.0,
+     "without": 0.75,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      1.0
+     ],
+     "spread_without": [
+      0.75,
+      0.75
+     ],
+     "verdict": "better",
+     "tokens_with": [
+      120092,
+      119117
+     ],
+     "tokens_without": [
+      76786,
+      76159
+     ]
+    },
+    "q02-medium": {
+     "with": 1.0,
+     "without": 1.0,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      1.0
+     ],
+     "spread_without": [
+      1.0,
+      1.0
+     ],
+     "verdict": "same",
+     "tokens_with": [
+      197989,
+      166757
+     ],
+     "tokens_without": [
+      145248,
+      143573
+     ]
+    },
+    "q03-complex": {
+     "with": 1.0,
+     "without": 0.969,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      1.0
+     ],
+     "spread_without": [
+      1.0,
+      0.938
+     ],
+     "verdict": "same",
+     "tokens_with": [
+      301822,
+      263217
+     ],
+     "tokens_without": [
+      136055,
+      107248
+     ]
+    },
+    "q04-complex": {
+     "with": 0.833,
+     "without": 0.861,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.833,
+      0.833
+     ],
+     "spread_without": [
+      0.889,
+      0.833
+     ],
+     "verdict": "same",
+     "tokens_with": [
+      1125233,
+      1296300
+     ],
+     "tokens_without": [
+      1401803,
+      1496879
+     ]
+    }
+   }
+  },
+  "codex": {
+   "skipped": "Claude only, at the owner's request"
+  },
+  "grok": {
+   "skipped": "Claude only, at the owner's request"
+  }
+ },
+ "notes": "Blind-graded by a judge given unlabeled A/B outputs and the case rubric; it re-ran cargo test and clippy on every side and timed q03 and q04 in release. q01: both arms fixed the broken pipe identically; both skilled runs named SIGPIPE, reproduced the panic first and ran clippy (the skill's std-edge-cases reference and verification loop), neither unskilled run did all three. q02: four-way tie at full marks. q03: all four landed on the same scoped-lock and OnceCell design at about 0.38 s; one unskilled run did not report clippy. q04 (performance): every run kept output byte-identical and beat 3x (5.1x, 7.0x with the skill; 5.8x, 19x without); no run in either arm profiled before optimising, so the skill's profile-first step did not change behaviour, and the fastest run (19x, memmap2 and LTO) was unskilled. The performance reference was read in both skilled q04 runs but bought no measurable gain on this case. Runs: 2 per arm, fewer than the 3 the method asks for."
+}

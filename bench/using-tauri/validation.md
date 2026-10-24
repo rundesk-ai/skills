@@ -16,3 +16,5 @@ Fixtures are Tauri 2 apps (tauri 2.12, plugins fs and opener, Vite and TypeScrip
   `list_notes` from the main window was refused while `export_all` from the `export` window was
   allowed; the new `settings` window is in no capability, so its fs read was denied.
 - `tempconv` (routing near miss): a plain Rust CLI whose integer division gives 21.0C for 70f.
+
+2026-10-24: see `bench/results/using-tauri/2026-10-24.json`.
