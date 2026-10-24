@@ -1,6 +1,6 @@
 ---
 name: managing-development-work
-description: Use when taking on, scoping, planning, delivering or finishing development work — a ticket, feature, bug fix, refactor or configuration change — including deciding what actually needs building, breaking a large or vague request into pieces shipped one at a time, picking up or resuming work from an earlier session, delegating parts, and deciding when it is done. It supplies the work contract, the least-work order of solutions, end-to-end slicing, a brief that survives sessions, and proof. Do not use it to diagnose a failure of unknown cause, or to write a ticket for people to read.
+description: Use when taking on, scoping, planning, delivering or finishing development work — a ticket, feature, bug fix, refactor or configuration change — including deciding what actually needs building, breaking a large or vague request into pieces shipped one at a time, picking up or resuming work from an earlier session, handing parts to other agents or subagents and integrating what they return, and deciding when it is done. It supplies the work contract, the least-work order of solutions, end-to-end slicing, handoffs for delegated work, a brief that survives sessions, and proof. Do not use it to diagnose a failure of unknown cause, or to write a ticket for people to read.
 ---
 
 # Manage development work
@@ -25,6 +25,9 @@ Turn the request — or the ticket it arrived as — into one contract before ch
 - **Preservation:** behavior, data, compatibility and interfaces that must not change.
 - **Authority:** what was asked for, and which later actions still need approval. Investigating,
   planning and implementing are separate authorizations.
+
+When the work arrives as a handoff from another agent, the handoff is the contract: its boundary is
+the scope, its stop condition is authority, and it is reported back in the form it asks for.
 
 Write the outcome and proof in the turn before the first edit — one line each for direct work, the
 head of the slice list otherwise. The requester can correct a wrong contract before any
@@ -108,7 +111,24 @@ slice list exists, and resume from the first unproven slice, not the last thing 
 [Tracking](references/tracking.md) for its shape, where it lives so a later session finds it, and when
 to update and remove it.
 
-## 6. Build, coordinate and hold the line
+## 6. Delegate a part
+
+Hand a part to another agent or subagent when it has an edit boundary of its own, or when finding its
+answer means reading far more than the answer is worth keeping in your context. Do a lookup or a
+few-step change yourself: writing the handoff and checking what returns cost more than the work.
+
+- Decisions, dependency order, integration and the final report stay with you; a delegate owns only
+  its part.
+- Parallel delegates never edit the same file. Give each its own files and keep the shared one (an
+  entry point, a router, a registry) for yourself to wire once both return; two agents editing one
+  file overwrite or half-merge each other's work.
+- The delegate knows the repository and your handoff, and nothing of this conversation. Write the
+  handoff from the slice's contract with the template in [Coordination](references/coordination.md).
+- What returns is a claim. Read the diff and rerun its proof, then the repository's gate on the
+  integrated result, before anything builds on it; update the brief when a handoff goes out or
+  comes back.
+
+## 7. Build, coordinate and hold the line
 
 - Finish everything the change breaks: callers, tests and fixtures. New logic with a branch, a loop,
   a parser, money or security leaves one small test; trivial changes need none.
@@ -118,9 +138,9 @@ to update and remove it.
 - Never infer a refactor from a feature or bug request.
 - Add evidence only for a named risk: auth or secrets, money, schema or stored data, production,
   public contracts, concurrency. Read [Coordination](references/coordination.md) for the risk
-  responses and for delegating and integrating work.
+  responses.
 
-## 7. Prove it and hand it over
+## 8. Prove it and hand it over
 
 Done means every **Done when** line traced to observed evidence: focused checks and the repository's
 gate passed, a representative path produced the expected result, named risks have their proof, and

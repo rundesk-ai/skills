@@ -99,6 +99,16 @@ universal development ceremony.
   expected, and keeping it where the next session looks rather than in session scratch, are
   operational conclusions from the Anthropic harness report above: its fix was a progress record
   written for the next session to read, which only works if that session finds it.
+- Delegating as its own step, the rule that parallel delegates never edit the same file, and the
+  handoff template are operational conclusions from a 2026-10-24 reproduction: two requests handed
+  to parallel subagents in the invoicer fixture, two runs with the skill and two without. Every run
+  wrote a self-contained brief unaided, but the skill loaded in only one of the two skilled runs, and
+  that run alone gave each delegate its own files and kept the shared entry point for itself; the
+  other three ran two agents editing one file at once. The template's lines restate the Anthropic
+  report's objectives, output format and task boundaries in this skill's contract terms.
+- Handing an investigator or reviewer the question rather than the expected answer is an
+  operational conclusion: a delegate given a hypothesis is a confirmation request, which the
+  independent-evidence principle above rules out.
 - The slice-size rule — one outcome, its own proof, one working session — and the doubling
   threshold for re-slicing are operational conclusions. The sources establish small integrated
   slices and falling agent reliability with task length; they do not supply these thresholds.
