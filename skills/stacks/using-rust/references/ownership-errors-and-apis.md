@@ -57,16 +57,15 @@ thread or task that must own it. Clone right before the hand-off, not at the top
 
 - Panic only for a broken invariant — a bug — never for bad input, I/O or a missing file. `expect`
   states the invariant: `.expect("the regex literal is valid")`. Unwrapping a `Mutex::lock` result is
-  the std idiom, since a poisoned lock means another thread already panicked.
+  the std idiom, except in a long-running service (see poisoning in [async and
+  concurrency](async-and-concurrency.md)).
 - **An error is shown once.** The wrapped error belongs in `source()` *or* in the outer `Display`,
   not both, or a chain reporter prints "failed to load config: no such file: no such file". With
   thiserror, `#[error("failed to load config")] Load(#[source] io::Error)`, not `{0}` in the message.
 - Display messages are lowercase with no trailing period, so they compose in a chain.
-- Never use `()` as an error type, and never `let _ = fallible()`: if discarding is right, say why in
-  a comment beside an explicit `.ok()` or match.
-
-## Numbers
-
+- Convert a lower error into yours with a `From` impl (`#[from]` in thiserror), so `?` does it;
+  repeated `.map_err(...)` at every call site is noise that drifts. Keep `map_err` for adding
+  context the source error lacks, such as the path.
 - **Overflow panics in debug and wraps in release.** Tests built in debug never see the release
   behavior. Use `checked_*` and turn `None` into an error, `saturating_*` where clamping is right, or
   `wrapping_*` where wrapping is the intent. For arithmetic whose correctness matters in production,
@@ -95,7 +94,15 @@ as a design decision to state, not a side effect of making something compile.
   one obvious, lossless conversion between two types is a `From` impl, which also gives `Into`; a
   named `from_*` constructor is right when the input needs a meaning such as units
   (`Duration::from_secs`). Callers guess names from
-  these, and Clippy flags several (`wrong_self_convention`).
+  these. Clippy's `wrong_self_convention` checks only private items by default, so a public
+  `to_*` that consumes `self` goes unflagged.
+- **Comparison traits must agree.** `Ord`, `PartialOrd`, `Eq` and `Hash` describe one order and one
+  equality. A hand-written `Ord` beside a derived `PartialOrd` compiles, but `<` and `sort()` use
+  `PartialOrd`, so they follow the field order, while `cmp`, `max` and `BTreeSet` follow your rule:
+  the same two values came out in opposite orders from `sort()` and from a `BTreeSet`. Derive all of them, or write `Ord` and implement
+  `partial_cmp` as `Some(self.cmp(other))`. Clippy denies the mismatch
+  (`derive_ord_xor_partial_ord`), which is one reason to run it. Sorting with an inconsistent
+  order panics since 1.81.
 - **The common traits.** Every public type implements `Debug`. Derive `Clone`, `PartialEq`, `Eq`,
   `Hash`, `Default` and `Copy` where they mean something for the type — a caller cannot add them
   later. Put trait bounds on `impl` blocks and functions, not on the struct definition, where every
@@ -114,7 +121,5 @@ as a design decision to state, not a side effect of making something compile.
 - **`async fn` in a public trait** warns (`async_fn_in_trait`) because callers cannot require the
   returned future to be `Send`. Declare `fn get(&self) -> impl Future<Output = T> + Send;`
   (implementors may still write `async fn`); use the boxing `async-trait` crate only for `dyn` use.
-- **One path per item.** After moving an item, update its users; do not leave a re-export under the
-  old path unless it is a published API with a deprecation plan.
 - Run `cargo semver-checks` before releasing a published library. It misses some breakage — changed
   field and parameter types, generics, features — so review those by hand.

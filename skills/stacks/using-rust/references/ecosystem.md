@@ -7,19 +7,12 @@ a proven solution instead of a hand-rolled one.
 
 ## Choose in this order
 
-1. **What the project already depends on.** Read `Cargo.toml`; `cargo tree -i <crate>` shows why
-   a crate is in the lockfile. A crate present only as another crate's dependency is not a vetted
-   choice to build on. A second crate for a
-   job one already does doubles the compile time and splits the code's conventions.
-2. **std, when it covers the job completely.** `std` now holds `LazyLock`, `OnceLock`,
-   `IsTerminal`, `thread::scope`, `available_parallelism` and `io::Error::other`. Each replaces a
-   crate that older code still pulls in.
-3. **The established crate below.** Hand-rolling a parser, a date calculation, a retry loop with
-   jitter, a constant-time compare or a TLS setup re-creates bugs those crates fixed years ago.
-4. **Verify before adding** with `cargo info <crate>`: confirm the name, recent releases and that the
-   repository is not archived. Then run `cargo deny check advisories` or `cargo audit` if the project
-   has them. These defaults are a starting point. They are not proof that a crate is still
-   maintained.
+What the project already depends on, then std, then the crate below. A crate present in the
+lockfile only as another crate's dependency is not a vetted choice to build on, and a second crate
+for a job one already does doubles compile time and splits conventions. `std` now holds
+`LazyLock`, `OnceLock`, `IsTerminal`, `thread::scope` and `io::Error::other`, each replacing a crate
+older code pulls in. Before adding a crate, `cargo info <crate>` (the name exists, recent releases,
+not archived), then `cargo deny check advisories` or `cargo audit` where the project has them.
 
 Read the locked version's `[features]` before writing a feature list: names change between major
 versions (reqwest 0.13 made rustls its default TLS and dropped `rustls-tls`), and
@@ -41,27 +34,15 @@ versions (reqwest 0.13 made rustls its default TLS and dropped `rustls-tls`), an
 | HTTP server | `axum` with `tower` and `tower-http` middleware | timeouts, limits, CORS and tracing come from `tower-http`; do not hand-write them |
 | Database | `sqlx` (compile-checked queries) or `diesel` | `rusqlite` for embedded SQLite; never build SQL with `format!` |
 | Data parallelism | `rayon` | `par_iter()` replaces hand-made thread pools for CPU work |
-| Channels beyond std | `crossbeam-channel`, or `tokio::sync` in async | |
 | Dates and time zones | `jiff`; `chrono` or `time` where already used | DST-aware arithmetic and the time-zone database are not hand-written |
+| Parsing text or binary formats | `winnow` or `nom` | parser combinators that work on `&[u8]` and borrow from the input; a hand-written recursive parser needs a depth cap on untrusted input |
 | Regex | `regex` | linear time, so no catastrophic backtracking; compile once in a `LazyLock` |
-| Randomness | `rand`; `getrandom` for raw OS bytes | |
-| IDs | `uuid` | |
 | Temporary files, atomic writes | `tempfile` | `NamedTempFile::persist` renames atomically; `sync_all` first, since it does not |
-| Directory walking | `walkdir`; `ignore` to respect `.gitignore` | |
 | User directories | `directories` or `dirs` | never assemble `~/.config` by hand; it differs on every platform |
-| Bit flags, enum helpers | `bitflags`, `strum` | |
 | Small-vector and arena storage | `smallvec`, `slotmap`, `typed-arena` | `slotmap` gives graph nodes stable, generation-checked keys |
-| Bytes for networking | `bytes` | |
-| Unicode text | `unicode-segmentation`, `unicode-width` | for user-perceived characters and terminal columns |
 | Terminal colour | `anstream` with `anstyle` | `anstream` strips colour when output is not a terminal; `owo-colors` does only through `if_supports_color` |
-| TLS | `rustls` | |
 | Cryptography | RustCrypto crates (`sha2`, `hmac`, `aes-gcm`), `ring`, `argon2` for passwords | never write a primitive, a password hash or a comparison of secrets yourself |
 | Secrets in memory | `secrecy`; `subtle` for constant-time comparison | `==` on a token leaks its length and prefix through timing |
-| Property tests | `proptest` | |
-| Snapshot tests | `insta` | |
-| Testing a CLI | `assert_cmd`, `trycmd` | |
-| Mocking HTTP | `wiremock` | |
-| Benchmarks | `criterion` or `divan` | |
 | Fuzzing | `cargo fuzz` | for parsers and anything taking untrusted bytes |
 | Testing lock-free or atomic code | `loom` | it explores thread interleavings; plain tests cannot |
 

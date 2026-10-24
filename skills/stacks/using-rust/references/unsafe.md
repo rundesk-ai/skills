@@ -47,8 +47,9 @@ cargo +nightly miri test
 
 Miri interprets the tests and reports undefined behavior that native runs miss: out-of-bounds and
 use-after-free access, invalid values, aliasing violations and data races. It checks only the paths
-the tests execute, cannot call foreign functions, and is slow, so run it on the tests that exercise
-the unsafe code. If the installed nightly has a dated name, use that name instead of `nightly`. A
+the tests execute, and is slow, so run it on the tests that exercise the unsafe code. A test that
+reaches a foreign function stops the whole Miri run ("can't call foreign function"), so gate FFI
+tests with `#[cfg_attr(miri, ignore)]` and run Miri on the rest. If the installed nightly has a dated name, use that name instead of `nightly`. A
 Miri report is a defect, never noise to silence.
 
 FFI: declare foreign items in `unsafe extern "C" { ... }`, mark items that are genuinely safe to call

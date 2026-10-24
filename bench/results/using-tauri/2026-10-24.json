@@ -1,0 +1,105 @@
+{
+ "date": "2026-10-24",
+ "skill": "using-tauri",
+ "skill_hash": "16fff36419d499ed",
+ "score": 0.33,
+ "cases": 6,
+ "cases_version": 1,
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "r01-direct",
+  "r02-indirect",
+  "r03-near-miss"
+ ],
+ "agents": {
+  "claude": {
+   "version": "2.1.310",
+   "model": "claude-opus-5-5",
+   "routing": "3/3",
+   "near_miss_fired": false,
+   "fired_on_quality": "6/6",
+   "better": 1,
+   "same": 2,
+   "worse": 0,
+   "score": 0.33,
+   "quality": {
+    "q01-easy": {
+     "with": 0.917,
+     "without": 0.917,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.917,
+      0.917
+     ],
+     "spread_without": [
+      0.917,
+      0.917
+     ],
+     "verdict": "same",
+     "tokens_with": [
+      152200,
+      150439
+     ],
+     "tokens_without": [
+      136706,
+      136052
+     ]
+    },
+    "q02-medium": {
+     "with": 0.964,
+     "without": 0.786,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      0.929
+     ],
+     "spread_without": [
+      0.786,
+      0.786
+     ],
+     "verdict": "better",
+     "tokens_with": [
+      930095,
+      633951
+     ],
+     "tokens_without": [
+      216652,
+      345306
+     ]
+    },
+    "q03-complex": {
+     "with": 1.0,
+     "without": 1.0,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      1.0
+     ],
+     "spread_without": [
+      1.0,
+      1.0
+     ],
+     "verdict": "same",
+     "tokens_with": [
+      477906,
+      344811
+     ],
+     "tokens_without": [
+      294013,
+      389701
+     ],
+     "note": "one pair narrowly better with the skill (canonicalized paths, async export, proof through mock IPC); rubric scores tie"
+    }
+   }
+  },
+  "codex": {
+   "skipped": "Claude only, at the owner's request"
+  },
+  "grok": {
+   "skipped": "Claude only, at the owner's request"
+  }
+ },
+ "notes": "Blind-graded; the judge ran cargo check and test on every side and its own mock-runtime IPC tests (HOME pointed at scratch). q01: all four used async plus spawn_blocking; indistinguishable. q02: both skilled runs proved per-window access through mock-runtime IPC (the skill's testing section); one moved the global fs scopes onto permissions and is the only side whose settings window could not read the home directory; the other found and reported that leak. Both unskilled runs reasoned from cargo check and left the leak unnoticed. q03: every side fixed all six rubric items; skilled runs tested through real IPC permission checks. Skilled q02 runs cost 2-3x the tokens. Runs: 2 per arm, fewer than the 3 the method asks for."
+}

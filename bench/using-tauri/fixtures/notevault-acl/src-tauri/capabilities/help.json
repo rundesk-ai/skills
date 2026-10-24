@@ -1,0 +1,15 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "help",
+  "description": "The help window loads our docs site so articles can open the user's notes as examples",
+  "windows": ["help"],
+  "remote": { "urls": ["https://*.notevault.example"] },
+  "permissions": [
+    "core:default",
+    "fs:allow-read-text-file",
+    {
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$HOME/**" }]
+    }
+  ]
+}

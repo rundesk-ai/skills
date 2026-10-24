@@ -1,5 +1,6 @@
 +++
 skill = "using-rust"
+cases_version = 1
 kind = "routing"
 fixture = "colorparse"
 expect = "fire"

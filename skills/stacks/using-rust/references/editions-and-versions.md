@@ -29,6 +29,27 @@ except building with the floor itself — `cargo +<floor> check`.
 | `build.warnings = "deny"` / `CARGO_BUILD_WARNINGS=deny` | Cargo 1.97 |
 | a member's `default-features = false` overriding a workspace dependency | 1.99 and edition 2024 |
 
+Newer std replaces code and crates an agent writes from habit. Use them only where the floor allows:
+
+| Instead of | Use | Needs |
+|---|---|---|
+| a clone or `RefCell` to hold two `&mut` into one slice or map | `get_disjoint_mut` | 1.86 |
+| `os_pipe` | `std::io::pipe` | 1.87 |
+| `retain` plus a second pass to collect what was removed | `extract_if` (`Vec` 1.87, `HashMap` 1.88, `BTreeMap` 1.91) | 1.87 |
+| `fs2` or `fs4` file locks | `File::lock`, `try_lock` | 1.89 |
+| a `char_indices` loop to cut text to a byte budget | `str::floor_char_boundary` | 1.91 |
+| `overflow-checks` for one sensitive sum | `strict_add` and the other `strict_*` methods, which panic in release too | 1.91 |
+| `Duration::from_secs(60 * m)` | `Duration::from_mins`, `from_hours` | 1.91 |
+| `cfg-if` | `cfg_select!` | 1.95 |
+| `fetch_update` loops | `Atomic*::update` | 1.95 |
+| `assert!(matches!(..))` | `assert_matches!`, imported with `use std::assert_matches;` (it is not in the prelude) | 1.96 |
+| `filetime` | `fs::set_times` | 1.99 |
+
+Lints that newer compilers raise on habitual code: `mismatched_lifetime_syntaxes` (1.89) warns on
+`fn iter(&self) -> Iter<u8>` — write `Iter<'_, u8>`; `semicolon_in_expressions_from_macros` is
+deny from 1.91; the `std::i32::MAX`-style module constants are deprecated in 1.99 — write
+`i32::MAX`.
+
 The resolver is workspace-wide and ignored in dependencies. A virtual workspace (a root
 `[workspace]` with no `[package]`) gets no edition default, so it must set `resolver` itself.
 

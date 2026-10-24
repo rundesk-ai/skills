@@ -5,10 +5,10 @@ configuration, or when a check passes in one place and fails in another.
 
 ## Toolchain selection
 
-The first match wins: `cargo +<toolchain>`, then `RUSTUP_TOOLCHAIN`, then `rustup override`, then the
-nearest `rust-toolchain.toml`, then the default. rustup installs a pinned toolchain automatically, so
-the first command in a pinned repository may spend minutes downloading. `rust-version` never selects
-a toolchain; it only makes Cargo refuse an older one.
+`rust-version` never selects a toolchain; it only makes Cargo refuse an older one. A pinned
+`rust-toolchain.toml` is installed automatically, so the first command in a pinned repository may
+spend minutes downloading, and `cargo +1.80.0 check` silently installs a toolchain that is missing;
+remove a floor toolchain you added only to check the floor.
 
 ## The full loop
 
@@ -26,13 +26,22 @@ cargo doc --workspace --no-deps                  # broken intra-doc links
   `[build] warnings = "deny"` in `.cargo/config.toml`. Passing `-D warnings` after `--`, or through
   `RUSTFLAGS`, changes the build fingerprint, so switching between a plain build and a deny build
   rechecks the workspace — and `RUSTFLAGS` rebuilds every dependency. Below 1.97, `-- -D warnings` is
-  the only option.
+  the only option: an older Cargo silently ignores `CARGO_BUILD_WARNINGS=deny` and reports green
+  with the warning still there. Check `cargo -V` before relying on it.
 - **`cargo test` stops at the first failing test binary.** Add `--no-fail-fast` to see every failure
   before deciding what broke.
 - **Features.** `--all-features` alone misses breakage with defaults off and with single features.
   For a crate with features, add `cargo check --no-default-features` and, where installed,
   `cargo hack check --each-feature --no-dev-deps`.
 - **In CI**, build with `--locked` so a stale `Cargo.lock` fails rather than being silently rewritten.
+- **Code behind `cfg` for another target is never compiled on yours.** A `#[cfg(windows)]` branch
+  can be broken for months. Check it with `rustup target add x86_64-pc-windows-msvc` and
+  `cargo check --target x86_64-pc-windows-msvc`. Keep `unexpected_cfgs` (on since 1.80) at warn or
+  deny, so a misspelled feature or cfg name is reported instead of silently compiling the code out;
+  declare custom cfgs in `[lints.rust] unexpected_cfgs = { level = "warn", check-cfg = [...] }`.
+- **The lower bound of a version requirement is never tested** by an ordinary build, which resolves
+  the newest. Before publishing a library, check it with `cargo +nightly update -Z minimal-versions`
+  then `cargo check`, or `cargo hack --version-range`.
 
 ## Features
 
@@ -40,8 +49,6 @@ Features must be **additive**: enabling one may add capability, never remove it 
 because Cargo builds each dependency once with the union of every feature any crate in the graph
 asked for.
 
-- A crate that compiles inside the workspace may fail alone, having relied on a feature a sibling
-  turned on. Check publishable crates with `-p <crate>`.
 - `default-features = false` does not guarantee the defaults are off: any other crate enabling them
   wins. Find out who with `cargo tree -e features -i <crate>`.
 - Mutually exclusive features break `--all-features` and unification. Prefer separate crates or a
@@ -65,8 +72,6 @@ asked for.
 
 ## Workspaces
 
-- `[workspace.dependencies]` pins a version once; members write `dep = { workspace = true }` and may
-  add `features` (additive) and `optional`.
 - **`[workspace.lints]` is not inherited implicitly.** Each member needs `[lints] workspace = true`, or
   it silently runs with defaults.
 - Profiles are read only from the workspace root; a `[profile]` in a member or dependency is ignored.
@@ -78,9 +83,11 @@ asked for.
   warns once the lint stops firing, so a dead suppression cannot linger. Use `#[allow]` where the lint
   fires only under some features or `cfg`s, since an unfulfilled `#[expect]` is an error under
   `-D warnings`.
-- Clippy's groups: `correctness` denies; `suspicious`, `style`, `complexity` and `perf` warn;
-  `pedantic` is opinionated and expects some allows; `nursery` is unfinished; `restriction` must never
-  be enabled as a whole, because its lints contradict each other. Pick individual restriction lints.
+- Never enable Clippy's `restriction` group as a whole: its lints contradict each other. Projects
+  commonly pick these from it in `[workspace.lints.clippy]`: `unwrap_used`, `dbg_macro`, `todo`,
+  `print_stdout` (libraries), `clone_on_ref_ptr` (so `Arc::clone(&a)` shows the cheap copy),
+  `undocumented_unsafe_blocks` and `large_futures`. `unwrap_used` and `print_stdout` also fire in
+  tests unless `clippy.toml` sets `allow-unwrap-in-tests = true` and `allow-print-in-tests = true`.
 - When enabling a group with exceptions in `[lints.clippy]`, give the group `priority = -1` so the
   single-lint entries override it.
 - **Never put `#![deny(warnings)]` in source.** A new compiler or Clippy release adds warnings, so the

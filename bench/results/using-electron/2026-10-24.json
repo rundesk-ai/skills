@@ -1,0 +1,105 @@
+{
+ "date": "2026-10-24",
+ "skill": "using-electron",
+ "skill_hash": "dfa8672b15b0e6f8",
+ "score": 1.0,
+ "cases": 6,
+ "cases_version": 1,
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "r01-direct",
+  "r02-indirect",
+  "r03-near-miss"
+ ],
+ "agents": {
+  "claude": {
+   "version": "2.1.310",
+   "model": "claude-opus-5-5",
+   "routing": "3/3",
+   "near_miss_fired": false,
+   "fired_on_quality": "6/6",
+   "better": 3,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0,
+   "quality": {
+    "q01-easy": {
+     "with": 0.95,
+     "without": 0.75,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      0.9
+     ],
+     "spread_without": [
+      0.7,
+      0.8
+     ],
+     "verdict": "better",
+     "tokens_with": [
+      187467,
+      222301
+     ],
+     "tokens_without": [
+      132376,
+      132635
+     ]
+    },
+    "q02-medium": {
+     "with": 1.0,
+     "without": 0.833,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      1.0
+     ],
+     "spread_without": [
+      0.833,
+      0.833
+     ],
+     "verdict": "better",
+     "tokens_with": [
+      270095,
+      299126
+     ],
+     "tokens_without": [
+      140177,
+      200232
+     ]
+    },
+    "q03-complex": {
+     "with": 1.0,
+     "without": 0.969,
+     "runs_per_arm": 2,
+     "spread_with": [
+      1.0,
+      1.0
+     ],
+     "spread_without": [
+      1.0,
+      0.938
+     ],
+     "verdict": "better",
+     "tokens_with": [
+      575235,
+      486984
+     ],
+     "tokens_without": [
+      793552,
+      282658
+     ],
+     "note": "both skilled runs served from app://, sent CSP as a header, limited openExternal to https and mailto, and turned off GrantFileProtocolExtraPrivileges; neither unskilled run did"
+    }
+   }
+  },
+  "codex": {
+   "skipped": "Claude only, at the owner's request"
+  },
+  "grok": {
+   "skipped": "Claude only, at the owner's request"
+  }
+ },
+ "notes": "Blind-graded; the judge ran every side in Electron 45 with a probe (userData in scratch, openExternal stubbed, local server for navigation). In every pair both fixes behaved the same at runtime; the skilled runs launched Electron to prove their fixes in 5 of 6 pairs where the unskilled runs only syntax-checked, and named the cause on q01. q03: the skilled runs did the deeper hardening from the security reference (custom protocol, header CSP, scheme allow-list, fuse); the rubric's and/or wording on item 6 gave it no extra points, so the q03 verdict rests on conduct and that depth. Runs: 2 per arm, fewer than the 3 the method asks for."
+}
