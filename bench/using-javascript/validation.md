@@ -14,3 +14,8 @@ that served a file from the sibling `public-drafts` directory; and an unbounded 
 
 The near-miss routing case uses the React fixture from `bench/using-reactjs/fixtures/storefront`, with
 both this skill and the React skill deployed.
+
+2026-10-24, Claude only: routing 3/3, near miss not fired. Better on the easy case (integer cents, test
+output reported), worse on the medium case (the skilled runs' date tests caught the bug only under a
+manual TZ run, as the skill's proof section suggests, while the unskilled runs set the zone inside the
+test), and worse on one complex pair. See the result's notes.

@@ -1,0 +1,104 @@
+{
+ "date": "2026-10-24",
+ "cases": 6,
+ "cases_version": 1,
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "r01-direct",
+  "r02-indirect",
+  "r03-near-miss"
+ ],
+ "skill": "using-javascript",
+ "skill_hash": "b83115839de52f91",
+ "score": 0.33,
+ "agents": {
+  "claude": {
+   "version": "2.1.310",
+   "model": "claude-opus-5-5",
+   "routing": "3/3",
+   "near_miss_fired": false,
+   "fired_on_quality": "6/6",
+   "better": 1,
+   "same": 0,
+   "worse": 2,
+   "score": 0.33,
+   "quality": {
+    "q01-easy": {
+     "with": 0.85,
+     "without": 0.65,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.9,
+      0.8
+     ],
+     "spread_without": [
+      0.6,
+      0.7
+     ],
+     "verdict": "better",
+     "tokens_with": [
+      159851,
+      127192
+     ],
+     "tokens_without": [
+      172292,
+      103807
+     ]
+    },
+    "q02-medium": {
+     "with": 0.93,
+     "without": 1.0,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.93,
+      0.93
+     ],
+     "spread_without": [
+      1.0,
+      1.0
+     ],
+     "verdict": "worse",
+     "tokens_with": [
+      126419,
+      161955
+     ],
+     "tokens_without": [
+      212430,
+      145330
+     ]
+    },
+    "q03-complex": {
+     "with": 0.845,
+     "without": 0.94,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.81,
+      0.88
+     ],
+     "spread_without": [
+      1.0,
+      0.88
+     ],
+     "verdict": "worse",
+     "tokens_with": [
+      721889,
+      797086
+     ],
+     "tokens_without": [
+      246716,
+      367081
+     ]
+    }
+   }
+  },
+  "codex": {
+   "skipped": "Claude-only benchmark at the owner's request"
+  },
+  "grok": {
+   "skipped": "Claude-only benchmark at the owner's request"
+  }
+ },
+ "notes": "Blind-graded by a judge given unlabeled A/B outputs and the case rubric; it re-ran npm test (and under TZ=America/New_York) on every side and checked each fix with its own scripts. Routing 3/3: the TypeScript conversion and the streaming CSV script loaded the skill; the React near miss loaded the React skill only. q01: both skilled runs used integer cents; one unskilled run neither reproduced the bug nor reported test output; no run added a second half-cent case. q02: every arm fixed both bugs; the unskilled runs set a non-UTC zone inside their date tests, so the tests fail on the old code under plain npm test, while the skilled runs relied on running the suite under TZ by hand, as the skill's Prove-it section says: the skill's proof wording made the regression test weaker. q03: all four runs fixed ReDoS, prototype pollution, the sibling-path escape and the unhandled rejection (verified); one unskilled run also named the blocking readFileSync and separated proved from inferred, which its skilled pair did not. Skilled q03 runs cost about 2.4 times the tokens. Proposed change after this run: make the date proof a test that fails in UTC CI rather than a TZ command. Runs: 2 per arm, fewer than the 3 the method asks for. Standing cost not measured."
+}

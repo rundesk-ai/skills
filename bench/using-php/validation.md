@@ -13,3 +13,7 @@ mutable `DateTime` shared between the issue date and the due date; unsalted `md5
 
 The `shop-laravel` fixture is a minimal Laravel-shaped project for the near-miss routing case, run with
 both this skill and the Laravel skill deployed.
+
+2026-10-24, Claude only: routing 3/3, near miss not fired. The skill did not load on the easy case; the
+medium case was indistinguishable; on the complex case one skilled run wrote an injection test that
+really fails on the vulnerable code. See the result's notes.

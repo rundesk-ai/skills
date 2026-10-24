@@ -14,3 +14,8 @@ whose price-store subscriber stores a fresh copy on every unchanged rebroadcast 
 
 The routing cases deploy both this skill and the JavaScript skill; the near miss is a plain module change
 (`src/api.js` retry) that touches no component.
+
+2026-10-24, Claude only: routing 2/3 (the indirect question was answered without loading the skill),
+near miss not fired. The skill did not load on the easy case; the medium case was mixed; on the complex
+case both skilled runs measured before and after and added an idle-render regression test, and neither
+unskilled run measured. See the result's notes.
