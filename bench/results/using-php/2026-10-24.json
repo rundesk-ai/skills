@@ -1,0 +1,105 @@
+{
+ "date": "2026-10-24",
+ "cases": 6,
+ "cases_version": 1,
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "r01-direct",
+  "r02-indirect",
+  "r03-near-miss"
+ ],
+ "skill": "using-php",
+ "skill_hash": "8a7d7f031eccb081",
+ "score": 0.33,
+ "agents": {
+  "claude": {
+   "version": "2.1.310",
+   "model": "claude-opus-5-5",
+   "routing": "3/3",
+   "near_miss_fired": false,
+   "fired_on_quality": "4/6",
+   "better": 1,
+   "same": 2,
+   "worse": 0,
+   "score": 0.33,
+   "quality": {
+    "q01-easy": {
+     "with": 0.917,
+     "without": 0.875,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.917,
+      0.917
+     ],
+     "spread_without": [
+      0.917,
+      0.833
+     ],
+     "verdict": "same",
+     "tokens_with": [
+      135340,
+      137298
+     ],
+     "tokens_without": [
+      134389,
+      160671
+     ],
+     "note": "the skill did not load in either skilled run; the 0.08 gap is one unskilled run that said it did not reproduce the bug"
+    },
+    "q02-medium": {
+     "with": 0.917,
+     "without": 0.917,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.917,
+      0.917
+     ],
+     "spread_without": [
+      0.917,
+      0.917
+     ],
+     "verdict": "same",
+     "tokens_with": [
+      166018,
+      131236
+     ],
+     "tokens_without": [
+      144704,
+      110551
+     ]
+    },
+    "q03-complex": {
+     "with": 0.906,
+     "without": 0.875,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.938,
+      0.875
+     ],
+     "spread_without": [
+      0.875,
+      0.875
+     ],
+     "verdict": "better",
+     "tokens_with": [
+      439787,
+      410362
+     ],
+     "tokens_without": [
+      156577,
+      261689
+     ]
+    }
+   }
+  },
+  "codex": {
+   "skipped": "Claude-only benchmark at the owner's request"
+  },
+  "grok": {
+   "skipped": "Claude-only benchmark at the owner's request"
+  }
+ },
+ "notes": "Blind-graded by a judge given unlabeled A/B outputs and the case rubric; it re-ran php tests/run.php on every side and verified the date and login fixes and the ORDER BY injection with its own scripts. Routing 3/3: plain PHP review and the runtime upgrade loaded the skill; the Laravel near miss loaded the Laravel skill only. q01: every arm found the foreach reference and fixed it the same way; the skill never loaded. q02: every arm fixed month overflow with the anchor day, the DateTime aliasing and the wrong existing test; indistinguishable. q03: every arm fixed all five findings and migrated md5 hashes on login; one skilled run wrote an injection test that really fails on the vulnerable code and gave end-to-end proof per finding, its unskilled pair's injection test passed on the old code. No arm tested the cookie or include fixes. Skilled q03 runs cost about 2 times the tokens. Runs: 2 per arm. Standing cost not measured."
+}

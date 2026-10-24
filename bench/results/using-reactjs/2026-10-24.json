@@ -1,0 +1,105 @@
+{
+ "date": "2026-10-24",
+ "cases": 6,
+ "cases_version": 1,
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "r01-direct",
+  "r02-indirect",
+  "r03-near-miss"
+ ],
+ "skill": "using-reactjs",
+ "skill_hash": "33c911c34d302256",
+ "score": 0.33,
+ "agents": {
+  "claude": {
+   "version": "2.1.310",
+   "model": "claude-opus-5-5",
+   "routing": "2/3",
+   "near_miss_fired": false,
+   "fired_on_quality": "4/6",
+   "better": 1,
+   "same": 2,
+   "worse": 0,
+   "score": 0.33,
+   "quality": {
+    "q01-easy": {
+     "with": 0.75,
+     "without": 0.75,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.75,
+      0.75
+     ],
+     "spread_without": [
+      0.75,
+      0.75
+     ],
+     "verdict": "same",
+     "tokens_with": [
+      283627,
+      227189
+     ],
+     "tokens_without": [
+      188386,
+      217626
+     ],
+     "note": "the skill did not load in either skilled run"
+    },
+    "q02-medium": {
+     "with": 0.895,
+     "without": 0.86,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.93,
+      0.86
+     ],
+     "spread_without": [
+      0.79,
+      0.93
+     ],
+     "verdict": "same",
+     "tokens_with": [
+      158498,
+      257900
+     ],
+     "tokens_without": [
+      173041,
+      145528
+     ]
+    },
+    "q03-complex": {
+     "with": 0.965,
+     "without": 0.36,
+     "runs_per_arm": 2,
+     "spread_with": [
+      0.93,
+      1.0
+     ],
+     "spread_without": [
+      0.36,
+      0.36
+     ],
+     "verdict": "better",
+     "tokens_with": [
+      410758,
+      715923
+     ],
+     "tokens_without": [
+      140730,
+      114481
+     ]
+    }
+   }
+  },
+  "codex": {
+   "skipped": "Claude-only benchmark at the owner's request"
+  },
+  "grok": {
+   "skipped": "Claude-only benchmark at the owner's request"
+  }
+ },
+ "notes": "Blind-graded by a judge given unlabeled A/B outputs and the case rubric; it re-ran npm test on every side, ran each new test against the original code, and measured idle and keystroke cost itself at 5,000 products. Routing 2/3: the direct review loaded the skill; the indirect 'counter lags' question was answered correctly without loading it (a description miss on a question the model answers unaided); the api.js near miss loaded the JavaScript skill only. q01: every arm keyed by id and tested it; none noticed the quantity lives only in row state; the skill never loaded. q02: every arm fixed the race, the derived count and the cleared box; one skilled run derived the empty result during render and tested it where its unskilled pair set state in the effect; the other pair was even. q03: both skilled runs measured before and after with the Profiler and added an idle-render test that fails on the original (the skill's measure-first and useSyncExternalStore guidance); both unskilled runs made the same structural fix without measuring, said so, and slowed the clock instead of colocating it. Skilled q03 runs cost about 4.5 times the tokens. Runs: 2 per arm. Standing cost not measured."
+}
