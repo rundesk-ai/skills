@@ -62,8 +62,11 @@ make_catalog() {
   printf 'base reference\n' > "$c/skills/core/alpha/references/base.md"
   printf -- '---\nname: beta\ndescription: Use when the beta case needs proving in a test fixture catalog.\n---\n\n# Beta\n' \
     > "$c/skills/core/beta/SKILL.md"
-  printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/core/alpha"}, {"name": "beta", "path": "skills/core/beta"}]}\n' \
+  printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/core/alpha"}, {"name": "beta", "path": "skills/core/beta"}], "subagents": [{"name": "gamma", "path": "subagents/gamma.md"}]}\n' \
     > "$c/manifest.json"
+  mkdir -p "$c/subagents"
+  printf -- '---\nname: gamma\ndescription: Use when the gamma case needs a subagent in a test fixture catalog.\nclaude:\n  model: sonnet\n---\nYou review the gamma case.\n' \
+    > "$c/subagents/gamma.md"
   printf 'core alpha beta\n' > "$c/skills/groups.txt"
   printf '# AGENTS\n\nfixture\n' > "$c/AGENTS.md"
   sed '1s/AGENTS/CLAUDE/' "$c/AGENTS.md" > "$c/CLAUDE.md"
@@ -275,11 +278,14 @@ mutate_credential()       { printf 'token: ghp_abcdefghijklmnopqrstuvwxyz0123\n'
 mutate_real_email()       { printf 'write to someone@company.com\n' >> "$1/skills/core/alpha/SKILL.md"; }
 mutate_integration_tool() { printf 'call mcp__tracker__create_issue first
 ' >> "$1/skills/core/alpha/SKILL.md"; }
-mutate_manifest_missing() { printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/core/alpha"}]}
+mutate_manifest_missing() { printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/core/alpha"}], "subagents": [{"name": "gamma", "path": "subagents/gamma.md"}]}
 ' > "$1/manifest.json"; }
-mutate_manifest_extra()   { printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/core/alpha"}, {"name": "beta", "path": "skills/core/beta"}, {"name": "gone", "path": "skills/core/gone"}]}
+mutate_manifest_extra()   { printf '{"schema": 1, "name": "fixture", "version": "1.0.0", "description": "Fixture catalog.", "skills": [{"name": "alpha", "path": "skills/core/alpha"}, {"name": "beta", "path": "skills/core/beta"}, {"name": "gone", "path": "skills/core/gone"}], "subagents": [{"name": "gamma", "path": "subagents/gamma.md"}]}
 ' > "$1/manifest.json"; }
 mutate_manifest_version() { sed -i.bak 's/"1.0.0"/"v1"/' "$1/manifest.json"; }
+mutate_subagent_name()    { sed -i.bak "s/^name: gamma/name: delta/" "$1/subagents/gamma.md"; rm "$1/subagents/gamma.md.bak"; }
+mutate_subagent_unlisted() { cp "$1/subagents/gamma.md" "$1/subagents/delta.md"; sed -i.bak "s/^name: gamma/name: delta/" "$1/subagents/delta.md"; rm "$1/subagents/delta.md.bak"; }
+mutate_subagent_names_skill() { printf 'Then hand it to alpha.\n' >> "$1/subagents/gamma.md"; }
 mutate_bad_removal() {
   mkdir -p "$1/skills/core/alpha/variants/narrow"
   printf -- '---\nname: alpha\n---\n' > "$1/skills/core/alpha/variants/narrow/SKILL.md"
@@ -353,6 +359,15 @@ case_check_accepts_reserved_email_domains() {
 }
 case_check_rejects_an_integration_tool() {
   check_rejects "a skill naming an integration's tool" "needs no integration" mutate_integration_tool
+}
+case_check_rejects_a_subagent_name_mismatch() {
+  check_rejects "a subagent naming another file" "expected 'gamma'" mutate_subagent_name
+}
+case_check_rejects_an_unlisted_subagent() {
+  check_rejects "a subagent the manifest leaves out" "does not list the subagent" mutate_subagent_unlisted
+}
+case_check_rejects_a_subagent_naming_a_skill() {
+  check_rejects "a subagent naming a skill" "a subagent stands alone" mutate_subagent_names_skill
 }
 case_check_rejects_a_manifest_missing_a_skill() {
   check_rejects "a manifest that leaves out a skill" "does not list the skill" mutate_manifest_missing
@@ -479,7 +494,9 @@ for c in check_passes_a_sound_catalog check_rejects_a_directory_without_skill_md
          check_rejects_a_skill_outside_a_group check_rejects_a_name_in_two_groups \
          check_rejects_a_credential check_rejects_a_real_email check_accepts_reserved_email_domains \
          check_rejects_an_integration_tool check_rejects_a_manifest_missing_a_skill \
-         check_rejects_a_manifest_listing_a_missing_skill check_rejects_a_bad_manifest_version; do
+         check_rejects_a_manifest_listing_a_missing_skill check_rejects_a_bad_manifest_version \
+         check_rejects_a_subagent_name_mismatch check_rejects_an_unlisted_subagent \
+         check_rejects_a_subagent_naming_a_skill; do
   run_case "$c"
 done
 

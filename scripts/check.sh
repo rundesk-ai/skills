@@ -8,7 +8,8 @@
 # its directory or does not start with its group's prefix, a missing or stub description or one not
 # starting "Use when" (or "Use before"), a reference no link reaches, a sentence cut off mid-way, a
 # variant that overlays nothing or removes a file the base does not have, a rules file that has
-# drifted from its copy, a manifest that does not list exactly the skills in the tree,
+# drifted from its copy, a manifest that does not list exactly the skills and subagents in the tree,
+# a subagent whose name does not match its file or whose description does not start "Use when",
 # and the three things that stop a skill standing alone — an absolute path, a reference to
 # another skill, and a dependency on an integration's tools.
 set -euo pipefail
@@ -236,6 +237,41 @@ for n in names:
                     if TOOL.search(line):
                         problems.append(f"{fp}:{i}: names an integration's tool — a skill needs no integration to work")
 
+# A subagent is one file, subagents/<name>.md, in the format the Rundesk subagent library stores. It is
+# copied into every agent CLI on the machine, so it stands alone as a skill does.
+subagents = {}
+if os.path.isdir("subagents"):
+    for fn in sorted(os.listdir("subagents")):
+        fp = os.path.join("subagents", fn)
+        if not fn.endswith(".md") or not os.path.isfile(fp):
+            problems.append(f"{fp}: subagents/ holds only <name>.md files")
+            continue
+        n = fn[:-3]
+        subagents[n] = fp
+        with open(fp, encoding="utf-8") as f:
+            text = f.read()
+        head, sep, _ = text[4:].partition("\n---\n") if text.startswith("---\n") else ("", "", "")
+        if not sep:
+            problems.append(f"{fp}: the frontmatter does not close with --- alone on a line")
+            continue
+        top = {}
+        for line in head.split("\n"):
+            if line[:1] not in (" ", "\t", "-", "") and ":" in line:
+                key, _, val = line.partition(":")
+                top[key.strip()] = val.strip().strip("'\"")
+        if top.get("name") != n:
+            problems.append(f"{fp}: frontmatter name is {top.get('name')!r}, expected {n!r}")
+        desc = top.get("description", "")
+        if len(desc) < 40 or not desc.startswith("Use when"):
+            problems.append(f"{fp}: description must start 'Use when' and say when to delegate to it")
+        for i, line in enumerate(text.splitlines(), 1):
+            if ABSOLUTE.search(line):
+                problems.append(f"{fp}:{i}: absolute path — a subagent runs anywhere")
+            if TOOL.search(line):
+                problems.append(f"{fp}:{i}: names an integration's tool — a subagent needs no integration to work")
+            for m in name_pat.findall(re.sub(r"https?://\S+", "", line)):
+                problems.append(f"{fp}:{i}: names the skill {m!r} — a subagent stands alone")
+
 # manifest.json lists exactly the skills in the tree, by name and path, so a package install gets them all.
 import json
 try:
@@ -261,6 +297,18 @@ if manifest is not None:
         problems.append(f"manifest.json: lists {m!r}, which is not a skill in the tree")
     if got_names != sorted(got_names) or len(got_names) != len(set(got_names)):
         problems.append("manifest.json: skills must be listed once each, sorted by name")
+    # subagents is optional, and lists exactly the files in subagents/ the same way.
+    listed = manifest.get("subagents") or []
+    got_names = [s.get("name") for s in listed]
+    for s in listed:
+        if s.get("name") in subagents and s.get("path") != subagents[s.get("name")]:
+            problems.append(f"manifest.json: subagent {s.get('name')!r} has path {s.get('path')!r}, expected {subagents[s.get('name')]}")
+    for m in sorted(set(subagents) - set(got_names)):
+        problems.append(f"manifest.json: does not list the subagent {m!r}")
+    for m in sorted(set(got_names) - set(subagents)):
+        problems.append(f"manifest.json: lists {m!r}, which is not a subagent in subagents/")
+    if got_names != sorted(got_names) or len(got_names) != len(set(got_names)):
+        problems.append("manifest.json: subagents must be listed once each, sorted by name")
 
 # The catalog is public: nothing in a skill, a benchmark or a prompt may carry a credential or a real
 # address. Examples use reserved names (example.com, .example, .test) so a pasted secret or a real
@@ -268,7 +316,7 @@ if manifest is not None:
 SECRET = re.compile(r"sk-[A-Za-z0-9]{16,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|xox[abpr]-[A-Za-z0-9-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY|AIza[0-9A-Za-z_-]{35}")
 EMAIL = re.compile(r"(?<![/\w.%+-])[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,}")
 RESERVED = re.compile(r"(^|\.)(example\.(com|org|net)|example|test|invalid|localhost)$", re.I)
-for top in ("skills", "bench", "prompts"):
+for top in ("skills", "subagents", "bench", "prompts"):
     for dirpath, _, filenames in os.walk(top):
         for fn in filenames:
             if not fn.endswith((".md", ".json", ".toml", ".py", ".txt", ".yml", ".yaml")):
@@ -283,7 +331,7 @@ for top in ("skills", "bench", "prompts"):
                         if not domain.lower().endswith((".html", ".htm")) and not RESERVED.search(domain) and not m.group(0).lower().startswith("noreply@"):
                             problems.append(f"{fp}:{i}: real email address {m.group(0)!r} — use a reserved domain such as example.com")
 
-print(f"  {len(names)} skills")
+print(f"  {len(names)} skills, {len(subagents)} subagents")
 
 for p in problems:
     print(f"  !!  {p}")
