@@ -1,6 +1,6 @@
 ---
 name: using-php
-description: Use when writing, reviewing, debugging, upgrading, or securing PHP outside a framework's own APIs — a plain PHP application or script, a Composer package, a CMS plugin, or the language underneath a framework — including loose comparison and type juggling, strict types, arrays and references, dates, money, UTF-8 and JSON, errors and deprecations across PHP 8 versions, password hashing, PDO queries, deserialization, file inclusion, uploads and shell calls, sessions, Composer dependencies and autoloading, and memory in long-running workers. It supplies PHP defaults, the failure each one prevents, and command-line proof. Do not use it for Laravel framework behavior such as routing, Eloquent, queues or Blade.
+description: Use when writing, reviewing, debugging, upgrading, or securing PHP outside a framework's own APIs — a plain PHP application or script, a Composer package, a CMS plugin, or the language underneath a framework — including comparisons and types, dates and money, arrays, strings and JSON, PHP version upgrades and deprecations, passwords, SQL, sessions, uploads and other security-sensitive calls, Composer and autoloading, PHPUnit, and long-running workers. It supplies PHP defaults, the failure each one prevents, and command-line proof. Do not use it for Laravel framework behavior such as routing, Eloquent, queues or Blade.
 ---
 
 # Use PHP
@@ -10,20 +10,12 @@ enters. PHP's defaults coerce quietly, so the first symptom is a wrong row or an
 
 ## Establish the target before changing code
 
-```sh
-php -v && php --ini && php -m
-grep -n -A3 -E '"php"|"platform"' composer.json
-```
-
-- `require.php` in `composer.json` is a range, not the version the code runs on. `config.platform.php`
-  is what the lock was resolved for, and production's `php -v` is the truth. Code that passes on a local
-  8.4 fails on an 8.3 server with a parse error (`new Foo()->bar()`) or an undefined function
-  (`array_find`).
-- `php --ini` names the ini files loaded; a host ini can hide deprecations or raise `memory_limit`. Run
-  with `php -n` when a result must not depend on the machine, and with
-  `-d error_reporting=-1 -d display_errors=1` to see every deprecation.
-- Read [Versions and tooling](references/versions-and-tooling.md) before an upgrade, or before using a
-  function newer than the lowest version the code must run on.
+`require.php` in `composer.json` is a range, not the version the code runs on. `config.platform.php` is
+what the lock was resolved for, and production's `php -v` is the truth. Code that passes on a local 8.4
+fails on an 8.3 server with a parse error (`new Foo()->bar()`) or an undefined function (`array_find`).
+Read [Versions and tooling](references/versions-and-tooling.md) before an upgrade or before using a
+function newer than the lowest supported version, and [Composer](references/composer.md) to pin the
+platform.
 
 ## Comparisons coerce: make them strict
 
@@ -34,12 +26,13 @@ defaults below are unchanged.
 |---|---|---|
 | `$a == $b` on numeric strings | `"1e3" == "1000"` is true, and so is `md5('240610708') == md5('QNKCDZO')`: both digests are `0e` followed by digits | `===`; `hash_equals($known, $given)` for anything secret |
 | `true == "any string"` | true, so a JSON body `{"token": true}` passes a loose token check | check that decoded fields are strings, then compare strictly |
+| `$_GET['id']`, `$_POST['token']` | `?id[]=1` makes it an array: a `TypeError` in a typed call, `"Array"` in a string | `is_string()` (or `filter_input`) before use |
 | `in_array`, `array_search`, `array_keys($a, $v)` | loose: `in_array(true, ['admin'])` is true | pass `true` as the strict argument |
 | `switch` | loose | `match`, which is strict and throws `UnhandledMatchError` when no arm matches |
 | `if (strpos($s, $x))` | a match at offset 0 reads as not found | `str_contains`, and reject an empty needle: `str_contains($s, '')` is true |
 | `empty($qty)`, `$qty ?: 1` | the string `"0"` is empty | compare with `''` or `null` |
-| `isset($a['k'])` | false when the key holds `null` | `array_key_exists` when null means something |
 | `(int)"12abc"` | 12, silently; `(int)"abc"` is 0 | `filter_var($s, FILTER_VALIDATE_INT)`, and handle `false` |
+| `if (!preg_match($re, $s))` | `preg_match` returns `false` when it hits the backtrack limit on hostile input, which reads as "no match" | compare with `=== false` and read `preg_last_error_msg()` |
 
 `declare(strict_types=1)` governs calls made from the file that declares it, and the return values of
 functions declared there. It does not reach callers in other files, callbacks the engine invokes
@@ -54,13 +47,15 @@ before touching authentication, sessions, SQL, uploads, file paths, shell calls,
 
 | Work | Default that fails | Do |
 |---|---|---|
-| Passwords | `md5` or `sha1`, compared with `==` | `password_hash($pw, PASSWORD_DEFAULT)` and `password_verify`; `password_needs_rehash` with the same algorithm; move legacy hashes over on the next successful login rather than forcing resets |
+| Passwords | `md5` or `sha1`, compared with `==` | `password_hash($pw, PASSWORD_DEFAULT)` and `password_verify`; `password_needs_rehash` with the same algorithm |
 | Secrets and tokens | `==` or `strcmp`; `uniqid`, `mt_rand`, `rand` | `hash_equals`; `random_bytes`, `random_int` |
-| Data a client can send back | `unserialize`, which instantiates any class and runs its magic methods; `allowed_classes` is not a security boundary | `json_decode($s, true, flags: JSON_THROW_ON_ERROR)`, signed with `hash_hmac` when it must round-trip |
+| Data a client can send back | `unserialize`, which instantiates any class and runs its magic methods | `json_decode($s, true, flags: JSON_THROW_ON_ERROR)`, signed with `hash_hmac` when it must round-trip |
 | SQL | values or identifiers concatenated into the query | bound parameters for values; an allow-list for column names and `ASC`/`DESC`, since an identifier cannot be bound (binding one sorts by a constant, silently) |
 | Includes and paths | `include $dir . $_GET['page']`; `str_starts_with(realpath($p), $base)` | an allow-list of pages; containment checked against `$base . DIRECTORY_SEPARATOR`, rejecting `realpath() === false` |
 | Shell | a command string, even with `escapeshellarg`, which stops injection but not a `-option` | `proc_open([...])` with an argument array, which runs no shell, and `--` before user operands |
-| Sessions | `use_strict_mode=0` and `httponly` off: an attacker-chosen session id is accepted | strict mode and secure cookie flags; `session_regenerate_id(true)` on login and privilege change |
+| Forms and sessions | no CSRF token; `use_strict_mode=0` and `httponly` off, so an attacker-chosen session id is accepted | a per-session token checked with `hash_equals` on every state-changing request; strict mode, secure cookie flags, `session_regenerate_id(true)` on login |
+| Redirect guards | `header('Location: /login')` without `exit` keeps running and renders the protected page | `exit` straight after the header |
+| Links in emails | a reset URL built from `$_SERVER['HTTP_HOST']`, which the client sets | a configured base URL |
 | HTML | explicit flags to `htmlspecialchars` drop `ENT_SUBSTITUTE`, so invalid UTF-8 renders as an empty string | the default flags; quote every attribute; allow-list URL schemes in `href` |
 
 ## Data traps that never throw
@@ -74,8 +69,8 @@ before touching authentication, sessions, SQL, uploads, file paths, shell calls,
   `array_replace`), and a key read back and passed to a `string` parameter throws under strict types.
 - **`DateTime::modify()` mutates and returns the same object**: `$end = $start->modify('+1 day')`
   moves `$start` too. Type dates as `DateTimeImmutable`.
-- **`'+1 month'` overflows**: 31 January becomes 3 March. Clamp to the month's last day yourself and keep
-  the anchor day for the month after.
+- **`'+1 month'` overflows**: 31 January becomes 3 March. Clamp to the month's last day yourself; see
+  [Dates](references/dates.md).
 - **Money in floats**: `(int)(19.99 * 100)` is `1998`. Integer minor units; `bcmath` truncates to the
   scale rather than rounding (`bcround`, from 8.4, rounds).
 - **`json_decode` returns `null` for invalid input and for `"null"` alike**, and turns ids above 2^53 into
@@ -83,38 +78,35 @@ before touching authentication, sessions, SQL, uploads, file paths, shell calls,
 - **`strlen`, `substr` and `strtolower` work on bytes.** A cut UTF-8 string makes `json_encode` return
   `false` and `preg_replace` return `null`, silently. `mb_*`, the `/u` regex flag, `JSON_THROW_ON_ERROR`.
 
-Read [Data](references/data.md) for numbers, strings and JSON, and [Dates](references/dates.md) for
-parsing, time zones and daylight saving.
+Read [Data](references/data.md) for numbers, strings and JSON.
 
 ## Composer decides what runs in production
 
-- Set `config.platform.php` to production's version. Without it the lock can pick packages that need the
-  local PHP, and the deploy fails on its first request in `vendor/composer/platform_check.php`.
-- `composer install` never checks advisories; only `update` and `require` can block a vulnerable
-  version. Run `composer audit --locked` as its own CI step.
-- A PSR-4 case mismatch works on macOS and fails on Linux; `composer dump-autoload --optimize --strict-psr`
-  exits non-zero on it locally.
-
-Read [Composer](references/composer.md) before adding a dependency, changing autoloading, or building
-for production.
+`composer install` never checks advisories; only `update` and `require` can block a vulnerable version,
+so run `composer audit --locked` as its own CI step. A PSR-4 case mismatch works on macOS and fails on
+Linux; `composer dump-autoload --optimize --strict-psr` exits non-zero on it locally. Read
+[Composer](references/composer.md) before adding a dependency, changing autoloading, or building for
+production.
 
 ## Long-running PHP keeps state
 
-Under a queue worker or an application server that keeps workers alive (Swoole, RoadRunner, FrankenPHP
-worker mode), one process serves many jobs. A `static` or global cache grows without end (about 16 MB per
-10,000 cached 1 KB entries, measured), and state set for one request is still there for the next. Bound
-or reset caches per job, use a `WeakMap` for per-object data, and restart workers after a fixed number of
-jobs. Read [Performance and memory](references/performance-and-memory.md) before optimizing anything.
+Under a queue worker or an application server that keeps workers alive, one process serves many jobs:
+a `static` or global cache grows without end, and state set for one request is still there for the next.
+Read [Performance and memory](references/performance-and-memory.md) before optimizing or running PHP
+that way.
 
 ## Prove it
 
 ```sh
 php -l src/File.php                                       # with the lowest PHP the code must run on
-php -d error_reporting=-1 -d display_errors=1 vendor/bin/phpunit
+php -d error_reporting=-1 -d display_errors=1 vendor/bin/phpunit   # every deprecation visible
 vendor/bin/phpstan analyse                                # with phpVersion set explicitly
 composer validate --no-check-publish && composer audit --locked
 ```
 
-PHPStan at its strictest level flags none of the loose comparisons above; the phpstan-strict-rules
-package does. Report the behaviour, the file, and the command whose output proves it.
+`php --ini` names the ini files in effect, and a host ini can hide deprecations; `php -n` runs with
+built-in defaults when a result must not depend on the machine. PHPStan at its strictest level flags none
+of the loose comparisons above; the phpstan-strict-rules package does. PHPUnit 11 deprecates docblock
+annotations and 12 ignores them, so a method marked only `@test` silently stops running: use `#[Test]`
+and `#[DataProvider]`. Report the behaviour, the file, and the command whose output proves it.
 [Sources](references/sources.md) holds the evidence behind each rule.

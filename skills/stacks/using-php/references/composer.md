@@ -5,16 +5,16 @@ directories, or building for production.
 
 ## Resolve for production's PHP
 
-The `require.php` range does not stop the solver choosing package versions that need the developer's
-PHP. A lock made on 8.4 for a range of `>=8.2` picked a dependency release that needs 8.4, and the
-generated `vendor/composer/platform_check.php` then throws on the 8.3 server at the first request.
+A lock made on 8.4 for a range of `>=8.2` picked a dependency release that needs 8.4, and the generated
+`vendor/composer/platform_check.php` then throws on the 8.3 server at the first request.
 
 ```sh
-composer config platform.php 8.3.0      # production's version
-composer update --lock                  # re-resolve without upgrading anything else
-composer check-platform-reqs --lock     # run on the target host: checks that PHP against the lock
+composer config platform.php 8.3.0         # production's version
+composer update --minimal-changes          # re-resolve, changing only what the platform forces
+composer check-platform-reqs --lock        # on the target host: checks that PHP against the lock
 ```
 
+`composer update --lock` does not help here: it keeps every locked version, so the solver fails.
 `check-platform-reqs` checks the PHP that runs it, so run it where the code will run.
 
 ## Change the lock deliberately
@@ -22,9 +22,10 @@ composer check-platform-reqs --lock     # run on the target host: checks that PH
 - `composer require vendor/pkg` or `composer update vendor/pkg` changes one package. A bare
   `composer update` upgrades everything the constraints allow, which turns a one-package fix into a
   forty-package change.
-- `composer.json` edited by hand without updating the lock makes `composer install` fail (exit 4: "The
-  lock file is not up to date"). `composer validate --no-check-publish` catches it in CI (exit 2); without
-  `--no-check-publish` it also fails an application for fields only a published package needs.
+- A `composer.json` edited by hand without updating the lock fails `composer install` (exit 4) only when a
+  required package is missing from the lock; a changed constraint the locked version still satisfies just
+  warns and exits 0. `composer validate --no-check-publish` exits 2 in both cases, so it is the CI gate;
+  without `--no-check-publish` it also fails an application for fields only a published package needs.
 - On a lock merge conflict, take one side's lock and re-run the `composer require` or `update` that the
   other side made.
 - Commit the lock for an application. For a library it has no effect on consumers; test the library with
@@ -36,17 +37,14 @@ composer check-platform-reqs --lock     # run on the target host: checks that PH
   the setting is `policy.advisories`; the older `audit.block-insecure` is deprecated, and ignored once
   `policy.advisories` exists. When something is blocked, ignore the one advisory id with a reason, never
   the whole package or the feature.
-- `composer install` from a lock neither blocks nor warns; a vulnerable lock installs with exit 0. Add a
-  CI step: `composer audit --locked` exits 1 on an advisory and, by default, on an abandoned package.
-- `composer why vendor/pkg` names who pulled a package in; `composer why-not vendor/pkg 2.0` names what
-  blocks an upgrade.
+- `composer audit --locked` exits 1 on an advisory and, by default, on an abandoned package.
 
 ## Code that runs on install
 
-- Plugins run code on every Composer command. Since 2.2 only packages listed in `allow-plugins` load; in a
-  non-interactive run an unlisted plugin is skipped with no message (only `-vvv` shows it), so a
-  code-generating plugin that works on a laptop silently does nothing in CI. List each plugin by name;
-  never set `"allow-plugins": true`.
+- Plugins run code on every Composer command. Since 2.2 only packages listed in `allow-plugins` load: in
+  a non-interactive run an unlisted plugin fails the command ("blocked by your allow-plugins config"),
+  while one listed as `false`, or one that marks itself optional, is skipped without a word. List each
+  plugin by name after reading what it does; never set `"allow-plugins": true`.
 - The root package's `scripts` run on `composer install`; a pull request that changes `scripts` or
   `allow-plugins` is code that runs on every developer's machine and in CI. Review it as code. Install an
   untrusted repository with `--no-scripts --no-plugins`.
@@ -65,14 +63,6 @@ dependency.
   `composer dump-autoload --optimize --strict-psr` reports it and exits non-zero locally, and
   `--classmap-authoritative` reproduces the failure on macOS. To rename a directory by case only:
   `git mv src/models src/tmp && git mv src/tmp src/Models`.
-- One class per file: a second class in a file loads only if the first one happened to be loaded,
-  an order-dependent bug.
 - Production install: `composer install --no-dev --prefer-dist --optimize-autoloader --classmap-authoritative`.
   The authoritative classmap changes behaviour as well as speed: a class missing from the map is not found
   even if its file exists.
-
-## Style
-
-Follow the project's existing formatter configuration and do not reformat unrelated files. Where none
-exists, PER Coding Style (the successor to PSR-12) is the common one; `php-cs-fixer fix --dry-run --diff`
-proves a change conforms without rewriting anything.

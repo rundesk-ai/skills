@@ -5,10 +5,9 @@ installs.
 
 ## The event loop is shared by every request
 
-Synchronous work blocks every request in the process, not just the one that caused it. Parsing an 18 MB
-JSON body takes about 70 ms; a regular expression that backtracks can take seconds; `fs.*Sync`,
-synchronous crypto and a long loop do the same. A chain of `await` or `queueMicrotask` with no real I/O
-starves timers and sockets just as a `while` loop does.
+Synchronous work blocks every request in the process, not just the one that caused it: parsing an 18 MB
+JSON body took about 70 ms, during which nothing else ran. A chain of `await` or `queueMicrotask` with no
+real I/O starves timers and sockets just as a `while` loop does.
 
 Measure before moving work around:
 
@@ -21,21 +20,14 @@ console.log('max ms', delay.max / 1e6, 'p99 ms', delay.percentile(99) / 1e6);
 ```
 
 Then stream or chunk the work, yield with `await new Promise((r) => setImmediate(r))` between chunks, or
-move it to a worker pool. `node --cpu-prof` writes a profile that names the hot function.
+move it to a worker pool. `node --cpu-prof` writes a `.cpuprofile` that names the hot function; open it in
+a browser's dev tools.
 
 ## Streams and backpressure
 
 - `readable.pipe(writable)` does not destroy the source when the destination fails: the source stays
-  paused and its file descriptor or socket leaks. Use `pipeline` from `node:stream/promises`, which
-  destroys every stream and rejects once:
-
-```js
-import { pipeline } from 'node:stream/promises';
-import { createReadStream, createWriteStream } from 'node:fs';
-import { createGzip } from 'node:zlib';
-await pipeline(createReadStream('in.log'), createGzip(), createWriteStream('in.log.gz'));
-```
-
+  paused and its file descriptor or socket leaks. Use `await pipeline(source, ...transforms, destination)`
+  from `node:stream/promises`, which destroys every stream and rejects once.
 - `write()` returns `false` when the buffer is full. Ignoring it buffered 125 MB in one test; waiting for
   `drain` held it at the high-water mark:
 
@@ -46,26 +38,22 @@ for (const row of rows) {
 }
 ```
 
-- `pipeline` with `async function*` transforms and `for await` over a readable keep backpressure; they
-  are the simplest way to process a large file one record at a time. A V8 string tops out near 512 MB,
-  so `readFile(..., 'utf8')` followed by `JSON.parse` cannot handle a larger file at all.
+- A V8 string tops out near 512 MB, so `readFile(..., 'utf8')` followed by `JSON.parse` cannot handle a
+  larger file at all. Process it a record at a time with `for await` over a stream, or `pipeline` with
+  `async function*` transforms, which keep backpressure.
 
 ## Process exit and shutdown
-
-| Situation | Exit code |
-|---|---|
-| Uncaught exception, or an unhandled rejection (the default since Node 15) | 1 |
-| `SIGTERM` with no handler | 143 |
-| `SIGKILL`, including a container out-of-memory kill | 137, with no stack trace |
 
 - `process.exit()` right after writing output truncates it when stdout is a pipe: 1 MB written, 64 KB
   arrived through `| cat`, all of it into a file. CI and other tools read through pipes. Set
   `process.exitCode` and let the process end.
-- A fire-and-forget promise needs its own `.catch`, or one failure ends the process.
+- Exit code 137 is `SIGKILL`, usually a container's out-of-memory kill: no stack trace, no heap error.
+  143 is `SIGTERM` with no handler, which an orchestrator may count as a failure.
 - Graceful shutdown: on `SIGTERM`, stop accepting connections with `server.close()` (since Node 19 it
   also closes idle keep-alive sockets and waits for in-flight requests), set a hard timeout with
-  `setTimeout(...).unref()` that calls `server.closeAllConnections()`, and set `process.exitCode`.
-  Running as PID 1 in a container, Node gets no default signal handling.
+  `setTimeout(...).unref()` that calls `server.closeAllConnections()`, and set `process.exitCode`. As PID
+  1 in a container Node gets no default signal handling, so a missing handler means the container is
+  killed after its grace period; register the handler, or run under an init process (`docker run --init`).
 
 ## Memory
 
@@ -94,11 +82,8 @@ reads as empty.
 
 ## Modules
 
-- A `.js` file is CommonJS unless the nearest `package.json` says `"type": "module"`. `npm init -y`
-  writes `"type": "commonjs"`, so `import` in a fresh project fails until it is changed. `.mjs` and
-  `.cjs` override the field.
-- ES modules have no `__dirname`; use `import.meta.dirname` and `import.meta.filename`. Importing JSON
-  needs `with { type: 'json' }`.
+- `npm init -y` writes `"type": "commonjs"`, so `import` in a `.js` file of a fresh project fails until
+  it is changed to `"module"` (or the file is renamed `.mjs`).
 - `require()` of an ES module works on current lines and returns the namespace, so
   `const fn = require('esm-pkg'); fn()` fails: the default export is `.default`. Top-level `await`
   anywhere in that module's graph makes `require()` throw `ERR_REQUIRE_ASYNC_MODULE`, so adding one to a
@@ -107,22 +92,25 @@ reads as empty.
   only the documented entry points. Adding `exports` to your own package is a breaking change.
 - A package that ships separate CommonJS and ESM builds loads twice when both are used in one process:
   `instanceof` fails across them and module-level singletons exist twice.
-- `node --run script` skips `pre` and `post` scripts that `npm run` runs.
+- Dynamic `import()` takes a URL, so an absolute Windows path (`C:\…`) fails; convert with
+  `pathToFileURL(path).href` from `node:url`.
+- `node --run script` skips the `pre` and `post` scripts that `npm run` runs.
 
-## Lockfiles and installs
+## Installs and publishing
 
-- `npm ci` and `pnpm install --frozen-lockfile` refuse a lock that does not match `package.json`;
-  `npm install` silently rewrites the lock. Use the frozen form in CI and in reproductions, and read the
-  lockfile diff of any dependency change (count the new transitive packages).
-- Dependency install scripts: npm 11 runs them silently; pnpm 10 and npm 12 block them unless the
-  package is allowed (`pnpm approve-builds`; npm `allowScripts` in `package.json`). Allow only packages
-  that need a native build. On npm 11, `--ignore-scripts` stops them.
-- A release-age gate (pnpm `minimumReleaseAge`, npm 11.10 and later `min-release-age`, or
-  `npm install --before=<date>`) skips versions published in the last day or so. Script blocking would not
-  have stopped the 2025 compromise of widely used packages, whose payload ran at run time; a one-day
-  gate would have, since the bad versions were live for about two hours.
-- `npm audit signatures` verifies registry signatures; `npm view <pkg> dist.attestations` shows
-  provenance.
+- Dependency install scripts: npm 11 runs them silently. pnpm from version 10 and npm from version 12
+  block them unless the package is allowed (`pnpm approve-builds`; `allowScripts` in `package.json` for
+  npm). Allow only packages that need a native build, and never switch the policy off. On npm 11,
+  `--ignore-scripts` stops them.
+- A release-age gate skips versions published in the last day or so: pnpm `minimumReleaseAge`, npm
+  `min-release-age` from 11.10, or `npm install --before=<date>` on any version. On pnpm it silently picks
+  an older version rather than failing. Script blocking would not have stopped the 2025 compromise of
+  widely used packages, whose payload ran at run time; a one-day gate would have, since the bad versions
+  were live for about two hours.
+- When a dependency change adds many transitive packages to the lockfile, say how many and why.
+- Before publishing, `npm pack --dry-run` lists every file the tarball will contain. Without a `files`
+  allow-list in `package.json`, tests, fixtures and a stray `.env` ship, and a published version cannot
+  be taken back.
 
 ## The permission model
 
@@ -131,17 +119,7 @@ processes. It restricts network access only on newer lines (Node 22 let `fetch` 
 symlinks out of granted paths, and is not inherited by workers. It is a seat belt for your own code, not
 a sandbox for untrusted code.
 
-## Testing with the built-in runner
+## Testing
 
-`node --test` runs `*.test.js` files without a dependency. A test that leaves a promise rejecting after it
-ends fails its file ("asynchronous activity after the test ended"), which catches the floating rejections
-above. Mock timers and the clock instead of sleeping:
-
-```js
-import test from 'node:test';
-test('debounce fires once', (t) => {
-  t.mock.timers.enable({ apis: ['setTimeout', 'Date'], now: new Date('2026-03-08T06:59:00Z') });
-  // ... call the debounced function several times ...
-  t.mock.timers.tick(1000);
-});
-```
+`node --test` needs no dependency. Mock the clock instead of sleeping:
+`t.mock.timers.enable({ apis: ['setTimeout', 'Date'], now })`, then `t.mock.timers.tick(ms)`.

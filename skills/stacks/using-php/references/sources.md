@@ -50,6 +50,11 @@ arm64 macOS with OPcache off unless stated; read them as ratios.
 | PDO exceptions by default; identifiers cannot bind; `exec` runs stacked statements; LIKE and IN behaviour | observed (sqlite) | [PDO MySQL](https://www.php.net/manual/en/ref.pdo-mysql.php) |
 | MySQL emulated prepares by default; charset belongs in the DSN | documented, community; not run | [PDO MySQL](https://www.php.net/manual/en/ref.pdo-mysql.php), [canonical answer on PDO and injection](https://stackoverflow.com/questions/134099/are-pdo-prepared-statements-sufficient-to-prevent-sql-injection) |
 | `include` executes PHP in any file; realpath sibling-prefix bypass; `basename` edge cases | observed | |
+| `?id[]=1` makes a superglobal an array; `hash_equals` then throws `TypeError` | observed | |
+| `preg_match` returns `false` at the backtrack limit ("Backtrack limit exhausted") | observed (`pcre.jit=0`) | [preg_last_error_msg](https://www.php.net/manual/en/function.preg-last-error-msg.php) |
+| `header('Location: …')` does not stop the script | documented | [header](https://www.php.net/manual/en/function.header.php) |
+| Plain PHP has no CSRF protection; synchronizer tokens | documented | [OWASP CSRF Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) |
+| Host header and forwarded headers are client-controlled | documented | [OWASP Forgot Password](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html) |
 | Polyglot uploads pass `finfo` and `getimagesize` | observed | [OWASP File Upload](https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html) |
 | `escapeshellarg` does not stop option injection; `proc_open` with an array runs no shell | observed, documented | [proc_open](https://www.php.net/manual/en/function.proc-open.php), community: [Composer argument injection write-up](https://sonarsource.com/blog/php-supply-chain-attack-on-composer/) |
 | `mail()` string headers accept CRLF; array headers throw; `header()` warns and drops | observed | |
@@ -63,15 +68,14 @@ arm64 macOS with OPcache off unless stated; read them as ratios.
 
 | Claim | Status | Source |
 |---|---|---|
-| Lock resolved for local PHP fails in `platform_check.php`; `config.platform.php` fixes it | observed | [platform](https://getcomposer.org/doc/06-config.md#platform) |
+| Lock resolved for local PHP fails in `platform_check.php`; `config.platform.php` plus `update --minimal-changes` fixes it; `update --lock` keeps the locked versions and fails | observed | [platform](https://getcomposer.org/doc/06-config.md#platform) |
 | Advisory blocking on update since 2.9; `policy` config in 2.10; install does not audit | observed, documented | [Composer 2.9](https://blog.packagist.com/composer-2-9/), [Composer 2.10.0 release](https://github.com/composer/composer/releases/tag/2.10.0), [policy](https://getcomposer.org/doc/06-config.md#policy) |
-| Stale lock: install exit 4, validate exit 2 | observed | [Resolving merge conflicts](https://getcomposer.org/doc/articles/resolving-merge-conflicts.md) |
-| Non-interactive runs skip unlisted plugins silently; root scripts run on install | observed, documented | [allow-plugins](https://getcomposer.org/doc/06-config.md#allow-plugins), [Scripts](https://getcomposer.org/doc/articles/scripts.md) |
+| Stale lock: install exits 4 only when a package is missing from the lock (0 for a still-satisfied constraint change); validate exits 2 in both cases | observed | [Resolving merge conflicts](https://getcomposer.org/doc/articles/resolving-merge-conflicts.md) |
+| Non-interactive runs fail on an unlisted plugin; plugins listed `false` or marked optional are skipped silently; root scripts run on install | observed, documented | [allow-plugins](https://getcomposer.org/doc/06-config.md#allow-plugins), [Scripts](https://getcomposer.org/doc/articles/scripts.md) |
 | Constraint meanings, `minimum-stability` | observed (composer/semver), documented | [minimum-stability](https://getcomposer.org/doc/04-schema.md#minimum-stability) |
 | Lock files for applications, not libraries | documented | [Libraries: lock file](https://getcomposer.org/doc/02-libraries.md#lock-file) |
 | PSR-4 case mismatch: `--strict-psr` exits 1, authoritative classmap misses the class on macOS | observed | [Autoloader optimization](https://getcomposer.org/doc/articles/autoloader-optimization.md) |
 | `strict_types` placement is fatal when not first | observed | |
-| PER Coding Style supersedes PSR-12 | documented | [PER Coding Style](https://www.php-fig.org/per/coding-style/), [php-cs-fixer PER-CS](https://cs.symfony.com/doc/ruleSets/PER-CS.html) |
 | Supply-chain incidents on Packagist | community | [Packagist maintainer account takeover](https://blog.packagist.com/packagist-org-maintainer-account-takeover/) |
 
 ## Tooling, versions and performance
@@ -85,6 +89,10 @@ arm64 macOS with OPcache off unless stated; read them as ratios.
 | `array_merge` in a loop is quadratic; `in_array` against a flipped set; generators against arrays; namespaced `array_key_exists` | observed (`hrtime`, `memory_get_peak_usage`) | |
 | `.=` is not slower than `implode` | observed | |
 | Static caches grow in workers; `WeakMap` releases; cycle collector | observed | [WeakMap](https://www.php.net/manual/en/class.weakmap.php) |
+| pdo_mysql buffers whole result sets by default | documented, not run (no MySQL server) | [MySQL buffered queries](https://www.php.net/manual/en/mysqlinfo.concepts.buffering.php) |
+| The file session handler locks for the request; `session_write_close`, `read_and_close` | documented | [session_write_close](https://www.php.net/manual/en/function.session-write-close.php) |
+| `rename()` replaces a file in one step on the same file system | documented | [rename](https://www.php.net/manual/en/function.rename.php) |
+| PHPUnit 11 deprecates docblock metadata; 12 ignores it | documented | [PHPUnit 12 release announcement](https://phpunit.de/announcements/phpunit-12.html) |
 | OPcache off on CLI; JIT disabled by default; JIT gains on numeric loops only | observed, documented | [JIT config defaults RFC](https://wiki.php.net/rfc/jit_config_defaults) |
 
 ## Judgments not stated by the sources

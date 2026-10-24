@@ -1,84 +1,34 @@
 # React versions and migration
 
-## Establish the version scope first
+## Upgrading to React 19
+
+Upgrade `react` and `react-dom` together, with the framework or renderer that depends on them, run the
+official codemods and read their diff, then search for what React 19 removed or changed:
 
 ```sh
-npm ls react react-dom
+grep -rnE "propTypes|defaultProps|contextTypes|getChildContext|createFactory|ReactDOM\.(render|hydrate|unmountComponentAtNode|findDOMNode)|react-dom/test-utils|react-test-renderer|forwardRef|ref=\"[a-zA-Z]" src
 ```
 
-React and `react-dom` must be on the same major version. This skill targets React 19.x on the
-stable `latest` channel.
+- `propTypes` on a function component is ignored, not an error: the code still runs and the validation
+  silently stops. `defaultProps` on a function component is ignored too; use default parameters.
+- Errors thrown during render are no longer re-thrown. An uncaught error goes to `window.reportError` and
+  one caught by an error boundary goes to `console.error`, so reporting that listened for a global
+  `error` event goes quiet without failing. Move it to the `onUncaughtError` and `onCaughtError` options
+  of `createRoot` or `hydrateRoot`.
+- `ref` is a regular prop, so new code does not need `forwardRef`; reading `element.ref` is deprecated in
+  favour of `element.props.ref`.
+- In TypeScript, `useRef` requires an argument, a ref callback may not return a value implicitly,
+  `ReactElement` props default to `unknown`, and the JSX namespace moved to `React.JSX`.
 
-Under React's versioning policy, the stable channel follows semver: patch for critical fixes and
-security, minor for features and non-critical fixes, major for breaking changes. Four things are
-explicitly excluded from that promise and must never become a production default: development-only
-warnings, APIs prefixed with `unstable_`, canary and experimental builds, and undocumented
-internals. Canary is offered for framework authors, not applications.
-
-Do not record a "latest" version number in project guidance. Query the registry at review time.
-
-## Apply the React 19 removals
-
-Removed from `react`:
-
-| Removed | Replacement |
-|---|---|
-| `propTypes` on function components | TypeScript, or runtime validation you own |
-| `defaultProps` on function components | ES default parameters (class components keep it) |
-| Legacy context: `contextTypes`, `getChildContext` | `createContext` |
-| String refs (`ref="input"`) | Callback refs or `useRef` |
-| Module pattern factories | A function returning JSX |
-| `React.createFactory` | JSX |
-
-Removed from `react-dom`:
-
-| Removed | Replacement |
-|---|---|
-| `ReactDOM.render` | `createRoot` |
-| `ReactDOM.hydrate` | `hydrateRoot` |
-| `ReactDOM.unmountComponentAtNode` | `root.unmount()` |
-| `ReactDOM.findDOMNode` | A DOM ref |
-| `react-dom/test-utils` helpers (its `act` is a deprecated shim) | `act` from `react`; Testing Library for the rest |
-| `react-test-renderer/shallow` | `react-shallow-renderer`, or move to Testing Library |
-
-`propTypes` being ignored rather than erroring is the trap worth calling out: the code still runs
-and the validation silently stops happening.
-
-## Handle the behavior changes, not just the renames
-
-Errors thrown during render are no longer re-thrown. An uncaught error goes to `window.reportError`
-and an error caught by an error boundary goes to `console.error`. Reporting that relied on a global
-`error` event will go quiet without failing; move it to the `onUncaughtError` and `onCaughtError`
-options on `createRoot` or `hydrateRoot`.
-
-`ref` is a regular prop for function components, so new code does not need `forwardRef`. Reading
-`element.ref` is deprecated in favour of `element.props.ref`. UMD builds are gone; use an ESM CDN.
-
-In TypeScript, `useRef` now requires an argument, ref callbacks may not return a value implicitly,
-`ReactElement` props default to `unknown`, and the JSX namespace moved to `React.JSX`.
+Then run the suite and exercise a form submit, an error boundary, a ref-driven DOM read, and hydration
+if the app renders on the server.
 
 ## Changes within React 19
 
 | Version | Change | What breaks |
 |---|---|---|
-| 19.2 | `useEffectEvent` and `<Activity>` are stable | nothing; a hidden `<Activity>` runs effect cleanups but keeps state and DOM, so anything not stopped in a cleanup (a playing video) keeps going |
+| 19.2 | `useEffectEvent` and `<Activity>` are stable | a hidden `<Activity>` runs effect cleanups but keeps state and DOM, so anything not stopped in a cleanup (a playing video) keeps going |
 | 19.2 | `useId` output changed from `:r:` (19.0) and `«r»` (19.1) to `_r_` | snapshots, CSS selectors and tests that match the old format |
 | 19.3 | transitions render and commit independently instead of together | code that assumed two transitions land in one commit |
 | 19.3 | the automatic form reset after an action fires `onReset` | side effects in `onReset` now run after every successful action |
 | 19.3 | Strict Mode double-invokes effects during hydration too | effects that were only safe because hydration ran them once |
-| 19.3 | `<ViewTransition>`, Fragment refs and `react-dom`'s `browser()` are stable | nothing |
-
-Server Components packages (`react-server-dom-*`) get security patch releases on every supported minor
-line; see [security.md](security.md) before calling an app up to date.
-
-## Upgrade with evidence
-
-1. Read the release notes for every major crossed, not only the newest.
-2. Upgrade `react` and `react-dom` together, plus the renderer or framework that depends on them.
-3. Run the official codemods where they exist, then read the diff rather than trusting it.
-4. Search the codebase for every identifier in the tables above, plus `forwardRef`,
-   `react-dom/test-utils`, and any global error reporting.
-5. Run the test suite, then exercise a form submit, an error boundary, a ref-driven DOM read, and
-   hydration if the app renders on the server.
-
-Translate older advice only after checking it against the documentation for the installed version.

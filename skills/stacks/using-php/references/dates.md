@@ -1,26 +1,13 @@
 # Dates
 
-Read this before parsing, storing or doing arithmetic on a date or time.
-
-## Immutable by default
-
-`DateTime::modify()`, `add()`, `sub()` and `setDate()` change the object and return it, so every
-variable holding it moves:
-
-```php
-$start = new DateTime('2026-01-31');
-$end = $start->modify('+1 day');      // $start is now 2026-02-01 too: same object
-```
-
-Use `DateTimeImmutable` in signatures and properties; its methods return a new object. A mutable date
-passed into a function or stored in two properties is the usual source of "the start date changed".
+Read this before parsing, storing or doing arithmetic on a date or time. Type dates as
+`DateTimeImmutable`: `DateTime` methods change the object every variable holding it shares.
 
 ## Month arithmetic overflows
 
-`'+1 month'` adds to the month number and lets the day spill over: 31 January becomes 3 March, 31 March
-becomes 1 May, and `'-1 month'` from 31 March is 3 March. For "same day next month, or the last day when
-the month is shorter", clamp it yourself, and keep the original day so a subscription started on the 31st
-returns to the 31st after February:
+`'+1 month'` lets the day spill over, so 31 March becomes 1 May, and `'-1 month'` from 31 March is
+3 March. For "same day next month, or the last day when the month is shorter", clamp it yourself, and
+keep the original day so a monthly date anchored on the 31st returns to the 31st after February:
 
 ```php
 function addMonthsClamped(DateTimeImmutable $anchor, int $months): DateTimeImmutable
@@ -51,8 +38,8 @@ February gives 28 March forever.
 ## Time zones and daylight saving
 
 There is no warning when no zone is configured: the default is UTC, and `date()` and `new DateTime()`
-use whatever `date.timezone` or `date_default_timezone_set()` says on that machine. Store and compute in
-UTC, and convert to the user's zone only to display.
+use whatever `date.timezone` or `date_default_timezone_set()` says on that machine, which can differ
+between the command line and the web server.
 
 Relative `modify()` with hours or seconds is wrong across a daylight-saving change. In
 `America/New_York` on 8 March 2026, from 01:30, `modify('+24 hours')` lands 23 elapsed hours later, and

@@ -14,32 +14,23 @@ that the fix holds; write that proof as a test that fails on the old code.
   with `PASSWORD_ARGON2ID` that checks against `PASSWORD_DEFAULT` silently converts every hash back to
   bcrypt. Argon2id exists only if the build has it; check `defined('PASSWORD_ARGON2ID')` on the server.
 - Bcrypt truncates input at 72 bytes without warning, so two long passphrases sharing a prefix both
-  verify; a NUL byte throws `ValueError`. Pre-hashing with raw binary output therefore fails for some
+  verify; a NUL byte throws `ValueError` (observed on 8.4). Pre-hashing with raw binary output therefore fails for some
   passwords; encode it: `password_hash(base64_encode(hash_hmac('sha384', $pw, $pepper, true)), PASSWORD_DEFAULT)`.
 - Migrating from `md5`/`sha1` without locking anyone out: on login, if the stored value is a legacy hash,
   compare `hash_equals($stored, md5($pw))`, and on success replace it with `password_hash($pw, …)`. Users
   who never return keep a weak hash; wrapping (`password_hash($legacyHash)`) protects them too, at the cost
   of a second verification path.
 
-## Comparisons on secrets
-
-`md5('240610708') == md5('QNKCDZO')` is true, and `true == 'any string'` is true, so a JSON body with
-`"password": true` or a digest starting `0e` passes a loose check. `strcmp` with an array argument now
-throws `TypeError`, so it crashes instead of bypassing, but the request still controls that path. Use
-`password_verify` for passwords, `hash_equals($known, $given)` for tokens and signatures (both strings,
-known first), and check the type of every decoded field.
-
 ## Tokens and randomness
 
-`mt_rand`, `rand`, `uniqid`, `str_shuffle`, `shuffle` and `array_rand` are predictable: `mt_srand(42)`
-repeats, and `uniqid()` is the clock. For tokens, reset links and codes use `bin2hex(random_bytes(32))`,
-`random_int`, or `(new Random\Randomizer())->getBytesFromString($alphabet, $length)`.
+`str_shuffle`, `shuffle` and `array_rand` are as predictable as `mt_rand` (`mt_srand(42)` repeats). For
+a human-friendly code from an alphabet, `(new Random\Randomizer())->getBytesFromString($alphabet, $length)`
+uses the secure engine and has no modulo bias.
 
 ## Deserialization
 
-`unserialize` instantiates any class named in the payload and runs `__wakeup`, `__unserialize` and
-`__destruct`; public gadget chains exist for common Composer packages. php.net says not to pass untrusted
-input to it whatever `allowed_classes` says. Cookies, hidden fields, and cache or queue rows an attacker
+Public gadget chains exist for common Composer packages, and php.net says not to pass untrusted input to
+`unserialize` whatever `allowed_classes` says. Cookies, hidden fields, and cache or queue rows an attacker
 can write are untrusted. Use JSON with `JSON_THROW_ON_ERROR`, and sign a value that must round-trip with
 `hash_hmac` and check it with `hash_equals`. Prove it: a test that sends a serialized object must not
 instantiate it.
@@ -76,9 +67,8 @@ $rows = $db->query("SELECT id, name, price_cents FROM products ORDER BY $order $
 - `include` executes PHP inside any file, whatever its extension: an uploaded `avatar.jpg` containing
   `<?php` runs when included. `allow_url_include` is off by default, which blocks remote includes, not
   local ones. Never build an include path from input; map a page name to a file through an allow-list.
-- `str_starts_with(realpath($path), $base)` passes for the sibling directory `$base . '_private'`. Compare
-  with `$base . DIRECTORY_SEPARATOR`, and reject `realpath() === false` (it returns `false` for a path
-  that does not exist, so check the directory of a file about to be written).
+- `realpath()` returns `false` for a path that does not exist, so for a file about to be written, check
+  the real path of its directory.
 - `basename('..')` is `..`, and on Linux `basename('..\\x.php')` keeps the backslashes: reject `.`, `..`
   and empty names after it.
 - `$_FILES[...]['type']` and `['name']` are chosen by the client, and a file can be a valid image and
@@ -92,29 +82,28 @@ $rows = $db->query("SELECT id, name, price_cents FROM products ORDER BY $order $
 
 ## Shell and code execution
 
-- A command string goes through `/bin/sh`. `escapeshellarg` stops `; rm …` but not an argument starting
-  with `-`, which the program reads as an option (the real bug in git, tar and curl wrappers).
-  `escapeshellcmd` does not separate arguments at all.
-- `proc_open(['git', 'log', '--', $path], $descriptors, $pipes)` takes an argument array and runs no
-  shell; put `--` before user operands.
-- `$fn = $_GET['f']; $fn()` and `call_user_func($_GET['f'])` call any function, `system` included.
-  `extract($_POST)` overwrites local variables such as `$isAdmin`.
+- Option injection through a value starting with `-` is the real bug in git, tar and curl wrappers;
+  `escapeshellcmd` does not separate arguments at all. With an array,
+  `proc_open(['git', 'log', '--', $path], $descriptors, $pipes)` runs no shell.
 - `mail()` with string headers accepts injected `\r\nBcc:` lines; array headers throw `ValueError` on
   CRLF. Never put input in its fifth argument. `header()` drops a value containing a newline with only a
   warning, so the redirect you meant to send silently does not happen.
 
 ## Output escaping
 
-- `htmlspecialchars()` with no flags escapes both quote types and substitutes invalid UTF-8 (the 8.1
-  defaults). Code that passes `ENT_QUOTES` alone loses `ENT_SUBSTITUTE`, and invalid UTF-8 then returns an
-  empty string. Quote every attribute: an unquoted `value=<?= … ?>` is open to `x onmouseover=…`.
+- Quote every attribute: an unquoted `value=<?= … ?>` is open to `x onmouseover=…` even after
+  `htmlspecialchars`.
 - `href` needs a scheme allow-list: `htmlspecialchars('javascript:alert(1)')` is unchanged,
   `FILTER_VALIDATE_URL` accepts `javascript://comment%0aalert(1)`, and `parse_url` returns no scheme for a
   leading space that browsers strip.
 - JSON inside a `<script>`: `json_encode($v, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_THROW_ON_ERROR)`.
   `JSON_UNESCAPED_SLASHES` lets `</script>` through.
 
-## Sessions and configuration
+## CSRF, sessions and configuration
+
+Plain PHP adds no CSRF protection. Give each session a token from `random_bytes(32)`, put it in every
+form that changes state, and reject the request unless `hash_equals($_SESSION['csrf'], $_POST['csrf'] ?? '')`
+holds; `SameSite=Lax` alone does not cover state changes on GET or sibling subdomains.
 
 The built-in defaults accept an attacker-chosen session id and send the cookie without `HttpOnly`,
 `Secure` or `SameSite`; they also display errors and advertise the PHP version.
@@ -132,6 +121,11 @@ session_regenerate_id(true);
 
 Prove it: send `Cookie: PHPSESSID=chosen123` and expect a new `Set-Cookie` carrying `secure; HttpOnly;
 SameSite`. In production set `display_errors=Off`, `expose_php=Off`, and log errors instead.
+
+`$_SERVER['HTTP_HOST']` and `X-Forwarded-For` come from the client: a password-reset link built from the
+host header sends the token to the attacker's domain, and rate limiting keyed on a forwarded address is
+bypassed by sending a different one. Use a configured base URL, and trust forwarded headers only from
+your own proxies.
 
 ## Outbound requests and XML
 

@@ -5,17 +5,16 @@ part ways; component typing belongs with the component framework.
 
 ## Check the compiler version first
 
-`npm exec --no -- tsc -v`. TypeScript 7, the native compiler, is the current release and changed defaults:
-`strict` is on when the tsconfig does not set it, `moduleResolution: node10` is removed, and
-`tsc file.ts` refuses to run when a tsconfig is present (TS5112). Upgrading a project that relied on the
-old default can surface hundreds of errors at once; set `"strict": false` explicitly to defer them, or fix
-them. A check run with the wrong compiler (a global 5.x against a project on 7) reports a different set of
-errors, or none.
+`ls node_modules/.bin/tsc && npm exec --no -- tsc -v`. TypeScript 6 changed defaults that older advice
+assumes: `strict` is on when the tsconfig does not set it, and `tsc file.ts` refuses to run when a
+tsconfig is present (TS5112; `--ignoreConfig` overrides). `moduleResolution: node10` is deprecated in 6
+and removed in 7, the native compiler. Upgrading a project that relied on the old default can surface
+hundreds of errors at once; set `"strict": false` explicitly to defer them, or fix them. A check run with
+the wrong compiler (a global 5.x against a project on 7) reports a different set of errors, or none.
 
 ## Types are erased
 
-Nothing in a type survives to run time, so these compile under the strictest settings and fail in
-production:
+These compile under the strictest settings and fail in production:
 
 ```ts
 interface User { id: number; name: string; tags: string[] }
@@ -25,34 +24,23 @@ user.tags.length;     // TypeError: Cannot read properties of undefined
 ```
 
 `JSON.parse`, `response.json()`, environment variables, `localStorage` and message events return data the
-compiler has never seen. `as`, `any` and the non-null `!` are claims the compiler takes on trust. Validate
-at the boundary, with a schema validator the project already uses or a type guard:
-
-```ts
-function isUser(value: unknown): value is User {
-  if (typeof value !== 'object' || value === null) return false;
-  const v = value as Record<string, unknown>;
-  return typeof v.id === 'number' && typeof v.name === 'string'
-    && Array.isArray(v.tags) && v.tags.every((t) => typeof t === 'string');
-}
-```
-
-Treat each `as`, `any` and `!` in a review as an unchecked claim that needs a reason.
+compiler has never seen. Validate it where it enters, with the schema validator the project already uses
+or a type guard (`function isUser(v: unknown): v is User`) that checks every field. In a review, treat
+each `as`, `any` and non-null `!` as an unchecked claim that needs a reason.
 
 ## Options that change what the compiler catches
 
 | Option | Catches | Without it |
 |---|---|---|
-| `strict` | implicit `any`, possibly-`null` access, unchecked `this` | most of the type system is advisory |
 | `noUncheckedIndexedAccess` | `arr[i]` and `record[key]` typed as possibly `undefined` | `const first: number = list[10]` type-checks and is `undefined` |
 | `exactOptionalPropertyTypes` | assigning `undefined` to an optional property explicitly | `{ retries: undefined }` passes as "not set", and `'retries' in opts` is true |
-| `useUnknownInCatchVariables` (in `strict`) | `catch (e)` typed `unknown` | `e.message` on a thrown string crashes |
+| `useUnknownInCatchVariables` (in `strict`) | `catch (e)` typed `unknown`, so you must narrow it | `e.message` on a thrown string is `undefined` in the log, and a thrown `null` crashes the handler |
 | `verbatimModuleSyntax` | a type imported without `import type` | the import survives type stripping and fails at load |
 | `erasableSyntaxOnly` | `enum`, parameter properties, value namespaces | Node's type stripping refuses the file at load |
 
-Turn on `noUncheckedIndexedAccess` for new code; it reported exactly the lines that crashed in the
-example above. `skipLibCheck` hides errors inside declaration files, and declarations from `@types` can
-disagree with the installed library's version.
+Turn on `noUncheckedIndexedAccess` for new code; it reported exactly the line that crashed in the example
+above. `skipLibCheck` hides errors inside declaration files, and declarations from `@types` can disagree
+with the installed library's version.
 
 ## Module settings must match the runtime
 
@@ -60,8 +48,8 @@ The compiler resolves imports by `module` and `moduleResolution`; if those do no
 actually runs, the type check passes and the program fails to start.
 
 - Code that Node runs directly, without a bundler: `"module": "nodenext"`. Relative imports then need
-  their extension (`./helper.js`, or `./helper.ts` with `allowImportingTsExtensions`), and the compiler
-  reports a missing one (TS2835).
+  their extension, and the compiler reports a missing one (TS2835). Write `./helper.js`, or `./helper.ts`
+  with `rewriteRelativeImportExtensions` when `tsc` emits the JavaScript.
 - `"moduleResolution": "bundler"` accepts extensionless imports that only a bundler can resolve. With it,
   `tsc` passed and `node dist/main.js` failed with `ERR_MODULE_NOT_FOUND`. Use it only when a bundler
   really builds the code.
@@ -76,18 +64,9 @@ runs. Type stripping also ignores `tsconfig.json` (no path aliases), refuses `.t
 parameter properties (`constructor(private x: number)`), and namespaces with values. Use a union of
 literals or an `as const` object instead of an enum.
 
-Prove a change type-checks separately from running it:
+## Prove the check covered the code
 
-```sh
-npm exec --no -- tsc --noEmit -p .   # or the project's own typecheck script
-```
-
-Use the project form. On TypeScript 5, `tsc --noEmit src/file.ts` ignores the tsconfig, so it checks with
-default options and can pass while the project form fails; on 7 it refuses to run.
-
-## What the compiler never checks
-
-The run-time shape of any input; whether an index or key exists unless `noUncheckedIndexedAccess` is on;
-whether an import resolves under the runtime's rules, unless the module settings match it; which
-exceptions a function throws; and whether a declaration file describes the installed version of its
-library.
+Use the project form, `tsc --noEmit -p .` or the project's own typecheck script; on TypeScript 5 the
+single-file form ignores the tsconfig and checks with default options. A root tsconfig with
+`"files": []` and `references` (a solution file) makes `tsc --noEmit -p .` check zero files and exit 0
+on a broken project: use `tsc -b`, and confirm the file count with `tsc -p . --listFilesOnly | wc -l`.
