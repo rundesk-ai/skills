@@ -111,3 +111,48 @@ Shorthand: `GS` = `https://docs.godotengine.org/en/stable/tutorials/scripting/gd
 - In a `--script` run, autoloads are not registered during `_init` but are by `_initialize`.
 - `scripts/check_scripts.gd` exits 1 on a parse error, an unknown identifier, a missing import cache, a
   missing root and an empty root, and 0 on a clean project whose scripts name an autoload.
+
+## Simulation scale, determinism and saves
+
+- `https://docs.godotengine.org/en/stable/classes/class_packedint32array.html` — 32-bit storage that
+  wraps; packed arrays passed by reference, an engine property returns a copy.
+- `https://docs.godotengine.org/en/stable/classes/class_dictionary.html` — insertion order kept.
+- `https://docs.godotengine.org/en/stable/classes/class_array.html` — `sort`/`sort_custom` not stable;
+  `has`/`find` type-strict.
+- `https://docs.godotengine.org/en/stable/classes/class_randomnumbergenerator.html` — save and restore
+  `state`; the algorithm is an implementation detail.
+- `https://docs.godotengine.org/en/stable/classes/class_float.html`, `class_int.html` — 32-bit vectors in
+  official builds; 64-bit wraparound.
+- `https://docs.godotengine.org/en/stable/classes/class_json.html` — numbers parse as floats;
+  `full_precision`; `from_native`/`to_native`.
+- `https://docs.godotengine.org/en/stable/classes/class_fileaccess.html` — `get_var` with objects can run
+  code.
+- `https://docs.godotengine.org/en/stable/classes/class_workerthreadpool.html`,
+  `https://github.com/godotengine/godot/blob/4.7-stable/doc/classes/ProjectSettings.xml` —
+  `low_priority_thread_ratio`; waiting for every task; small tasks hurt.
+- `https://docs.godotengine.org/en/stable/tutorials/performance/thread_safe_apis.html` — writing
+  elements from threads is fine, resizing needs a mutex; the active tree is not thread-safe.
+- `https://docs.godotengine.org/en/stable/classes/class_os.html` — `get_static_memory_usage` works only
+  in debug builds.
+- `https://docs.godotengine.org/en/stable/about/faq.html` — C# and GDExtension speed against GDScript.
+- `https://forum.godotengine.org/t/does-godot-auto-inline-functions/88154`,
+  `https://forum.godotengine.org/t/child-ready-before-parent/62992`,
+  `https://forum.godotengine.org/t/i-get-the-invalid-operands-string-and-int-in-operator-error-and-i-dont-know-why/93487`
+  — the same answers from the community.
+
+Measured on 4.7.2, debug editor binary and the release export template, Apple Silicon, median of 5
+inner runs and 3 processes: every figure in `references/simulation-scale.md` — grid storage, neighbour
+sums, struct of arrays against objects and dictionaries, call cost, batched against per-agent signals,
+sorting, string building, `StringName` lookups, memory per instance and per chunk, chunk lookup, time
+slicing, `WorkerThreadPool` at low and high priority, chunk compression; and in
+`references/determinism-and-saves.md`: global RNG draws from `shuffle`, restoring `state`, dictionary
+order after erase, 32-bit vectors, `str()` and JSON precision, typed-container truncation, `int("12abc")`.
+Also observed: `--script` hanging after an error before `quit()`; `_init` not chaining; `==` between
+mismatched types aborting; `RefCounted` cycles leaking; `await` in `_ready`; the engine-property copy;
+enums stored as ints in `.tres`.
+
+Observed on 4.7.2 when the skill was last revised: a subclass `_init` with no arguments does not call
+the parent's `_init` (only `super()` does); `Array[int].map()` returns an untyped `Array` while `filter`
+keeps the type; `str_to_var('Object(Node,…)')` builds a live node and `bytes_to_var` refuses objects; two
+scripts with one `class_name` resolve silently to one, and the checker reports it; an autoload named like
+a `class_name` fails both.

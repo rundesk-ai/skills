@@ -1,74 +1,34 @@
-# Projects, frameworks and the test loop
+# Projects, runtimes and analyzers
 
-## A project's references are its architecture
+## The layer that must stay pure is its own project
 
-The cheapest architectural boundary in .NET is a project that does not reference the thing it must not
-use. It needs no reviewer, no convention and no lint rule: the build fails.
+Put the simulation in a project that references nothing it must not use — no engine, no UI — and let
+every other layer reference it. Its tests then run in milliseconds with nothing installed, which is the
+difference between a suite run on every change and one run before a commit.
 
-```xml
-<!-- The simulation: the base library and nothing else. -->
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-</Project>
-```
+## Target framework and runtime are different questions
 
-Put the layer that must stay pure in its own project, and let every other layer reference *it*. When
-somebody reaches the other way, they find out at compile time.
+`TargetFramework` is what you compile against; the installed runtime is what executes it
+(`dotnet --list-runtimes`). An assembly whose framework has no matching runtime builds and then fails to
+load, with an error naming the framework rather than the project — so a load failure is often misread as a
+code bug. A host that loads your assembly, such as a game engine, pins the targets and sometimes the
+runtime itself; that pin decides which APIs exist.
 
-## Target frameworks
+## Analyzers
 
-`TargetFramework` is what you compile against. The installed **runtime** is what executes it, and they
-are different questions: `dotnet --list-sdks` answers the first, `dotnet --list-runtimes` the second. An
-assembly targeting a framework with no matching runtime installed builds and then fails to load, and the
-error names the framework rather than the project — which is why a load failure is so often misread as a
-code bug.
+- `<AnalysisMode>Recommended</AnalysisMode>` turns on the culture rules (CA1304, CA1305, CA1309, CA1310,
+  CA1311) and the double-lookup rule CA1854. CA1305 does not flag string interpolation.
+- Enable single rules in `.editorconfig` rather than taking `All`: CA1851 (multiple enumeration) and
+  CA2002 (`lock (this)`) are worth it; CA2007 (`ConfigureAwait`) is wrong in code that runs inside an
+  engine host, because `ConfigureAwait(false)` moves the continuation off the main thread.
+- `<WarningsAsErrors>nullable</WarningsAsErrors>` makes nullable warnings errors without failing the build
+  on everything else — how a project adopts null safety a step at a time.
+- Suppress in the narrowest place, with a reason: `#pragma warning disable` around one line and a
+  sentence, not a project-wide setting nobody wrote down.
+- `<Deterministic>` makes identical source produce identical assemblies. It does nothing for simulation
+  determinism.
 
-The newest SDK builds older targets, so one SDK is usually enough. A host that loads your assembly, such
-as a game engine, may pin which targets it supports; that pin is a property of the host, not of C#.
+## When the build itself is in question
 
-## Analyzers and warnings
-
-`TreatWarningsAsErrors` is the setting that makes the rest worth having. Without it warnings accumulate
-until nobody reads them, and the one that mattered scrolls past.
-
-- `EnforceCodeStyleInBuild` turns style rules into build diagnostics.
-- `AnalysisLevel` and `AnalysisMode` select how much the built-in analyzers say.
-- A `.editorconfig` at the repository root is where a rule is turned down, with a comment saying why.
-- **Suppress in the narrowest place, with a reason.** `#pragma warning disable` around one line and a
-  sentence explaining it is a decision; the same setting in the project file is a policy nobody wrote
-  down.
-
-Note that `var x = Expensive();` where `x` is unused does **not** raise a compiler warning: CS0219 only
-fires for a variable assigned a constant. The analyzer rule IDE0059 (unnecessary assignment) reports
-it, but only in the build when `EnforceCodeStyleInBuild` is on and the rule's severity is raised, so an
-assignment dropped during an edit can otherwise compile clean and do nothing.
-
-## The test loop
-
-```sh
-dotnet test                                      # everything
-dotnet test --filter "FullyQualifiedName~Clock"  # one area
-dotnet test --nologo                             # readable output
-```
-
-A suite over a project with no engine reference runs in milliseconds and needs nothing installed. That
-speed is the reason to keep the pure layer pure — it is not a stylistic preference, it is the difference
-between a suite run on every change and one run before a commit.
-
-Keep the framework choice conventional: xUnit or NUnit, whichever the repository already uses. `[Theory]`
-with `[InlineData]` covers a table of cases without a loop that stops at the first failure.
-
-## The build's own evidence
-
-```sh
-dotnet build -bl:/tmp/build.binlog   # the complete record of what MSBuild did
-dotnet build -v:n                    # readable, when the diagnostic is not enough
-dotnet restore --force-evaluate      # when the restore graph is suspect
-```
-
-A binary log is the only complete answer to "which flags did that project actually compile with", and it
-settles arguments that verbose output leaves open.
+`dotnet build -bl` writes a binary log, the only complete answer to which flags a project actually
+compiled with.

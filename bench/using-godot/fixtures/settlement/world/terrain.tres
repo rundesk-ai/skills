@@ -1,0 +1,17 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://art/tiles.png" id="1_l2gim"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_le663"]
+texture = ExtResource("1_l2gim")
+texture_region_size = Vector2i(32, 16)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+
+[resource]
+tile_shape = 1
+tile_layout = 5
+tile_size = Vector2i(32, 16)
+sources/0 = SubResource("TileSetAtlasSource_le663")

@@ -194,7 +194,12 @@ those pages.
   enumeration order is undefined, and string hash codes are randomized per process.
 - Godot's [C# basics](https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_basics.html)
   and [`GodotObject.IsInstanceValid`](https://docs.godotengine.org/en/stable/classes/class_@globalscope.html#class-globalscope-method-is-instance-valid) —
-  the C# wrapper over a native object, IDE attach, and checking whether a freed object is still valid.
+  the C# wrapper over a native object, launching the engine from the IDE to debug, and checking whether
+  a freed object is still valid; [C# signals](https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_signals.html) —
+  a custom signal subscribed with `+=` is not disconnected when the receiver is freed. Observed on
+  Godot 4.7.2: a node is still valid and writable in the frame it was queued for deletion, invalid with
+  `ObjectDisposedException` on the next; `IsInstanceValid` is false after `Dispose()` while the node
+  stays in the tree.
 
 ## Excluded sources
 
