@@ -165,6 +165,10 @@
       "path": "skills/stacks/using-csharp"
     },
     {
+      "name": "using-electron",
+      "path": "skills/stacks/using-electron"
+    },
+    {
       "name": "using-gdscript",
       "path": "skills/stacks/using-gdscript"
     },
@@ -215,6 +219,10 @@
     {
       "name": "using-tailwindcss",
       "path": "skills/stacks/using-tailwindcss"
+    },
+    {
+      "name": "using-tauri",
+      "path": "skills/stacks/using-tauri"
     },
     {
       "name": "using-unreal-engine",

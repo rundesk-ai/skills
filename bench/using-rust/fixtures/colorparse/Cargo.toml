@@ -1,0 +1,9 @@
+[package]
+name = "colorparse"
+version = "0.3.2"
+edition = "2021"
+rust-version = "1.80"
+description = "Parse colour strings for the importer"
+license = "MIT"
+
+[dependencies]

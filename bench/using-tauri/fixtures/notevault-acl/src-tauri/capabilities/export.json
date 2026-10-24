@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "export",
+  "description": "The export window",
+  "windows": ["export"],
+  "permissions": ["core:default", "allow-export"]
+}

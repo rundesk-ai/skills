@@ -25,7 +25,7 @@ learned to expect.
   ```
 - **A `char` is not a visible character.** `chars().rev()` breaks combining marks and emoji. Use
   `unicode-segmentation` for graphemes and `unicode-width` for terminal columns.
-- **Lines keep their terminator.** `read_line` leaves `\n` (or `\r\n`) on the string. Use
+- **Lines keep their terminator.** `BufRead::read_line` leaves `\n` (or `\r\n`) on the string. Use
   `lines()`, which strips both, or `trim_end_matches(['\r', '\n'])`. Do not use `trim()`, which also
   removes meaningful whitespace.
 - **`split(' ')` yields empty strings** between repeated spaces. Use `split_whitespace` for words.
@@ -57,6 +57,10 @@ learned to expect.
 - **`extension()` is only the last part:** `archive.tar.gz` gives `gz`.
 - **`fs::canonicalize` on Windows** returns a `\\?\` path that many tools reject. `dunce` returns the
   normal form.
+- **`env::args()` panics on a non-UTF-8 argument**, such as a file name from an old archive. Use
+  `args_os()`, or let `clap` take `PathBuf` arguments.
+- **`read_dir` order is whatever the file system returns** — not sorted, and different between
+  machines. Sort the entries before output, hashing or numbering anything from them.
 - **`env::var` fails on unset and on non-UTF-8 values.** Match on `VarError::NotPresent` to apply a
   default, and use `var_os` for paths.
 
@@ -69,15 +73,18 @@ learned to expect.
   `tempfile::NamedTempFile::persist` does the atomic rename but **not** the sync: call
   `tmp.as_file().sync_all()?` before `persist`, and on Unix also sync the parent directory when the
   file must survive a power loss.
-- **`println!` panics on a closed pipe.** Rust ignores `SIGPIPE`, so `mycli | head -1` ends with
-  "failed printing to stdout: Broken pipe". A CLI writes through `let mut out = io::stdout().lock()`
-  with `writeln!(out, ...)?`, and treats `ErrorKind::BrokenPipe` as a normal exit. The lock also
-  stops the per-line locking that makes `println!` in a loop slow.
+- **`println!` panics on a closed pipe, and is slow in a loop.** Rust ignores `SIGPIPE`, so
+  `mycli | head -1` ends with "failed printing to stdout: Broken pipe". And stdout flushes at every
+  newline whether or not it is locked: one million `println!` lines took 0.4–1.5 s, locking alone
+  saved under 5%, and a `BufWriter` over the lock took 16–19 ms. A CLI writes through a
+  `BufWriter` with `writeln!(..)?`, flushes at the end (where a broken pipe also surfaces), and
+  treats `ErrorKind::BrokenPipe` as a normal exit. Output a person watches live, such as progress,
+  needs an explicit `flush()`.
 
   ```rust
   // Good
   fn write_lines(items: &[String]) -> io::Result<()> {
-      let mut out = io::stdout().lock();
+      let mut out = BufWriter::new(io::stdout().lock());
       for item in items {
           writeln!(out, "{item}")?;
       }
@@ -91,7 +98,7 @@ learned to expect.
       }
   }
 
-  // Bad: panics with "failed printing to stdout: Broken pipe" under `| head`.
+  // Bad: panics with "failed printing to stdout: Broken pipe" under `| head`, and flushes per line.
   for item in items() { println!("{item}"); }
   ```
 - **`print!` does not flush.** A prompt without a newline needs `io::stdout().flush()?` before
@@ -125,22 +132,34 @@ let log = String::from_utf8_lossy(&out.stdout);
 
 ## Numbers
 
-- **Floats have no total order.** `sort_by(|a, b| a.partial_cmp(b).unwrap())` panics on `NaN`. Use
-  `f64::total_cmp`: `v.sort_by(f64::total_cmp)` orders every value, `NaN` included. A float cannot be a `HashMap` key or derive `Eq`;
-  `ordered-float` wraps it when one must be.
-- **Never compare computed floats with `==`.** Compare within a tolerance suited to the magnitude,
-  and keep money in integer minor units or a decimal crate, never `f64`.
+- **Floats have no total order.** `sort_by(|a, b| a.partial_cmp(b).unwrap())` panics on `NaN`, and
+  the usual "fix", `.unwrap_or(Ordering::Equal)`, is worse: over 1,000 inputs containing `NaN`,
+  Rust 1.91 panicked on 518 ("the comparison function does not correctly implement a total
+  order", checked since 1.81) and left 361 more out of order; 1.80 left all of them misordered,
+  silently. Use `v.sort_by(f64::total_cmp)`, which orders every value, `NaN` included. A float
+  cannot be a `HashMap` key or derive `Eq`; `ordered-float` wraps it when one must be. The same
+  panic comes from any comparator that is not a total order, so `Ord` must agree with `PartialOrd`,
+  `Eq` and `Hash` (see [ownership, errors and APIs](ownership-errors-and-apis.md)).
+- **`f32` accumulates error fast.** Adding `0.1f32` ten million times gave 1,087,937, not 1,000,000.
+  Accumulate in `f64`, or use compensated (Kahan) summation where the total matters.
 - **`%` keeps the sign of the dividend:** `-7 % 3` is `-1`. Use `rem_euclid` for indices and
   wrap-around. Integer division by zero panics; `checked_div` returns `None`.
 
 ## Collections
 
-- **`HashMap` iteration order is random per process.** Output, snapshots, hashes or signatures built
+- **`HashMap` iteration order is random, seeded per map.** Output, snapshots, hashes or signatures built
   by iterating one change from run to run. Use `BTreeMap`, `indexmap`, or sort before emitting.
-- **The default hasher is DoS-resistant and slower.** Swap it (`rustc-hash`, `ahash`) only for
-  measured hot paths whose keys an attacker does not control.
-- **`Vec::remove(0)` shifts every element.** Use `VecDeque` for a queue, `swap_remove` when order
-  does not matter, and `retain` or `drain` instead of removing in a loop.
+
+## Data from outside
+
+- **A length read from input decides an allocation.** Beyond the abort and the "capacity overflow"
+  panic, an overcommitting OS may let a huge `with_capacity` succeed and fail later, far from the
+  cause. Check `n` against the bytes actually present, and cap it, before allocating.
+- **JSON numbers:** `serde_json::Value` silently turns integers above `u64::MAX` into floats, and
+  JavaScript readers lose precision above 2^53, so IDs travel as strings.
+- **`#[serde(untagged)]` takes the first variant that fits** and drops the fields that variant does
+  not have, with no error, and its error message names no variant when nothing fits. Prefer
+  `#[serde(tag = "type")]`.
 
 ## Ownership at runtime
 
@@ -156,6 +175,3 @@ let log = String::from_utf8_lossy(&out.stdout);
 
 - **`Instant` for elapsed time, `SystemTime` for wall-clock time.** `SystemTime` can jump backwards,
   so `duration_since` returns `Err` and must not be unwrapped in a timeout or rate limiter.
-- **Durations are not calendar arithmetic.** "Add one day" or "add a month" across a DST change or
-  a month end needs a time-zone-aware crate (see [ecosystem](ecosystem.md)), not
-  `Duration::from_secs(86_400)`.

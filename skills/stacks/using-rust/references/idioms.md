@@ -69,15 +69,6 @@ let _ = fs::remove_file(&lock_path);
 ## Signatures
 
 ```rust
-// Good: accepts &String, &str, a literal, a slice of a Vec or an array.
-fn total_len(names: &[String], sep: &str) -> usize { /* ... */ }
-fn open_all(paths: impl IntoIterator<Item = impl AsRef<Path>>) { /* ... */ }
-
-// Bad: forces callers to own a String and a Vec just to lend them.
-fn total_len(names: &Vec<String>, sep: &String) -> usize { /* ... */ }
-```
-
-```rust
 // Good: the call site says what it does.
 pub enum Overwrite { Yes, No }
 copy(&src, &dst, Overwrite::No)?;
@@ -134,14 +125,6 @@ match status {
 }
 ```
 
-```rust
-// Good
-let Some(user) = find(id) else { return Err(Error::NotFound(id)) };
-
-// Bad: the check and the unwrap drift apart in the next edit.
-if find(id).is_none() { return Err(Error::NotFound(id)); }
-let user = find(id).unwrap();
-```
 
 ## Types and modules
 
@@ -184,7 +167,7 @@ pub struct Cache<K: Hash + Eq, V: Clone> { map: HashMap<K, V> }
 ```rust
 // Good: the suppression states why, and warns once it is no longer needed.
 #[expect(clippy::too_many_arguments, reason = "mirrors the C API one to one")]
-fn ffi_call(/* ... */) {}
+fn ffi_call(/* eight or more parameters; with fewer the expectation is unfulfilled and warns */) {}
 
 // Bad: silences the lint forever, with no record of why.
 #[allow(clippy::too_many_arguments)]

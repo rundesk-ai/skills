@@ -1,0 +1,7 @@
+{
+  "name": "csvtotal",
+  "version": "1.2.0",
+  "type": "module",
+  "bin": { "csvtotal": "./index.js" },
+  "scripts": { "test": "node --test" }
+}

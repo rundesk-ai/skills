@@ -1,0 +1,6 @@
+"$schema" = "../gen/schemas/permission-schema.json"
+
+[[permission]]
+identifier = "allow-export"
+description = "Lets the export window run the export."
+commands.allow = ["export_all"]

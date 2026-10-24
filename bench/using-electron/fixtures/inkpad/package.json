@@ -1,0 +1,21 @@
+{
+  "name": "inkpad",
+  "productName": "Inkpad",
+  "version": "0.9.0",
+  "description": "Local markdown notes",
+  "main": "src/main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --dir"
+  },
+  "build": {
+    "appId": "com.inkpad.desktop",
+    "files": ["src/**/*", "package.json"],
+    "mac": { "target": "dmg" }
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  }
+}
