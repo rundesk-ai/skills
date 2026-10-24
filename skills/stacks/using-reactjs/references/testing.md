@@ -55,6 +55,24 @@ Fake or stub the network at the boundary the component actually uses, and resolv
 A fixed `setTimeout` in a test trades correctness for a delay that is too short on a loaded machine
 and too long on every run.
 
+## Fake timers hang Testing Library under Vitest
+
+With `vi.useFakeTimers()`, `await user.type(...)`, `await user.click(...)` and `findBy*` time out, even
+with `userEvent.setup({ advanceTimers: vi.advanceTimersByTime })`. Testing Library waits on a
+`setTimeout(0)` after each async helper and advances fake timers only when a global `jest` exists, so
+under Vitest that timeout never fires.
+
+```js
+vi.useFakeTimers({ shouldAdvanceTime: true });
+const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+// advance the component's own timers inside act:
+await act(async () => { vi.advanceTimersByTime(1000); });
+```
+
+A test that renders with a plain `createRoot` instead of Testing Library must set
+`globalThis.IS_REACT_ACT_ENVIRONMENT = true`, or `act` warns that the environment is not configured for
+it; Testing Library sets the flag itself.
+
 ## Test a hook through a component
 
 A hook's contract is what it does inside a render. Render a small component that uses it, drive it

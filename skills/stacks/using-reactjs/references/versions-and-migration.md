@@ -57,6 +57,20 @@ options on `createRoot` or `hydrateRoot`.
 In TypeScript, `useRef` now requires an argument, ref callbacks may not return a value implicitly,
 `ReactElement` props default to `unknown`, and the JSX namespace moved to `React.JSX`.
 
+## Changes within React 19
+
+| Version | Change | What breaks |
+|---|---|---|
+| 19.2 | `useEffectEvent` and `<Activity>` are stable | nothing; a hidden `<Activity>` runs effect cleanups but keeps state and DOM, so anything not stopped in a cleanup (a playing video) keeps going |
+| 19.2 | `useId` output changed from `:r:` (19.0) and `«r»` (19.1) to `_r_` | snapshots, CSS selectors and tests that match the old format |
+| 19.3 | transitions render and commit independently instead of together | code that assumed two transitions land in one commit |
+| 19.3 | the automatic form reset after an action fires `onReset` | side effects in `onReset` now run after every successful action |
+| 19.3 | Strict Mode double-invokes effects during hydration too | effects that were only safe because hydration ran them once |
+| 19.3 | `<ViewTransition>`, Fragment refs and `react-dom`'s `browser()` are stable | nothing |
+
+Server Components packages (`react-server-dom-*`) get security patch releases on every supported minor
+line; see [security.md](security.md) before calling an app up to date.
+
 ## Upgrade with evidence
 
 1. Read the release notes for every major crossed, not only the newest.

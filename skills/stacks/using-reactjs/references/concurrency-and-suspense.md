@@ -28,6 +28,8 @@ function Search() {
 }
 
 // Good: the field stays urgent; the list is allowed to lag and be interrupted.
+const Results = memo(function Results({ query }) { /* slow list */ });
+
 function Search() {
   const [query, setQuery] = useState('');
   const deferred = useDeferredValue(query);
@@ -39,6 +41,11 @@ function Search() {
   );
 }
 ```
+
+The `memo` is what makes it work. Without it the urgent render re-renders `Results` with the old
+value, paying the full cost on every keystroke, and then renders it again in the background: in a
+measurement with a 50 ms list, the keystroke took 51 ms without `memo` and under 1 ms with it. Where the
+React Compiler is on and has compiled the parent, it supplies the memoization.
 
 `useDeferredValue` fits a value derived from an urgent one. `useTransition` fits an action — a tab
 change, a route change, a submit — where you also want a pending flag:
@@ -65,6 +72,16 @@ Put the boundary around a region the user can accept losing, keep the fallback c
 real content to avoid layout shift, and let an already-visible region stay visible by driving the
 update through a transition instead of a new boundary.
 
+Two React 19 behaviours change how a boundary looks in practice. When a child suspends, the fallback
+commits at once and the siblings render afterwards in a pre-warm pass. When the data arrives, React
+throttles the reveal, so content can appear about 300 ms after its data: by design, and something a
+fake-timer test has to advance through.
+
+`use(promise)` needs a promise that survives re-renders. A promise created during render is a new one
+each time, so the boundary shows its fallback forever while the component re-renders around a hundred
+times a second, and development usually prints no warning. Create the promise in a Server Component, a
+router loader, or a cache keyed by its inputs.
+
 Suspense catches suspended reads, not errors. Pair it with an error boundary; they are separate
 mechanisms with separate fallbacks.
 
@@ -79,3 +96,15 @@ line up.
 Verification is the input remaining responsive while the expensive region lags, the fallback
 appearing exactly where intended, and no torn value across components in one commit. A green unit
 test that renders the component once proves none of that.
+
+## Form actions and optimistic updates
+
+- After a `<form action={fn}>` action finishes, React resets the form's uncontrolled fields, including
+  when the action returned a validation error, so the user's input disappears. Return the submitted
+  values from the action (with `useActionState`) and pass them back as `defaultValue`, keep the field
+  controlled, or use `onSubmit` with `startTransition` when no reset is wanted. From 19.3 the automatic
+  reset also fires `onReset`, so code in `onReset` runs after every successful action.
+- `useOptimistic` applies its value only inside a transition or action; outside one it shows nothing
+  and logs an error. Inside, the optimistic value rolls back by itself when the action ends without
+  committing real state, so no `catch` is needed for the rollback. A state update after an `await` is
+  no longer part of the transition: wrap it in `startTransition` again.

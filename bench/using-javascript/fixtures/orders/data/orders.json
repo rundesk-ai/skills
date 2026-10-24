@@ -1,0 +1,9 @@
+{
+  "orders": [
+    { "id": 81234, "sku": "mug-blue", "qty": 2, "total": 18.5 },
+    { "id": 9007199254740993, "sku": "tee-black-m", "qty": 1, "total": 24 },
+    { "id": 9007199254740995, "sku": "poster-a2", "qty": 3, "total": 45 },
+    { "id": 81240, "sku": "sticker-pack", "qty": 10, "total": 30 },
+    { "id": 81241, "sku": "tote", "qty": 1, "total": 15 }
+  ]
+}

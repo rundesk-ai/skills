@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "skills",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "General-purpose skills for any coding agent, in seven groups: development, writing, design, research, marketing, stacks and games. Each skill stands alone.",
   "skills": [
     {
@@ -177,12 +177,20 @@
       "path": "skills/stacks/using-inertia"
     },
     {
+      "name": "using-javascript",
+      "path": "skills/stacks/using-javascript"
+    },
+    {
       "name": "using-laravel",
       "path": "skills/stacks/using-laravel"
     },
     {
       "name": "using-mysql",
       "path": "skills/stacks/using-mysql"
+    },
+    {
+      "name": "using-php",
+      "path": "skills/stacks/using-php"
     },
     {
       "name": "using-postgres",

@@ -44,8 +44,21 @@ useEffect(() => {
 ```
 
 If declaring a dependency makes the effect run too often, the fix is to change what the effect
-depends on — move a function inside the effect, hoist a constant out of the component, or read the
-latest value from a ref for genuinely non-reactive logic — not to lie about the array.
+depends on: move a function inside the effect, hoist a constant out of the component, or, from React
+19.2, move logic that must read the latest value without re-running the effect into an Effect Event:
+
+```jsx
+const onConnected = useEffectEvent(() => showToast(`Connected to ${roomId}`, theme));
+useEffect(() => {
+  const connection = createConnection(roomId);
+  connection.on('connected', onConnected);
+  connection.connect();
+  return () => connection.disconnect();
+}, [roomId]); // theme changes no longer reconnect; onConnected is not a dependency
+```
+
+An Effect Event is called only from effects, never during render (React throws), and never goes in a
+dependency array. On React before 19.2, a ref holding the latest value is the fallback.
 
 ## Always write the cleanup that makes a re-run safe
 
@@ -69,6 +82,15 @@ useEffect(() => {
 
 Subscriptions, timers, animation frames, observers, and network requests all need the matching
 teardown. If the effect cannot be made idempotent, that is a signal it is doing event work.
+
+Two common "fixes" for the development double-run break things:
+
+- A `useRef` flag that skips the second setup. React 19 keeps the ref across Strict Mode's simulated
+  remount, so after the first request is aborted by its cleanup, the second setup returns early and the
+  component stays on "loading" in development. Delete the flag; keep the cleanup.
+- `useEffect(async () => { … })`. An async function returns a promise where React expects a cleanup
+  function: React logs an error, and on unmount throws `destroy is not a function`. Define the async
+  function inside the effect and call it.
 
 ## Prefer the framework's data layer for fetching
 
