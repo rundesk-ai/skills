@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "skills",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "General-purpose skills for any coding agent, in seven groups: development, writing, design, research, marketing, stacks and games. Each skill stands alone.",
   "skills": [
     {
@@ -49,6 +49,10 @@
       "path": "skills/games/game-3d-models"
     },
     {
+      "name": "game-agent-behavior",
+      "path": "skills/games/game-agent-behavior"
+    },
+    {
       "name": "game-animation",
       "path": "skills/games/game-animation"
     },
@@ -73,6 +77,10 @@
       "path": "skills/games/game-management-sims"
     },
     {
+      "name": "game-pathfinding",
+      "path": "skills/games/game-pathfinding"
+    },
+    {
       "name": "game-player-experience",
       "path": "skills/games/game-player-experience"
     },
@@ -83,6 +91,10 @@
     {
       "name": "game-tile-worlds",
       "path": "skills/games/game-tile-worlds"
+    },
+    {
+      "name": "game-traffic",
+      "path": "skills/games/game-traffic"
     },
     {
       "name": "game-unreal-ui",
