@@ -100,12 +100,21 @@ file, not an appendix: they are the bulk of every oversized rules file.
 
 Agents over-build: options nobody asked for, wrappers, a new helper beside an existing one. They also
 under-finish: a fixed function with its callers left broken. Every file carries one rule in Before
-you work that holds both lines, in four parts: take the first option that fully works (the ladder);
-touch nothing the task did not send you to; be lazy about the solution, never about the change; and
-never cut validation, data-loss guards, security, accessibility, or anything the user asked for.
+you work that holds both lines, in five parts:
+
+1. List every place the change must reach — callers, tests, fixtures, config, exports — then take
+   the first option that fully works (the ladder).
+2. Add no abstraction, wrapper, option, config or "for later" code nobody asked for; keep the
+   structure the code already has, and prefer deleting to adding. This is the part that cuts code:
+   a ladder alone stops at "the least new code", and an agent counts a wrapper or an option as part
+   of the least.
+3. Touch nothing the task did not send you to.
+4. Be lazy about the solution, never about the change.
+5. Never cut validation, data-loss guards, security, accessibility, or anything the user asked for
+   — and code moved or merged keeps its own.
 [Structure](references/structure.md) has the house wording to start from.
 
-Keep all four parts, and adapt every generic noun to this repository: its platform APIs instead of
+Keep all five parts, and adapt every generic noun to this repository: its platform APIs instead of
 "the standard library", its actual trust boundary, and its data-loss guards by their literal value or
 symbol — `0700` directory, `0600` file, the lock file, the conflict error's name, the migration
 constant — so a later rewrite keeps them checkable. A clause copied unchanged is an unadapted
@@ -181,3 +190,7 @@ evidence behind the length, emphasis and ordering advice.
 - **The smallest-change rule read as permission to skip work.** Symptom: a small diff that leaves
   callers or tests broken. Cause: the ladder kept without its "never lazy about the change" half.
   Fix: keep both halves in one rule. Proof: the rule in the file names callers, tests and docs.
+- **The ladder kept without what not to add.** Symptom: agents still add a helper, option or wrapper
+  layer and call it the least new code. Cause: step 4 condensed to the ladder, its "add no
+  abstraction, wrapper, option, config or 'for later' code" sentence dropped. Fix: keep that
+  sentence in step 4, naming this repository's own usual over-builds. Proof: the rule names them.

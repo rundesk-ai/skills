@@ -70,9 +70,16 @@ Take the first rung that fully works, and record which one and why:
 5. **Is it a setting or one readable line?** Change the configuration before writing code.
 6. **Only then** write the minimum code that works, in the structure the codebase already has.
 
+**Add nothing on the way:** no abstraction, wrapper, type conversion, option, configuration or "for
+later" code the outcome does not need. The ladder alone stops at "the minimum code", and an agent
+counts a wrapper or an option as part of the minimum. Keep values in the form the platform gives
+them, prefer deleting to adding, and between options of equal size take the one correct on edge
+cases.
+
 **Never cut** validation at a trust boundary, handling that prevents data loss, security,
 accessibility, compliance (consent, opt-out, Do Not Call) or anything the requester asked for. These
 are the lines a smaller version must still carry, because the cost of missing them lands on users.
+Code you move or merge keeps its own: a consolidation that drops a guard is a regression.
 
 Shape a large request before cutting it: find what is going wrong today, set what the outcome is
 worth, and split a grab-bag ("redesign X", "v2") into separate outcomes, each with its own contract.

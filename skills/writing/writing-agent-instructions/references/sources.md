@@ -21,4 +21,10 @@
   falls as instruction count rises, with a bias toward earlier instructions.
 - **Ponytail** — https://github.com/DietrichGebert/ponytail — the "first option that fully works"
   ladder, "lazy about the solution, never about the change", a never-cut list, a closing line naming
-  what was skipped and the risk, and a `shortcut:` comment convention.
+  what was skipped and the risk, and a `shortcut:` comment convention. The smallest-change rule's
+  list of every place a change must reach, its list of code not to add (abstraction, wrapper,
+  option, config, "for later" code), "deletion beats addition", and "code you move or merge keeps
+  its error handling and validation" are adapted from its `AGENTS.md`. MIT licence, Copyright (c)
+  2026 DietrichGebert: the above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT
+  WARRANTY OF ANY KIND.
