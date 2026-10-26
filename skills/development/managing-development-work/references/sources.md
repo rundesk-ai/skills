@@ -124,6 +124,12 @@ universal development ceremony.
   without the prompt, 39 tasks, five runs each — reports roughly half the code and a higher share of
   risky logic shipped with a test; it is the author's own benchmark. This skill adopts the method,
   adds compliance to the never-cut list, and applies it at scoping time as well as coding time.
+  "Add nothing on the way" — no abstraction, wrapper, type conversion, option, configuration or
+  "for later" code, values kept in the platform's form, deletion over addition, the edge-case
+  tie-break — and "code you move or merge keeps its error handling and validation" are adapted from
+  its `AGENTS.md`. MIT licence, Copyright (c) 2026 DietrichGebert: the above copyright notice and
+  this permission notice shall be included in all copies or substantial portions of the Software;
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 - Martin Fowler's [Yagni](https://martinfowler.com/bliki/Yagni.html) explains why building a
   capability before it is needed costs build, delay, carry and repair. This supports dropping
   options and flexibility nobody asked for, the ladder's first rung.

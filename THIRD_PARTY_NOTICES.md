@@ -6,5 +6,7 @@ licences; each skill's `references/sources.md` carries the full notice.
 | Skill | Adapted from | Licence |
 |---|---|---|
 | `designing-ui-ux` | Anthropic's `frontend-design` Agent Skill | Apache-2.0 |
+| `managing-development-work` | Dietrich Gebert's Ponytail | MIT |
 | `using-mysql` | PlanetScale | MIT |
 | `using-python` | TestMu AI / LambdaTest | MIT |
+| `writing-agent-instructions` | Dietrich Gebert's Ponytail | MIT |

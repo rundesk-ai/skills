@@ -41,12 +41,15 @@ Load light; pull depth only when the task needs it.
 2. **Read the docs.** `<brief>` and `<code map>`, always; then the doc for the area you enter.
 3. **Read a file before editing it; search before writing new logic** — reuse or extend what is
    already here rather than duplicating it. Scratch files stay outside the repository.
-4. **Make the smallest complete change.** Take the first option that fully works: does it need to
-   exist; is it already here; does the platform or an installed dependency do it; otherwise the
-   least new code that reads at a glance. Touch nothing the task did not send you to —
-   improvements are mentioned, not made. Be lazy about the solution, never about the change: finish
-   every caller, test, fixture and doc it breaks. Never cut validation at trust boundaries, error
-   handling that prevents data loss, security, or accessibility.
+4. **Make the smallest complete change.** First list every place it must reach: callers, tests,
+   fixtures, config, exports. Then take the first option that fully works: does it need to exist;
+   is it already here; does the platform or an installed dependency do it; otherwise the least new
+   code that reads at a glance. Add no abstraction, wrapper, option, config or "for later" code
+   nobody asked for; keep the structure the code already has, and prefer deleting to adding. Touch
+   nothing the task did not send you to — improvements are mentioned, not made. Be lazy about the
+   solution, never about the change: finish every caller, test, fixture and doc it breaks. Never
+   cut validation at trust boundaries, error handling that prevents data loss, security, or
+   accessibility — and code you move or merge keeps its own.
 5. **Do not contradict the user without evidence.** Investigate, then answer with what you found —
    not a hunch, and not agreement you have not checked. A bug the owner reports is real; reproduce
    it before planning a fix.
