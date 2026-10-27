@@ -65,6 +65,7 @@ none here fits the work, and add it to this table in the same change.
 | Verb | The work it names |
 |---|---|
 | `using-` | working in one technology: a language, framework, engine, data store or tool |
+| `directing-` | steering a generative model's output take by take toward a brief |
 | `designing-` | deciding what something should be, before or while it is built |
 | `building-` | making a particular kind of product |
 | `engineering-` | a technical concern that cuts across the code |
