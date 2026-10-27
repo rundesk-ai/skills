@@ -72,6 +72,66 @@ var reach = crossing.ClearReach(halfWidth, margin);
 A preview or ghost is the sharpest case: build it by calling the same steps the real edit takes, or it
 shows a result the edit does not produce.
 
+## A list of cases where a predicate owns the set
+
+```csharp
+// Bad: the set restated as cases. Bike was added to the kerb rule later; this copy never learned of
+// it, and bike couriers stopped being offered kerbside drops, with no error anywhere.
+if (vehicle.Class is VehicleClass.Van or VehicleClass.Truck && bay.Length >= vehicle.Length) ...
+
+// Good: the predicate that owns the set, so the next class added updates every caller.
+if (VehicleClasses.MayUseKerb(vehicle.Class) && bay.Length >= vehicle.Length) ...
+```
+
+Search for the enum's cases (`VehicleClass.Van or`), not for the predicate's name. An exhaustive
+`switch` that maps every case to a value (a width, a colour) is a mapping, not a copy of a predicate.
+
+## One classification, worked out once
+
+```csharp
+// Bad: the map colour and the tooltip classify the same ratio on their own, and already disagree:
+// a shelf the map draws red reads "Low" in its tooltip.
+var shade = ratio >= Stock.FullAbove ? 0f : ratio >= Stock.LowAbove ? 0.5f : 1f;   // MapLayer
+var word = ratio >= Stock.FullAbove ? "Full" : ratio >= 0.1f ? "Low" : "Empty";    // Tooltip
+
+// Good: classify once into an enum; each output maps the enum.
+public static StockBand Band(float ratio) => ratio >= FullAbove ? StockBand.Full : ratio >= LowAbove ? StockBand.Low : StockBand.Empty;
+```
+
+## A component's own copy of another's state
+
+```csharp
+// Bad: the panel keeps the tool's mode and level and re-applies the tool's clamp. The tool resets the
+// level when a mode forbids it; the panel's copy does not, so it shows a level the tool is not using.
+private int _level;
+case "level_up": _level = Math.Min(_level + 1, Levels.Highest); tool.SetLevel(_level); break;
+
+// Good: the tool owns its state and rules; the panel asks and reads.
+case "level_up": tool.SetLevel(tool.Level + 1); break;
+label.Text = $"{tool.Mode}, level {tool.Level}";
+```
+
+A copy made on purpose to cross a boundary, such as a snapshot handed from the simulation thread to
+the render thread, is not this: it is taken whole, at one moment, and never edited by its reader.
+
+## A second subsystem copied from the first
+
+```csharp
+// Bad: the forklift was built by copying the crane, its clearance rule and margin with it.
+public static float CraneClearance(float hook) => hook - CraneSpec.SpreaderDepth - 0.4f;
+public static float ForkliftClearance(float mast) => mast - ForkliftSpec.CarriageDepth - 0.4f;
+
+// Good: one rule; each subsystem passes what genuinely differs.
+public static float Clearance(float top, float depth) => top - depth - Lifting.SafetyMargin;
+```
+
+## Removing something leaves its references behind
+
+Not duplication, but found by the same review: deleting an entity from its main collection while
+other structures still hold its id (a ban list, an index, a cache, a selection) leaves stale entries
+that later code trusts. When you write the removal, list every structure that stores the id and
+clear it there too, and add a test that removes one and uses what referred to it.
+
 ## Built ahead of its reader
 
 ```csharp

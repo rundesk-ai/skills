@@ -87,6 +87,38 @@ Gate::authorize('cancel', $order);
 @can('cancel', $order) <button>Cancel</button> @endcan
 ```
 
+## A list of cases, a classification, a copy of state
+
+Incorrect — the set of open statuses restated as cases, and a badge colour and a label each classifying
+the order on their own; the next status added is missed by both:
+```php
+if (in_array($order->status, [OrderStatus::Pending, OrderStatus::Paid])) { ... }
+```
+```blade
+<span class="{{ $order->status === OrderStatus::Shipped ? 'green' : 'amber' }}">
+    {{ $order->status === OrderStatus::Shipped || $order->status === OrderStatus::Delivered ? 'Done' : 'Open' }}
+</span>
+```
+
+Correct — the enum owns the set and the classification; every surface asks it:
+```php
+enum OrderStatus: string
+{
+    // ...cases
+    public function isOpen(): bool
+    {
+        return in_array($this, [self::Pending, self::Paid], true);
+    }
+}
+```
+```blade
+<span class="{{ $order->status->isOpen() ? 'amber' : 'green' }}">{{ $order->status->isOpen() ? 'Open' : 'Done' }}</span>
+```
+
+Search for the cases (`OrderStatus::Pending,`), not for the method you would name. The same goes for
+state: a Livewire or front-end component that keeps its own copy of a model's status and re-applies its
+rules drifts from it; read the model's value instead.
+
 ## Validation, written once
 
 Incorrect — the web and API controllers each carry their own rule array, and one gains a rule the

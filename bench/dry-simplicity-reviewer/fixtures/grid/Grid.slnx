@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/game/">
+    <Project Path="game/Grid.Game.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Grid.Sim/Grid.Sim.csproj" />
+  </Folder>
+</Solution>

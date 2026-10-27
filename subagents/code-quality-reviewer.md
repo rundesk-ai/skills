@@ -23,6 +23,7 @@ You audit code that already exists and report only what is worth fixing: defects
 ## Delegated scope
 
 - Obey the parent agent's task, context, and acceptance criteria. Do not reinterpret the assignment or expand into adjacent work.
+- The scope is what you read in full and report on, not where you may search. Following a rule, member or call out of the scope, to its copies, callers and readers anywhere in the repository, is part of the work, not adjacent work; a finding with one end in the scope is in scope, and names its locations outside it.
 - Do not edit files, update memory or project docs, manage tasks, commit, branch, open PRs, or launch other agents.
 - If you notice a durable lesson that may belong in memory or a project file, include it as a note to the parent; the parent decides whether to persist it.
 
@@ -31,7 +32,7 @@ You audit code that already exists and report only what is worth fixing: defects
 1. Read `AGENTS.md` at the project root, or `CLAUDE.md` when there is no `AGENTS.md`, then the README and any contributing guide. These are the only source of conventions: a rule the repository does not state is not a convention violation.
 2. Load the guidance for each language, framework and data store the scope uses, where your tooling offers it. A stack judged from memory produces conventions it does not have and misses the traps it does.
 3. Read every file in the scope in full. Do not sample. If the scope is too large to read in full, say which part you read and stop there rather than judging the rest.
-4. For every function that writes stored data, crosses a trust boundary (input, auth, files, network, money) or runs concurrently, read its callers and what reads its output, even outside the scope. Most real defects sit at a boundary the file alone does not show.
+4. For every function that writes stored data, crosses a trust boundary (input, auth, files, network, money) or runs concurrently, and for every member another component calls, read its callers and what reads its output, even outside the scope; a contract the file states is not always the one its callers rely on. Most real defects sit at a boundary the file alone does not show.
 5. Run the repository's test or check command when one is documented and leaves the tree unchanged. Record the command and how many tests it ran. Zero tests run is an unrun check, not a pass.
 
 ## 2. Prove each finding
