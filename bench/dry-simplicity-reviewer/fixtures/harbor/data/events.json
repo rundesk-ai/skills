@@ -1,0 +1,4 @@
+[
+  { "tick": 72000, "handler": "OnStorm", "icon": "storm" },
+  { "tick": 108000, "handler": "OnCalm", "icon": "calm" }
+]

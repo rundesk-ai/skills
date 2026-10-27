@@ -1,0 +1,50 @@
+{
+ "date": "2026-10-27",
+ "skill": "using-laravel",
+ "skill_hash": "6546e167c27cdd18",
+ "score": 0.0,
+ "cases": 1,
+ "cases_version": 1,
+ "cases_run": [
+  "q01-revisions"
+ ],
+ "agents": {
+  "claude": {
+   "version": "2.1.311",
+   "model": "claude-sonnet-5-5",
+   "judge": "claude-opus-5-5",
+   "fired": "9/9 steps with the skill table in AGENTS.md",
+   "near_miss_fired": null,
+   "better": 0,
+   "same": 1,
+   "worse": 0,
+   "score": 0.0,
+   "quality": {
+    "q01-revisions": {
+     "none": [
+      10,
+      10,
+      10
+     ],
+     "skill": [
+      10,
+      10,
+      9
+     ],
+     "tokens_mean": {
+      "none": 514146,
+      "skill": 702366
+     },
+     "verdict": "same"
+    }
+   }
+  },
+  "codex": {
+   "skipped": "not run this time"
+  },
+  "grok": {
+   "skipped": "not run this time"
+  }
+ },
+ "notes": "q01 is a sequential case on a runnable Laravel 13 shop: three fresh agents in turn add an admin overdue page, replace the synchronous CSV export with a queued emailed one, and fix the confirmation email's total. Every rule they need already has one home found by convention (the overdue scope, the total_with_vat_cents accessor, OrderPolicy::cancel, the admin gate, OrderStatus, config/billing.php). Both arms share a house-template AGENTS.md with the cleanup clause; the skill arm adds the skill table and installs the skill. Graded blind on the final tree against a rubric frozen before the first run, and checked by hand: no run in either arm re-derived VAT, an admin or ownership check, a status string or the overdue query, and every final tree passed php artisan test. Five of six runs kept OrdersExportController as the new job's trigger; the judge failed that once (a skill run) and passed it five times, so the arms are the same. The skill cost about 37% more tokens. Like the C# case, the base is small and clean enough that the model finds every home unaided; a case at the scale where duplication arises is still unmeasured. Composer ran with its home and cache in scratch; the fixture's composer.lock has package author fields removed."
+}

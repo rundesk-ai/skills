@@ -98,3 +98,9 @@ process; read them as ratios.
 
 - Running date tests in two zones on opposite sides of UTC is the skill's own proof standard.
 - "Ask whether the platform already does it" before adding a dependency is the skill's own order.
+
+## Write it once
+
+The write-once rules come from the cleanup history of a private multi-project C# simulation (2026-10), where about two dozen review rounds found formulas retyped in several files, a lookup copied three times with two tolerances, mirror-image methods, view code re-deriving model rules, outputs published with no reader, and replaced paths left behind, although its instructions already said to search before writing new logic. They are stack-neutral; the tooling line below is this language's.
+
+- `noUnusedLocals` and `noUnusedParameters`: [TSConfig reference](https://www.typescriptlang.org/tsconfig/#noUnusedLocals); an export counts as used by the module's interface.

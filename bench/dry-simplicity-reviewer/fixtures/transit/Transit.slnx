@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/game/">
+    <Project Path="game/Transit.Game.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Transit.Sim/Transit.Sim.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Transit.Sim.Tests/Transit.Sim.Tests.csproj" />
+  </Folder>
+</Solution>

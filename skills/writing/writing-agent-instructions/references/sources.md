@@ -28,3 +28,11 @@
   2026 DietrichGebert: the above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT
   WARRANTY OF ANY KIND.
+- **Orphans left by finished changes** — the "delete what it leaves unused; list anything already
+  unused for the owner" clause of step 4 comes from a private multi-project simulation (2026-10)
+  whose instructions already carried the full smallest-change rule, yet about two dozen review rounds
+  removed helpers, tests, assets and comments whose only caller an earlier change had removed. Its
+  review log also held already-unused code for the owner to decide on, which is why the clause lists
+  existing dead code rather than deleting it. Measured once on a 1,000-line C# case with four
+  sequential agents: arms with and without the clause both scored 9-10 of 10, so the benefit is
+  unproven at that size.

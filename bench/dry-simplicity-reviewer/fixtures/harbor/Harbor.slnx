@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/game/">
+    <Project Path="game/Harbor.Game.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Harbor.Sim/Harbor.Sim.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Harbor.Sim.Tests/Harbor.Sim.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "skills",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "General-purpose skills for any coding agent, in seven groups: development, writing, design, research, marketing, stacks and games. Each skill stands alone.",
   "skills": [
     {

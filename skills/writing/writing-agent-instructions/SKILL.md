@@ -109,7 +109,8 @@ you work that holds both lines, in five parts:
    a ladder alone stops at "the least new code", and an agent counts a wrapper or an option as part
    of the least.
 3. Touch nothing the task did not send you to.
-4. Be lazy about the solution, never about the change.
+4. Be lazy about the solution, never about the change: finish what it breaks, and delete what it
+   leaves unused — code, tests, assets, config — listing anything already unused for the owner.
 5. Never cut validation, data-loss guards, security, accessibility, or anything the user asked for
    — and code moved or merged keeps its own.
 [Structure](references/structure.md) has the house wording to start from.
@@ -190,6 +191,10 @@ evidence behind the length, emphasis and ordering advice.
 - **The smallest-change rule read as permission to skip work.** Symptom: a small diff that leaves
   callers or tests broken. Cause: the ladder kept without its "never lazy about the change" half.
   Fix: keep both halves in one rule. Proof: the rule in the file names callers, tests and docs.
+- **Finishing read as fixing only what breaks.** Symptom: review rounds keep finding helpers, tests,
+  assets and config whose only caller an earlier change removed. Cause: "finish the change" covers
+  what fails to compile, and an orphan compiles. Fix: step 4 says to delete what the change leaves
+  unused. Proof: the rule in the file names it.
 - **The ladder kept without what not to add.** Symptom: agents still add a helper, option or wrapper
   layer and call it the least new code. Cause: step 4 condensed to the ladder, its "add no
   abstraction, wrapper, option, config or 'for later' code" sentence dropped. Fix: keep that

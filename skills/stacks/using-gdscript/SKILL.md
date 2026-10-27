@@ -102,6 +102,33 @@ Read [Simulation scale](references/simulation-scale.md) before writing a grid, a
 or a chunked world, and [Determinism and saves](references/determinism-and-saves.md) before a replay, a
 save format or anything seeded.
 
+## Write it once, for a reader that exists
+
+Duplication and dead code arrive one reasonable edit at a time, often from different agents each
+revising code they did not write, and every copy is a place the next fix misses:
+
+- **Before writing a formula, threshold, tolerance or lookup, search for it by its inputs**, not by
+  the name you would give it: a copy someone else wrote has another name or none. Found, call it;
+  not found, give it one home beside its inputs.
+- **Never copy a function to change one value or one end**; take the difference as a parameter.
+  Copies that already disagree are a bug: decide which is right and prove it with a test.
+- **A view, preview, tool or test helper calls the simulation's rule**; it never re-derives it.
+- **Add an output in the same change as the code that reads it.** A variable, signal, dictionary key
+  or parameter nothing reads is dead on arrival, and a test that only exercises it is not a reader. A
+  parameter every caller passes the same value is a constant.
+- **A comment names only what exists in this repository**: no task or phase id, no document from
+  another project, no function that is not there. Those go stale the day they are written.
+- **Leave nothing your change made unused.** When new code replaces old, delete the old in the same
+  change, then every helper, test, asset (icon, image, sound, scene), configuration key and string only
+  it used, until nothing new is unused. Anything that was already unused, list in your hand-off for the
+  owner to decide rather than deleting it: it may be kept on purpose. Before finishing, read your diff:
+  every new name has a reader.
+
+Two or three repeated lines, or one number meaning two things, are not duplication. Godot warns by
+default on an unused variable, parameter, signal and `_`-prefixed member variable; nothing warns on an
+unused function, and one called by name (`call`, a string `connect`, a connection saved in a scene) is
+found only by searching the `.tscn` and `.tres` files too.
+
 ## Prove it
 
 Warnings never reach a headless run, and errors rarely reach the exit code, so prove a change in three

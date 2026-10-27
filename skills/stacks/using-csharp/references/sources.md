@@ -18,6 +18,7 @@ The primary documentation behind the claims in this skill. Consult these when au
 | async/await, and why `async void` is for event handlers | [Async return types](https://learn.microsoft.com/dotnet/csharp/asynchronous-programming/async-return-types), [Async best practices](https://learn.microsoft.com/archive/msdn-magazine/2013/march/async-await-best-practices-in-asynchronous-programming) |
 | Target frameworks, and the runtime that must exist to load one | [Target frameworks](https://learn.microsoft.com/dotnet/standard/frameworks), [.NET versioning](https://learn.microsoft.com/dotnet/core/versions/) |
 | Warnings as errors, analysis level, EditorConfig | [Code analysis configuration](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/configuration-options), [.editorconfig for .NET](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/code-style-rule-options) |
+| Unused private members, write-only members and unused parameters (IDE0051, IDE0052, IDE0060) are style rules whose severity `.editorconfig` sets | [IDE0051](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0051), [IDE0052](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0052), [IDE0060](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0060), [Code-style analysis on build](https://learn.microsoft.com/dotnet/fundamentals/code-analysis/overview#code-style-analysis) |
 | CS0219 fires only for a variable assigned a constant | [Compiler warning CS0219](https://learn.microsoft.com/dotnet/csharp/misc/cs0219) |
 | `dotnet build`, `dotnet test`, binary logs | [dotnet build](https://learn.microsoft.com/dotnet/core/tools/dotnet-build), [dotnet test](https://learn.microsoft.com/dotnet/core/tools/dotnet-test), [MSBuild binary log](https://github.com/dotnet/msbuild/blob/main/documentation/wiki/Binary-Log.md) |
 | Turkish-I casing; invariant and ordinal-ignore-case comparison | [Best practices for comparing strings](https://learn.microsoft.com/dotnet/standard/base-types/best-practices-strings) |
@@ -74,3 +75,20 @@ Also compiled and run on .NET 10 when the references were last revised: the full
 distinguishing values that differ above the low byte; `SplitMix64` as a class sharing state across
 references; the basis-point tax giving 3 for 25 at 10%; `FloorDiv` on negatives; the struct initializer
 skipped by `default` and arrays; and `-=` with a new lambda removing nothing.
+
+The duplication and dead-code patterns come from the cleanup history of a private multi-project C#
+simulation (2026-10): about two dozen review rounds, most areas needing three or four before one came
+back clean, found the formulas, lookups, copied methods, re-derived view rules, unread outputs and
+left-behind paths shown in [Duplication and dead code](duplication-and-dead-code.md); the examples are
+renamed. Its own instructions already said to search before writing new logic and to add no "for
+later" code. The analyzer table was observed on .NET 10 (SDK 10.0.301) in a throwaway project with that
+solution's settings: with `latest-recommended`, `EnforceCodeStyleInBuild` and no severity overrides,
+an unused private method and an unused parameter produced no diagnostic, and a private field written
+from a parameter produced none (CS0414 only for a constant); raising IDE0051, IDE0052 and IDE0060
+reported each, and nothing reported an unused `internal` or `public` method. Run over that solution's
+simulation projects after its review rounds, the three rules still found an unused private method and
+an unused parameter, and one false positive on a record's own `PrintMembers`. Across its dead-code
+commits, removed `public` declarations outnumbered `private` ones about two to one.
+Later rounds in the same project removed whole public types and interface members kept alive only by
+tests and test stubs, an event with no subscriber, a setter and probe hooks nothing set, a default every
+caller overrode, and about twenty comments citing documents and task ids that the repository never had.

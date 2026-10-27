@@ -47,7 +47,9 @@ Load light; pull depth only when the task needs it.
    code that reads at a glance. Add no abstraction, wrapper, option, config or "for later" code
    nobody asked for; keep the structure the code already has, and prefer deleting to adding. Touch
    nothing the task did not send you to — improvements are mentioned, not made. Be lazy about the
-   solution, never about the change: finish every caller, test, fixture and doc it breaks. Never
+   solution, never about the change: finish every caller, test, fixture and doc it breaks, and delete
+   the code, tests, assets and config it leaves unused; list anything already unused for the owner,
+   since it may be kept on purpose. Never
    cut validation at trust boundaries, error handling that prevents data loss, security, or
    accessibility — and code you move or merge keeps its own.
 5. **Do not contradict the user without evidence.** Investigate, then answer with what you found —

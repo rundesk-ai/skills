@@ -1,6 +1,6 @@
 """Benchmark a review subagent: no agent against two versions of it, graded blind.
 
-    python3 -I bench/harness.py run   SUBJECT OUT [--old REF] [--runs N] [--jobs N] [--cases a,b,...]
+    python3 -I bench/harness.py run   SUBJECT OUT [--old REF] [--runs N] [--jobs N] [--cases a,b,...] [--arms none,old,new]
     python3 -I bench/harness.py judge SUBJECT OUT [--jobs N]
     python3 -I bench/harness.py score SUBJECT OUT
 
@@ -148,7 +148,7 @@ def cmd_run(a):
     jobs = []
     for n in range(1, a.runs + 1):
         for i, case in enumerate(cases(a.cases)):
-            arms = ARMS if i % 2 == 0 else ARMS[::-1]  # alternate order so nothing rides on it
+            arms = a.arms if i % 2 == 0 else a.arms[::-1]  # alternate order so nothing rides on it
             jobs += [(case, arm, n) for arm in arms]
     with concurrent.futures.ThreadPoolExecutor(a.jobs) as pool:
         for line in pool.map(lambda j: review(out, *j), jobs):
@@ -182,8 +182,10 @@ Answer with JSON only, no prose, in this shape:
 
 def source(fixture):
     root, parts = fixture_dir(fixture), []
-    for d, dirs, files in sorted(os.walk(root)):
-        dirs[:] = sorted(x for x in dirs if x != "__pycache__")
+    # sorted() drains the walk before the loop runs, so a pruned dirs list would prune nothing.
+    for d, _, files in sorted(os.walk(root)):
+        if "__pycache__" in d.split(os.sep):
+            continue
         for f in sorted(files):
             p = os.path.join(d, f)
             parts.append(f"\n===== {os.path.relpath(p, root)}\n" + open(p).read())
@@ -265,8 +267,9 @@ def cmd_score(a):
 
     by_case, names = {}, sorted({c for c, _, _ in rows})
     print(f"{'case':20}{'arm':6}{'recall':>8}{'noise':>7}{'prec':>7}{'clean':>7}{'consist':>9}{'tokens':>9}")
+    present = [arm for arm in ARMS if any(aa == arm for (_, aa, _) in rows)]
     for c in names:
-        for arm in ARMS:
+        for arm in present:
             r = [v for (cc, aa, _), v in rows.items() if cc == c and aa == arm]
             rec = [x["recall"] for x in r if x["recall"] is not None]
             row = {"recall": round(st.mean(rec), 3) if rec else None, "noise_per_run": round(st.mean(x["noise"] for x in r), 2),
@@ -276,7 +279,7 @@ def cmd_score(a):
             by_case.setdefault(c, {})[arm] = row
             print(f"{c:20}{arm:6}{str(row['recall']):>8}{row['noise_per_run']:>7}{row['precision']:>7}{row['clean']:>7}{str(row['consistency']):>9}{row['tokens_median']:>9}")
     arms = {}
-    for arm in ARMS:
+    for arm in present:
         r = [v for (_, aa, _), v in rows.items() if aa == arm]
         rec = [x["recall"] for x in r if x["recall"] is not None]
         arms[arm] = {"wrongly_approved": f"{sum(x['wrongly_approved'] for x in r)}/{sum(not clean_case[c] for (c, aa, _) in rows if aa == arm)}",
@@ -297,6 +300,7 @@ def main():
     r.add_argument("--old", help="git ref for the old agent; default the newest tag")
     r.add_argument("--runs", type=int, default=3)
     r.add_argument("--jobs", type=int, default=9)
+    r.add_argument("--arms", type=lambda s: tuple(s.split(",")), default=ARMS, help="comma-separated arms; default all")
     r.add_argument("--cases", type=lambda s: s.split(","), help="comma-separated case names; default all")
     j = sub.add_parser("judge")
     j.add_argument("--jobs", type=int, default=9)
