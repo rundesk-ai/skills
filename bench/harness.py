@@ -64,6 +64,27 @@ def git(*args):
     return subprocess.run(["git", "-C", ROOT, *args], capture_output=True, text=True, check=True).stdout
 
 
+# Git inside a run folder ignores the user's own config, hooks and signing, so a fixture repository
+# behaves the same on every machine and touches nothing outside OUT.
+GIT_ENV = {"GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_NOSYSTEM": "1", "GIT_AUTHOR_NAME": "bench",
+           "GIT_AUTHOR_EMAIL": "bench@example.com", "GIT_COMMITTER_NAME": "bench",
+           "GIT_COMMITTER_EMAIL": "bench@example.com"}
+
+
+def make_change(src, run):
+    """A diff fixture: base/ committed in a new repository, change/ laid over it uncommitted, and
+    the paths in stage.txt staged. A file only in change/ is untracked."""
+    shutil.copytree(os.path.join(src, "base"), run, ignore=shutil.ignore_patterns("__pycache__"))
+    env = dict(os.environ, **GIT_ENV)
+    for args in (["init", "-q", "-b", "main"], ["add", "-A"], ["commit", "-q", "-m", "Base"]):
+        subprocess.run(["git", "-C", run, *args], env=env, check=True, capture_output=True)
+    shutil.copytree(os.path.join(src, "change"), run, dirs_exist_ok=True, ignore=shutil.ignore_patterns("__pycache__"))
+    stage = os.path.join(src, "stage.txt")
+    if os.path.exists(stage):
+        paths = [p.strip() for p in open(stage) if p.strip()]
+        subprocess.run(["git", "-C", run, "add", "--", *paths], env=env, check=True, capture_output=True)
+
+
 def refuse_checkout(out):
     probe = subprocess.run(["git", "-C", out, "rev-parse", "--is-inside-work-tree"], capture_output=True, text=True)
     if probe.stdout.strip() == "true":
@@ -74,17 +95,22 @@ def review(out, case, arm, n):
     fixture, _, brief = read_case(case)
     run = os.path.join(out, "runs", f"{case}-{arm}-{n}")
     # copytree refuses an existing folder, so a rerun needs a new OUT rather than deleting an old one.
-    shutil.copytree(fixture_dir(fixture), run, ignore=shutil.ignore_patterns("__pycache__"))
+    src = fixture_dir(fixture)
+    if os.path.isdir(os.path.join(src, "base")):
+        make_change(src, run)
+    else:
+        shutil.copytree(src, run, ignore=shutil.ignore_patterns("__pycache__"))
     cmd = ["claude", "-p", brief, "--model", REVIEW_MODEL, "--restricted", "--strict-mcp-config",
            "--tools", "Read,Grep,Glob,Bash",
            "--allowedTools", "Read,Grep,Glob,Bash(python3 -m unittest:*),Bash(npm test:*),Bash(node --test:*),"
-                             "Bash(go test:*),Bash(php tests/run.php:*)",
+                             "Bash(go test:*),Bash(php tests/run.php:*),"
+                             "Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*)",
            "--output-format", "stream-json", "--verbose"]
     if arm != "none":
         cmd += ["--agents", os.path.join(out, "agents", arm + ".json"), "--agent", SUBJECT]
     # Go writes its caches under the home directory and may fetch a toolchain; keep both in OUT.
     env = dict(os.environ, GOCACHE=os.path.join(out, "go", "cache"), GOMODCACHE=os.path.join(out, "go", "mod"),
-               GOTOOLCHAIN="local")
+               GOTOOLCHAIN="local", **GIT_ENV)
     try:
         proc = subprocess.run(cmd, cwd=run, env=env, stdin=subprocess.DEVNULL, capture_output=True, text=True,
                               timeout=REVIEW_TIMEOUT)
@@ -133,6 +159,9 @@ JUDGE = """You grade one code review against an answer key written before the re
 
 ANSWER KEY
 {key}
+THE REQUEST THE REVIEWER WAS GIVEN
+{brief}
+
 THE CODE THAT WAS REVIEWED
 {src}
 
@@ -162,8 +191,8 @@ def source(fixture):
 
 
 def grade(out, bid, run):
-    fixture, key, _ = read_case(run["case"])
-    prompt = JUDGE.format(key=key, src=source(fixture), review=run["review"])
+    fixture, key, brief = read_case(run["case"])
+    prompt = JUDGE.format(key=key, brief=brief, src=source(fixture), review=run["review"])
     proc = subprocess.run(["claude", "-p", prompt, "--model", JUDGE_MODEL, "--restricted", "--strict-mcp-config",
                            "--tools", "", "--output-format", "json"],
                           stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=JUDGE_TIMEOUT)
@@ -222,6 +251,13 @@ def cmd_score(a):
             "clean": bool(g.get("clean_verdict")), "tokens": run.get("tokens", 0)}
     if open_items:
         sys.exit("rule these in overrides.json first: " + ", ".join(open_items))
+    # The verdict is the review's most consequential output: approving a change with a planted
+    # defect is the worst failure, and blocking a clean one the next.
+    clean_case = {c: bool(re.search(r"^expect_clean = true", open(os.path.join(HERE, "cases", c + ".md")).read(), re.M))
+                  for c, _, _ in rows}
+    for (c, _, _), x in rows.items():
+        x["wrongly_approved"] = x["clean"] and not clean_case[c]
+        x["wrongly_blocked"] = clean_case[c] and not x["clean"]
 
     def jaccard(sets):
         pairs = list(itertools.combinations(sets, 2))
@@ -243,7 +279,9 @@ def cmd_score(a):
     for arm in ARMS:
         r = [v for (_, aa, _), v in rows.items() if aa == arm]
         rec = [x["recall"] for x in r if x["recall"] is not None]
-        arms[arm] = {"recall": round(st.mean(rec), 3), "noise_per_run": round(st.mean(x["noise"] for x in r), 2),
+        arms[arm] = {"wrongly_approved": f"{sum(x['wrongly_approved'] for x in r)}/{sum(not clean_case[c] for (c, aa, _) in rows if aa == arm)}",
+                     "wrongly_blocked": f"{sum(x['wrongly_blocked'] for x in r)}/{sum(clean_case[c] for (c, aa, _) in rows if aa == arm)}",
+                     "recall": round(st.mean(rec), 3) if rec else None, "noise_per_run": round(st.mean(x["noise"] for x in r), 2),
                      "items_per_run": round(st.mean(x["items"] for x in r), 2),
                      "not_worth_fixing_share": round(sum(x["noise"] for x in r) / max(1, sum(x["items"] for x in r)), 3),
                      "precision": round(st.mean(x["precision"] for x in r), 3), "tokens_median": int(st.median(x["tokens"] for x in r))}

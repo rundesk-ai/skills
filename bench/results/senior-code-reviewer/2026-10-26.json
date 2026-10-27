@@ -1,0 +1,430 @@
+{
+ "date": "2026-10-26",
+ "subject": "senior-code-reviewer",
+ "kind": "subagent",
+ "skill_hash": "545378fcd876ddff",
+ "compared": {
+  "none": "no subagent: the same brief to a plain session",
+  "old": "subagents/senior-code-reviewer.md at v1.2.1",
+  "new": "this branch's rewrite (after the first run's grounding changes)"
+ },
+ "score": 0.441,
+ "cases": 12,
+ "cases_run": [
+  "s01-easy",
+  "s02-untracked",
+  "s03-contract",
+  "s04-clean",
+  "s05-preexisting",
+  "s06-stored-data",
+  "s07-test-edited",
+  "s08-race",
+  "s09-pressure",
+  "s10-xss",
+  "s11-clean-concurrent",
+  "s12-migration"
+ ],
+ "heldout": [
+  "s10-xss",
+  "s11-clean-concurrent",
+  "s12-migration"
+ ],
+ "runs_per_arm": 3,
+ "agents": {
+  "claude": {
+   "version": "2.1.311",
+   "model": "claude-sonnet-5-5",
+   "judge": "claude-opus-5-5",
+   "arms": {
+    "none": {
+     "wrongly_approved": "0/27",
+     "wrongly_blocked": "3/9",
+     "recall": 0.944,
+     "noise_per_run": 2.11,
+     "precision": 0.609,
+     "precision_heldout": 0.378,
+     "tokens_median": 21956
+    },
+    "old": {
+     "wrongly_approved": "0/27",
+     "wrongly_blocked": "3/9",
+     "recall": 1.0,
+     "noise_per_run": 3.31,
+     "precision": 0.509,
+     "precision_heldout": 0.371,
+     "tokens_median": 25855
+    },
+    "new": {
+     "wrongly_approved": "0/27",
+     "wrongly_blocked": "0/9",
+     "recall": 1.0,
+     "noise_per_run": 0.19,
+     "precision": 0.95,
+     "precision_heldout": 0.926,
+     "tokens_median": 29962
+    }
+   },
+   "by_case": {
+    "s01-easy": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 2.33,
+      "precision": 0.667,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 15226
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 2.67,
+      "precision": 0.611,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25741
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25829
+     }
+    },
+    "s02-untracked": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 4,
+      "precision": 0.439,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 29529
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 6.33,
+      "precision": 0.427,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 33944
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.756,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 33859
+     }
+    },
+    "s03-contract": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 2,
+      "precision": 0.589,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 37977
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 3.33,
+      "precision": 0.566,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 35045
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.933,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 35250
+     }
+    },
+    "s04-clean": {
+     "none": {
+      "recall": null,
+      "noise_per_run": 4.33,
+      "precision": 0.317,
+      "clean": "2/3",
+      "consistency": null,
+      "tokens_median": 31361
+     },
+     "old": {
+      "recall": null,
+      "noise_per_run": 4.33,
+      "precision": 0.234,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 36221
+     },
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 36045
+     }
+    },
+    "s05-preexisting": {
+     "none": {
+      "recall": null,
+      "noise_per_run": 1.67,
+      "precision": 0.444,
+      "clean": "2/3",
+      "consistency": null,
+      "tokens_median": 21322
+     },
+     "old": {
+      "recall": null,
+      "noise_per_run": 3,
+      "precision": 0.444,
+      "clean": "1/3",
+      "consistency": null,
+      "tokens_median": 34033
+     },
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 25170
+     }
+    },
+    "s06-stored-data": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.811,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 21911
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 2,
+      "precision": 0.713,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25468
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 43578
+     }
+    },
+    "s07-test-edited": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 14010
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 0.67,
+      "precision": 0.867,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 16768
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 43340
+     }
+    },
+    "s08-race": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 0.67,
+      "precision": 0.903,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 22002
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 3,
+      "precision": 0.607,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25461
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.933,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25876
+     }
+    },
+    "s09-pressure": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 21658
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 2.67,
+      "precision": 0.522,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25517
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25597
+     }
+    },
+    "s10-xss": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 3,
+      "precision": 0.411,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 21434
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 3.67,
+      "precision": 0.389,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25071
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.889,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 24967
+     }
+    },
+    "s11-clean-concurrent": {
+     "none": {
+      "recall": null,
+      "noise_per_run": 3.33,
+      "precision": 0.167,
+      "clean": "2/3",
+      "consistency": null,
+      "tokens_median": 47782
+     },
+     "old": {
+      "recall": null,
+      "noise_per_run": 3.33,
+      "precision": 0.283,
+      "clean": "2/3",
+      "consistency": null,
+      "tokens_median": 25970
+     },
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 26066
+     }
+    },
+    "s12-migration": {
+     "none": {
+      "recall": 0.5,
+      "noise_per_run": 3,
+      "precision": 0.556,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 46809
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 4.67,
+      "precision": 0.44,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 55906
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.889,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 55660
+     }
+    }
+   }
+  },
+  "codex": {
+   "skipped": "not run in this benchmark"
+  },
+  "grok": {
+   "skipped": "not run in this benchmark"
+  }
+ },
+ "first_run": {
+  "agent": "the first rewrite, before the grounding, consequence and pre-existing rules",
+  "cases": 9,
+  "arms": {
+   "none": {
+    "wrongly_approved": "0/21",
+    "wrongly_blocked": "5/6",
+    "recall": 1.0,
+    "noise_per_run": 1.56,
+    "items_per_run": 5.41,
+    "not_worth_fixing_share": 0.288,
+    "precision": 0.727,
+    "tokens_median": 30004,
+    "wrongly_blocked_excluding_s04": "2/3"
+   },
+   "old": {
+    "wrongly_approved": "0/21",
+    "wrongly_blocked": "4/6",
+    "recall": 1.0,
+    "noise_per_run": 3.3,
+    "items_per_run": 7.19,
+    "not_worth_fixing_share": 0.459,
+    "precision": 0.569,
+    "tokens_median": 25618,
+    "wrongly_blocked_excluding_s04": "1/3"
+   },
+   "new": {
+    "wrongly_approved": "0/21",
+    "wrongly_blocked": "3/6",
+    "recall": 1.0,
+    "noise_per_run": 0.67,
+    "items_per_run": 4,
+    "not_worth_fixing_share": 0.167,
+    "precision": 0.863,
+    "tokens_median": 25165,
+    "wrongly_blocked_excluding_s04": "0/3"
+   }
+  },
+  "notes": "Diff fixtures: base committed in a fresh repository, the change laid over it (untracked in s02, staged in s06). Graded blind against keys frozen before any run. No arm approved a change with a planted defect (0/21 each) and every arm found every planted defect, including the untracked file, the unchanged caller and the staged change. s04 was meant to be clean but had a real defect (a huge page raised OverflowError and answered 500, not 400); every arm in every run blocked on it, rightly, so s04 does not count as wrongly blocked. The fixture was corrected after the run. wrongly_blocked_excluding_s04 is s05 alone: a correct change in a file with a pre-existing bug. This run's judge did not see the reviewer's request; the harness now includes it. 49 unsure findings were ruled without arm labels with the request in hand, including the 'their own accounts' requirement in s08 (real)."
+ },
+ "notes": "Second run. After the first run (new precision 0.863-0.881 after making Unverified rulings consistent), the agent gained three general rules: ground every risk in what the repository shows, fold a finding's consequences into it, and list pre-existing problems only when they would be Blocking. Three held-out cases (s10-s12) were written after the first run and before the changed agent ran on them. All three arms were rerun on all twelve cases with the judge now given the reviewer's request. s04 was corrected twice: after run one (an unbounded page answered 500) and after run two (its AGENTS.md said input 'is validated in products/api.py', which the change's store-side range check literally broke; reviewers quoting it were right, so those findings were ruled neutral). s04 was then rerun for all arms and its results here are from that rerun. 77 + 6 unsure findings were ruled without arm labels, the request in hand: real when reachable in normal use with a concrete cost (including s08's unenforced 'their own accounts'), false when ungrounded, speculative or a minor coverage nit, neutral when filed as Unverified."
+}
