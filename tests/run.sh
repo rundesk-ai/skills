@@ -261,6 +261,10 @@ check_rejects() {    # check_rejects <description> <expected message> <mutate fn
 }
 
 # Each mutation introduces exactly one fault into a sound fixture catalog.
+mutate_yaml_mapping()     { sed -i.bak "s/^description: Use when/description: Use when this: a mapping, when/" "$1/skills/core/alpha/SKILL.md"; }
+mutate_yaml_comment()     { sed -i.bak "s/^description: Use when/description: Use when this #comment cuts it, when/" "$1/skills/core/alpha/SKILL.md"; }
+mutate_yaml_indicator()   { sed -i.bak "s/^description: Use when/description: [Use when/" "$1/skills/core/alpha/SKILL.md"; }
+mutate_subagent_yaml()    { sed -i.bak "s/^description: Use when/description: Use when this: a mapping, when/" "$1/subagents/gamma.md"; rm "$1/subagents/gamma.md.bak"; }
 mutate_hollow_directory() { mkdir -p "$1/skills/core/hollow"; }
 mutate_name_mismatch()    { sed -i.bak "s/^name: alpha/name: wrong/" "$1/skills/core/alpha/SKILL.md"; }
 mutate_stub_description() { sed -i.bak "s/^description: .*/description: short/" "$1/skills/core/alpha/SKILL.md"; }
@@ -356,6 +360,26 @@ case_check_accepts_reserved_email_domains() {
   printf 'write to support@example.com or privacy@shop.example, never to a URL like https://docs.example.com/class_@gdscript.html\n' >> "$c/skills/core/alpha/SKILL.md"
   "$c/scripts/check.sh" >/dev/null 2>&1; status=$?
   assert_eq "reserved domains and URL fragments pass" "0" "$status"
+}
+# Installers parse frontmatter as YAML and reject the whole package when one file fails, so every
+# skill in every project stops syncing. These are the plain-scalar faults that did it in v1.3.0.
+case_check_rejects_an_unquoted_colon_in_frontmatter() {
+  check_rejects "an unquoted ': ' in a description" "nested mapping" mutate_yaml_mapping
+}
+case_check_rejects_an_unquoted_hash_in_frontmatter() {
+  check_rejects "an unquoted ' #' in a description" "start of a comment" mutate_yaml_comment
+}
+case_check_rejects_a_leading_yaml_indicator() {
+  check_rejects "a description starting with '['" "reads as syntax" mutate_yaml_indicator
+}
+case_check_rejects_an_unquoted_colon_in_a_subagent() {
+  check_rejects "an unquoted ': ' in a subagent description" "nested mapping" mutate_subagent_yaml
+}
+case_check_accepts_a_quoted_colon_in_frontmatter() {
+  local c status; c="$(new_catalog)"
+  sed -i.bak "s/^description: Use when\(.*\)$/description: \"Use when this: quoted\1\"/" "$c/skills/core/alpha/SKILL.md"
+  "$c/scripts/check.sh" >/dev/null 2>&1; status=$?
+  assert_eq "a quoted description may hold ': '" "0" "$status"
 }
 case_check_rejects_an_integration_tool() {
   check_rejects "a skill naming an integration's tool" "needs no integration" mutate_integration_tool
@@ -458,6 +482,32 @@ case_real_catalog_is_sound() {
   assert_eq "the shipped catalog passes its own check" "0" "$status"
 }
 
+# check.sh reads frontmatter by hand; installers use a real YAML parser and reject the whole package
+# when one file fails it. Parse every file the way they do, so no fault the hand reader misses ships.
+case_real_catalog_frontmatter_parses_as_yaml() {
+  local out
+  if ! command -v ruby >/dev/null 2>&1; then
+    fail "no YAML parser: install ruby so every frontmatter can be parsed as installers parse it"
+    return
+  fi
+  out="$(cd "$ROOT" && ruby -ryaml -e '
+    bad = 0
+    ARGV.each do |f|
+      fm = File.read(f)[/\A---\n(.*?)\n---\n/m, 1]
+      begin
+        data = YAML.safe_load(fm.to_s)
+        raise "frontmatter is not a mapping" unless data.is_a?(Hash)
+        raise "description is not text" unless data["description"].is_a?(String)
+      rescue Exception => e
+        puts "#{f}: #{e.message}"; bad += 1
+      end
+    end
+    puts "#{ARGV.size} parsed, #{bad} rejected"
+  ' skills/*/*/SKILL.md subagents/*.md 2>&1)"
+  assert "every frontmatter parses as YAML ($out)" grep -q " 0 rejected$" <<< "$out"
+  assert "the parser read every file ($out)" test "$(ls "$ROOT"/skills/*/*/SKILL.md "$ROOT"/subagents/*.md | wc -l | tr -d ' ') parsed, 0 rejected" = "$(tail -1 <<< "$out")"
+}
+
 case_real_catalog_pushes_and_resyncs() {
   local t n; t="$(new_target)"
   "$ROOT/scripts/deploy.sh" "$t" --all >/dev/null
@@ -496,7 +546,10 @@ for c in check_passes_a_sound_catalog check_rejects_a_directory_without_skill_md
          check_rejects_an_integration_tool check_rejects_a_manifest_missing_a_skill \
          check_rejects_a_manifest_listing_a_missing_skill check_rejects_a_bad_manifest_version \
          check_rejects_a_subagent_name_mismatch check_rejects_an_unlisted_subagent \
-         check_rejects_a_subagent_naming_a_skill; do
+         check_rejects_a_subagent_naming_a_skill \
+         check_rejects_an_unquoted_colon_in_frontmatter check_rejects_an_unquoted_hash_in_frontmatter \
+         check_rejects_a_leading_yaml_indicator check_rejects_an_unquoted_colon_in_a_subagent \
+         check_accepts_a_quoted_colon_in_frontmatter; do
   run_case "$c"
 done
 
@@ -509,7 +562,7 @@ for c in bench_status_reports_a_skill_never_run bench_status_skips_a_recent_unch
 done
 
 echo "the shipped catalog"
-for c in real_catalog_is_sound real_catalog_pushes_and_resyncs; do
+for c in real_catalog_is_sound real_catalog_frontmatter_parses_as_yaml real_catalog_pushes_and_resyncs; do
   run_case "$c"
 done
 
