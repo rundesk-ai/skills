@@ -10,6 +10,7 @@
 # variant that overlays nothing or removes a file the base does not have, a rules file that has
 # drifted from its copy, a manifest that does not list exactly the skills and subagents in the tree,
 # a subagent whose name does not match its file or whose description does not start "Use when",
+# a frontmatter value a YAML parser would reject or cut short (an unquoted ": " or " #"),
 # and the three things that stop a skill standing alone — an absolute path, a reference to
 # another skill, and a dependency on an integration's tools.
 set -euo pipefail
@@ -42,6 +43,25 @@ python3 - <<'PY' || fail=1
 import os, re, sys, urllib.parse
 
 ABSOLUTE = re.compile(r"(?:^|[\s`(\[])(?:/Users/|/home/|[A-Za-z]:\\\\)")
+
+
+def plain_scalar_fault(val):
+    """Say why a YAML parser would misread an unquoted frontmatter value, or return None.
+
+    Installers parse frontmatter as YAML and reject the whole package when one file fails, so a
+    value this hand-rolled reader accepts must also be one a real parser accepts.
+    """
+    val = val.strip()
+    if not val or val[0] in "'\"|>":
+        return None
+    if ": " in val or val.endswith(":"):
+        return "an unquoted ': ', which YAML reads as a nested mapping"
+    if " #" in val:
+        return "an unquoted ' #', which YAML reads as the start of a comment"
+    if val[0] in "[{&*!%@`,#?-" and not (val[0] in "?-" and val[1:2] not in (" ", "")):
+        return f"an unquoted leading {val[0]!r}, which YAML reads as syntax, not text"
+    return None
+
 
 problems = []
 names = []
@@ -93,6 +113,10 @@ for n in sorted(dirs):
         elif key and line.strip():
             got[key] = got.get(key, "") + " " + line.strip()
 
+    for key, val in got.items():
+        fault = plain_scalar_fault(val)
+        if fault:
+            problems.append(f"{n}: frontmatter {key} has {fault}; installers reject the whole package — reword it")
     if got.get("name") != n:
         problems.append(f"{n}: frontmatter name is {got.get('name')!r}, expected {n!r}")
     desc = got.get("description", "").strip()
@@ -258,6 +282,9 @@ if os.path.isdir("subagents"):
         for line in head.split("\n"):
             if line[:1] not in (" ", "\t", "-", "") and ":" in line:
                 key, _, val = line.partition(":")
+                fault = plain_scalar_fault(val)
+                if fault:
+                    problems.append(f"{fp}: frontmatter {key.strip()} has {fault}; installers reject the whole package — reword it")
                 top[key.strip()] = val.strip().strip("'\"")
         if top.get("name") != n:
             problems.append(f"{fp}: frontmatter name is {top.get('name')!r}, expected {n!r}")

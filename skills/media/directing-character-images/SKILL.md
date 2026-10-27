@@ -1,6 +1,6 @@
 ---
 name: directing-character-images
-description: Use when generating or editing AI images of a recurring character, above all a realistic person, who must keep the same face and a believable body across images, including new poses, outfits, expressions, scenes or angles from a reference picture, fixing a character who drifted or came out wrong, asking why edits keep failing, or making a character's keyframes for a video generator. It supplies a provider-neutral edit-first workflow: identity lock, one change per edit, prompt grammar with worked examples, whole-body inspection, and how to diagnose and improve a failed take. Do not use it for logos, icons, illustrations or textures, game sprites, or one-off images with no recurring character.
+description: Use when generating or editing AI images of a recurring character, above all a realistic person, who must keep the same face and a believable body across images, including new poses, outfits, expressions, scenes or angles from a reference picture, fixing a character who drifted or came out wrong, asking why edits keep failing, or making a character's keyframes for a video generator. It supplies a provider-neutral edit-first workflow for identity lock, one change per edit, prompt grammar with worked examples, whole-body inspection, and how to diagnose and improve a failed take. Do not use it for logos, icons, illustrations or textures, game sprites, or one-off images with no recurring character.
 ---
 
 # Directing character images
