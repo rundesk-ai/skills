@@ -92,3 +92,7 @@ commits, removed `public` declarations outnumbered `private` ones about two to o
 Later rounds in the same project removed whole public types and interface members kept alive only by
 tests and test stubs, an event with no subscriber, a setter and probe hooks nothing set, a default every
 caller overrode, and about twenty comments citing documents and task ids that the repository never had.
+Its rounds after that found a set of enum cases restated where a predicate owned it (missing a class added
+later), a HUD keeping its own copy of a tool's state and rules, one traffic classification worked out
+separately for a map colour and a card label (already disagreeing), road and rail bridges each with their
+own clearance rule, and a removed road left in its junction's turn bans; the examples for those are renamed.

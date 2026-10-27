@@ -108,12 +108,13 @@ The rest are in the references below, each with its reproduction.
 Duplication and dead code arrive one reasonable edit at a time, often from different agents each
 revising code they did not write, and every copy is a place the next fix misses:
 
-- **Before writing a formula, threshold, tolerance or lookup, search for it by its inputs**, not by
-  the name you would give it: a copy someone else wrote has another name or none. Found, call it;
-  not found, give it one home beside its inputs.
+- **Before writing a formula, threshold, tolerance, lookup or list of cases, search for it by its
+  inputs**, not by the name you would give it: a copy someone else wrote has another name or none.
+  Found, call it; not found, give it one home beside its inputs.
 - **Never copy a function to change one value or one end**; take the difference as a parameter.
   Copies that already disagree are a bug: decide which is right and prove it with a test.
-- **A view, preview, tool or test helper calls the model's rule**; it never re-derives it.
+- **A view, preview, tool or test helper calls the model's rule and reads its state**; it never
+  re-derives them or keeps its own copy.
 - **Add an output in the same change as the code that reads it.** A field, variant or parameter
   nothing reads is dead on arrival, and a test that only exercises it is not a reader. A parameter
   every caller passes the same value is a constant.

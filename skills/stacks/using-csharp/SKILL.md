@@ -102,13 +102,13 @@ Duplication and dead code arrive one reasonable edit at a time, often from diffe
 revising code they did not write, and every copy is a place the next fix misses. A project rule saying
 "search before writing" does not stop it; acting at these moments does:
 
-- **Before writing a formula, threshold, tolerance or lookup, search for it by its inputs**, not by
-  the name you would give it: a copy someone else wrote has another name or none. Found, call it;
-  not found, give it one home on the type that owns its inputs.
+- **Before writing a formula, threshold, tolerance, lookup or list of cases, search for it by its
+  inputs**, not by the name you would give it: a copy someone else wrote has another name or none.
+  Found, call it; not found, give it one home on the type that owns its inputs.
 - **Never copy a method to change one value or one end**; take the difference as a parameter. Copies
   drift, and copies that already disagree are a bug: decide which is right and prove it with a test.
-- **A view, preview, tool or test helper calls the model's rule**; it never re-derives it from raw
-  fields, or it shows a result the model does not produce.
+- **A view, preview, tool or test helper calls the model's rule and reads its state**; it never
+  re-derives them or keeps its own copy, or it shows a result the model does not produce.
 - **Add an output in the same change as the code that reads it.** A property, record member, enum case,
   event, setter, interface member, snapshot field or parameter nothing reads is dead on arrival, and a
   test or test stub that only exercises it is not a reader. A parameter every caller passes the same

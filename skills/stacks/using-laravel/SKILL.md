@@ -76,8 +76,9 @@ revising code they did not write, and every copy is a place the next fix misses:
   method, a policy, a backed enum, a Form Request, a config key.
 - **Never copy a method or a rule array to change one value**; take the difference as a parameter.
   Copies that already disagree are a bug: decide which is right and prove it with a test.
-- **Blade, mailables, exports, resources and front-end code call the model's rule**; they never
-  re-derive a price, a status check or an ownership test.
+- **Blade, mailables, exports, resources and front-end code call the model's rule and read its state**;
+  they never re-derive a price, a status check, an ownership test or a list of statuses, or keep their
+  own copy of a model's state.
 - **Add an output in the same change as the code that reads it**: a view variable, appended accessor,
   event, job, config key or translation nothing reads is dead on arrival, and a test that only
   exercises it is not a reader.
