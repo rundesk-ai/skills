@@ -1,7 +1,7 @@
 # skills
 
-Skills for any coding agent, in seven groups under `skills/`: development, writing, design,
-research, marketing, stacks and games. Each skill is a folder with a `SKILL.md` an agent loads when
+Skills for any coding agent, in eight groups under `skills/`: development, writing, design,
+research, marketing, stacks, games and media. Each skill is a folder with a `SKILL.md` an agent loads when
 it recognises the work, and references it reads only when the work reaches them.
 
 Every skill stands alone. None depends on another skill, and none needs an integration, account or

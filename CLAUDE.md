@@ -83,8 +83,8 @@ scripts/bench-status.sh               which skills a benchmark is due for, and w
 manifest.json                         schema, name, version, description, every skill and subagent by path
 ```
 
-- The groups are `development`, `writing`, `design`, `research`, `marketing`, `stacks` and
-  `games`. Every skill sits in exactly one, and a name is unique across all of them: projects get
+- The groups are `development`, `writing`, `design`, `research`, `marketing`, `stacks`, `games`
+  and `media`. Every skill sits in exactly one, and a name is unique across all of them: projects get
   skills flat by name, so the group exists only here. Move a skill between groups with `git mv`,
   keeping its name.
 - `manifest.json` lists exactly the skills in `skills/`, by name and path, sorted by name; adding,
