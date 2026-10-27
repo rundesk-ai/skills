@@ -96,7 +96,9 @@ manifest.json                         schema, name, version, description, every 
   does, and the same privacy rules apply.
 - A skill's name starts with its group's prefix, listed in `skills/groups.txt`; development keeps
   one verb per activity. Its frontmatter holds only `name` and `description`, and the description
-  starts `Use when`.
+  starts `Use when` and contains no `: ` and no ` #`: installers read frontmatter as strict YAML,
+  where an unquoted `: ` is a nested mapping and ` #` starts a comment. Write "It supplies a workflow
+  for …" or use a comma, as the other skills do.
 - Adapted material keeps its upstream licence notice in the skill's `references/sources.md` and a
   line in `THIRD_PARTY_NOTICES.md`.
 
@@ -118,6 +120,18 @@ Releasing is the owner's call. The version in `manifest.json` follows semver: a 
 skill is major, a new skill minor, a change to an existing skill patch. Bump it in the pull request,
 merge, then tag `vX.Y.Z` on the merge commit. Installers take the newest tag and ignore untagged
 commits, so nothing reaches a project until the tag exists.
+
+Tag only a commit the real installer accepts. One invalid file makes Rundesk reject the whole
+package, so every project stops updating at once (v1.3.0 did this with one unquoted `: `):
+
+1. On the merge commit, `./scripts/check.sh` and `./tests/run.sh` pass; `tests/run.sh` parses every
+   frontmatter with a real YAML parser.
+2. Before tagging, the package installs through Rundesk from that commit: add
+   `https://github.com/rundesk-ai/skills/tree/main` as a skill package (Rundesk's
+   `skill_package_add`, or Settings), confirm every skill in `manifest.json` is listed, then remove
+   that package.
+3. After tagging, sync the package (Rundesk's `skill_package_sync` for `rundesk-ai/skills`) and
+   confirm it reports the new tag and version with nothing dropped. This is how v1.3.1 was verified.
 
 ## Definition of done
 
