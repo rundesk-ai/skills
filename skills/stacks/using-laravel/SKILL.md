@@ -63,6 +63,34 @@ Cross-cutting changes often need more than one rule file.
 | Actions, services, dependencies, application structure | [`references/architecture.md`](references/architecture.md) |
 | Production caches, Octane, deploy transitions, workers | [`references/deployment.md`](references/deployment.md) |
 | Code-review triage across Laravel concerns | [`references/review-triage.md`](references/review-triage.md) |
+| Finding an existing rule before writing one; removing what a change left unused | [`references/duplication-and-dead-code.md`](references/duplication-and-dead-code.md) |
+
+## Write It Once, Leave Nothing Unused
+
+Duplication and dead code arrive one reasonable change at a time, often from different agents each
+revising code they did not write, and every copy is a place the next fix misses:
+
+- **Before writing a rule, find its existing home by convention, not by name.** A scope is called as
+  `->active()`, an accessor read as `$order->total_with_vat_cents`, a view, route, config key, policy or
+  translation by its string. Found, call it; not found, give it one home: a scope, accessor or model
+  method, a policy, a backed enum, a Form Request, a config key.
+- **Never copy a method or a rule array to change one value**; take the difference as a parameter.
+  Copies that already disagree are a bug: decide which is right and prove it with a test.
+- **Blade, mailables, exports, resources and front-end code call the model's rule**; they never
+  re-derive a price, a status check or an ownership test.
+- **Add an output in the same change as the code that reads it**: a view variable, appended accessor,
+  event, job, config key or translation nothing reads is dead on arrival, and a test that only
+  exercises it is not a reader.
+- **A comment names only what exists in this repository**: no task or phase id, no document from
+  another project, no class that is not there.
+- **Leave nothing your change made unused.** When new code replaces old, delete the old in the same
+  change, then every route, view, component, config key, translation, asset and test only it used,
+  until nothing new is unused. Never delete a migration. Anything that was already unused, list in your
+  hand-off for the owner to decide rather than deleting it: it may be kept on purpose.
+
+Two or three repeated lines, or one number meaning two things, are not duplication. Read
+[`references/duplication-and-dead-code.md`](references/duplication-and-dead-code.md) for where each
+kind of reader appears and the paired examples.
 
 ## Decision Rules
 

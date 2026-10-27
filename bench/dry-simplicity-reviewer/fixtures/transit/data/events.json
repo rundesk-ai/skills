@@ -1,0 +1,4 @@
+[
+  { "tick": 28800, "handler": "OnRushHour" },
+  { "tick": 43200, "handler": "OnQuietNight" }
+]

@@ -96,6 +96,40 @@ Read [Saves and serialization](references/saves-and-serialization.md) before wri
 
 Read [Anti-patterns](references/anti-patterns.md) for the rest that compile clean and fail later.
 
+## Write it once, for a reader that exists
+
+Duplication and dead code arrive one reasonable edit at a time, often from different agents each
+revising code they did not write, and every copy is a place the next fix misses. A project rule saying
+"search before writing" does not stop it; acting at these moments does:
+
+- **Before writing a formula, threshold, tolerance or lookup, search for it by its inputs**, not by
+  the name you would give it: a copy someone else wrote has another name or none. Found, call it;
+  not found, give it one home on the type that owns its inputs.
+- **Never copy a method to change one value or one end**; take the difference as a parameter. Copies
+  drift, and copies that already disagree are a bug: decide which is right and prove it with a test.
+- **A view, preview, tool or test helper calls the model's rule**; it never re-derives it from raw
+  fields, or it shows a result the model does not produce.
+- **Add an output in the same change as the code that reads it.** A property, record member, enum case,
+  event, setter, interface member, snapshot field or parameter nothing reads is dead on arrival, and a
+  test or test stub that only exercises it is not a reader. A parameter every caller passes the same
+  value is a constant, and so is a default no caller relies on.
+- **A comment names only what exists in this repository**: no task or phase id, no document from
+  another project or build, no member that is not there. Those go stale the day they are written.
+- **Leave nothing your change made unused.** When new code replaces old, delete the old in the same
+  change: the alias, the superseded overload, the test that only covered it, then every helper, asset
+  (icon, image, sound, scene), configuration key and string only it used, until nothing new is unused.
+  Anything that was already unused, list in your hand-off for the owner to decide rather than deleting
+  it: it may be kept on purpose.
+- **Before finishing, read your diff for these**: every new member has a reader, and every member
+  whose caller you removed is gone too.
+
+Two or three repeated lines, or one number meaning two things, are not duplication: merging them
+couples rules that were free to diverge.
+
+No analyzer reports an unused `public` or `internal` member, and the default rule set does not report an
+unused private one either. Read [Duplication and dead code](references/duplication-and-dead-code.md)
+for the paired examples and the three `.editorconfig` lines that make the build list private dead code.
+
 ## A project's references are its architecture
 
 A layer that must not reach the engine is a project that does not reference it, so the day someone breaks

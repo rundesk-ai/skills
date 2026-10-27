@@ -249,6 +249,29 @@ advice is marked in the owning reference instead of maintaining a patch/support 
 - [View composers](https://laravel.com/docs/13.x/views#view-composers) — callbacks or classes for data
   genuinely shared by a set of views.
 
+## Duplication and dead-code lessons
+
+- [Accessors](https://laravel.com/docs/13.x/eloquent-mutators#defining-an-accessor) — an accessor is a
+  camel-case method returning `Attribute`, read as the snake-case attribute, so a search for the
+  method name misses its readers.
+- [Local scopes](https://laravel.com/docs/13.x/eloquent#local-scopes),
+  [authorizing with policies](https://laravel.com/docs/13.x/authorization#authorizing-actions-using-policies),
+  [enum casting](https://laravel.com/docs/13.x/eloquent-mutators#enum-casting) and
+  [Form Requests](https://laravel.com/docs/13.x/validation#form-request-validation) — the one home
+  for a query constraint, an ownership rule, a status and a rule array.
+- [Event discovery and `event:list`](https://laravel.com/docs/13.x/events#event-discovery) — a
+  discovered listener has no registration line to search for; `event:list` shows what is wired.
+  [`route:list`](https://laravel.com/docs/13.x/routing#the-route-list) and
+  [`schedule:list`](https://laravel.com/docs/13.x/scheduling#defining-schedules) do the same for
+  routes and scheduled tasks.
+- [Running migrations](https://laravel.com/docs/13.x/migrations#running-migrations) — migrations
+  build and roll back every database, which is why an old one is never deleted to tidy up.
+- The write-once and leave-nothing-unused rules come from the cleanup history of a private
+  multi-project simulation (2026-10), where about two dozen review rounds found rules retyped across
+  layers, view code re-deriving model rules, outputs with no reader and replaced paths left behind,
+  although its instructions already said to search before writing; the Laravel shapes of each are
+  the skill's own mapping.
+
 ## Framework utility lessons
 
 - [Service-container injection](https://laravel.com/docs/13.x/container#automatic-injection) and

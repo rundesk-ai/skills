@@ -153,6 +153,12 @@ Maintainer writing, cited where the documentation states a mechanism but not a j
   [`subprocess.Popen`](https://docs.python.org/3/library/subprocess.html#popen-constructor) documents
   `start_new_session=True` as the safe Python interface to `setsid()`.
 
+## Write it once
+
+The write-once rules come from the cleanup history of a private multi-project C# simulation (2026-10), where about two dozen review rounds found formulas retyped in several files, a lookup copied three times with two tolerances, mirror-image methods, view code re-deriving model rules, outputs published with no reader, and replaced paths left behind, although its instructions already said to search before writing new logic. They are stack-neutral; the tooling line below is this language's.
+
+- Ruff's default rule selection (`E4`, `E7`, `E9`, `F`) and the opt-in `flake8-unused-arguments` rules (`ARG001`-`ARG005`): [Ruff rules](https://docs.astral.sh/ruff/rules/), [rule selection](https://docs.astral.sh/ruff/settings/#lint_select).
+
 ## License
 
 Portions are adapted from material under this notice:

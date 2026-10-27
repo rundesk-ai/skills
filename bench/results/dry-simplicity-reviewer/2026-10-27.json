@@ -1,0 +1,208 @@
+{
+ "date": "2026-10-27",
+ "subject": "dry-simplicity-reviewer",
+ "kind": "subagent",
+ "skill_hash": "17b2d08989adcb2f",
+ "compared": {
+  "none": "no subagent: the same brief to a plain session",
+  "old": "subagents/dry-simplicity-reviewer.md at v1.2.2 (2026-10-26's new arm, byte-identical)",
+  "new": "this branch: dead code as its own section; a reader inventory of every declared member and asset; removals followed to what they leave unused; data leaving the program excluded; whole mirrored or one-value copies and repeated literals no longer exempt as 'two or three lines'"
+ },
+ "score": 0.14,
+ "score_basis": "pooled recall, final new arm minus v1.2.2, over all ten cases",
+ "cases": 10,
+ "cases_run": [
+  "d01-orders",
+  "d02-notify",
+  "d03-jobs",
+  "d04-ledger",
+  "d05-clean",
+  "d06-coincidental",
+  "d07-wrappers",
+  "d08-transit",
+  "d09-harbor",
+  "d10-rota"
+ ],
+ "runs_per_arm": "new 3 per case (one run of the final agent); none and old pooled from four same-day runs: 3 to 9 per case, 48 each",
+ "pooled": {
+  "none": {
+   "recall": 0.851,
+   "noise_per_run": 1.96,
+   "runs": 48
+  },
+  "old": {
+   "recall": 0.805,
+   "noise_per_run": 0.44,
+   "runs": 48
+  },
+  "new": {
+   "recall": 0.945,
+   "noise_per_run": 0.27,
+   "runs": 30
+  }
+ },
+ "by_case_recall_noise": {
+  "d01-orders": {
+   "none": [
+    1.0,
+    1.33
+   ],
+   "old": [
+    1.0,
+    0.33
+   ],
+   "new": [
+    1.0,
+    0.0
+   ]
+  },
+  "d02-notify": {
+   "none": [
+    1.0,
+    1.67
+   ],
+   "old": [
+    1.0,
+    1.0
+   ],
+   "new": [
+    1.0,
+    0.67
+   ]
+  },
+  "d03-jobs": {
+   "none": [
+    1.0,
+    1.67
+   ],
+   "old": [
+    1.0,
+    0.0
+   ],
+   "new": [
+    1.0,
+    0.33
+   ]
+  },
+  "d04-ledger": {
+   "none": [
+    null,
+    4.0
+   ],
+   "old": [
+    null,
+    0.0
+   ],
+   "new": [
+    null,
+    0.0
+   ]
+  },
+  "d05-clean": {
+   "none": [
+    null,
+    2.22
+   ],
+   "old": [
+    null,
+    0.0
+   ],
+   "new": [
+    null,
+    0.0
+   ]
+  },
+  "d06-coincidental": {
+   "none": [
+    0.79,
+    0.17
+   ],
+   "old": [
+    1.0,
+    0.0
+   ],
+   "new": [
+    1.0,
+    0.0
+   ]
+  },
+  "d07-wrappers": {
+   "none": [
+    0.96,
+    3.33
+   ],
+   "old": [
+    0.83,
+    0.0
+   ],
+   "new": [
+    0.88,
+    0.67
+   ]
+  },
+  "d08-transit": {
+   "none": [
+    0.67,
+    1.56
+   ],
+   "old": [
+    0.56,
+    1.0
+   ],
+   "new": [
+    0.74,
+    0.33
+   ]
+  },
+  "d09-harbor": {
+   "none": [
+    0.85,
+    1.67
+   ],
+   "old": [
+    0.74,
+    1.33
+   ],
+   "new": [
+    0.95,
+    0.33
+   ]
+  },
+  "d10-rota": {
+   "none": [
+    0.96,
+    2.0
+   ],
+   "old": [
+    0.58,
+    1.33
+   ],
+   "new": [
+    1.0,
+    0.33
+   ]
+  }
+ },
+ "agents": {
+  "claude": {
+   "version": "2.1.311",
+   "model": "claude-sonnet-5-5",
+   "judge": "claude-opus-5-5",
+   "final_run": {
+    "new": {
+     "wrongly_approved": "0/24",
+     "wrongly_blocked": "3/6",
+     "recall": 0.945,
+     "noise_per_run": 0.27,
+     "items_per_run": 7.67,
+     "not_worth_fixing_share": 0.035,
+     "precision": 0.961,
+     "tokens_median": 38540
+    }
+   }
+  }
+ },
+ "why_v1.2.2_trails_no_agent_on_new_cases": "Rerun today on d01-d07, v1.2.2 reproduces 2026-10-26 (recall 1.0, 1.0, 1.0, -, 0.83; noise 0.33, 1, 0, 0, 0). Those cases hold 1-4 planted items each, mostly duplication and layering, and reward restraint. d08-d10 hold 4-14 items each, half dead code; v1.2.2 had no dead-code procedure, and its 'two or three plain lines' exemption led it to leave whole mirrored methods it had read (UnloadFore/UnloadAft in 'Considered and left alone' 2 of 3 runs). A plain session reports everything: more hits, and 2-4 times the noise, including the documented test seam called dead in 3 of 3 runs on d09 (v1.2.2 did the same; the final agent 0 of 3).",
+ "remaining_misses": "Join/JoinAtHead mirrored splice 0/3 in every arm and version; d08's deepest stop-line chain (M9 1 hit + 1 partial, M14 1/3) and its snapshot chain (M10 partial 3/3); a bare retry literal (d08 M2 1/3). d08 and d10 informed the last two changes, so their final numbers are not independent; d09 is held out from all but the mirrored-copy wording.",
+ "notes": "Unsure findings were ruled without arm labels: real for a genuine defect with a concrete cost; false for preference, marginal gains, guards against hypothetical futures, or a behaviour change presented as cleanup; neutral for hedged questions to the owner, tooling advice, and entry points or persisted data whose outside readers cannot be ruled out. The d10 fixture leaves its payroll entry points and Week.log undocumented, which drew hedged findings in every arm (ruled neutral). Fixed during the run: the harness fed __pycache__ bytecode to the judge, because sorted(os.walk) defeats directory pruning. Not measured: codex and grok."
+}

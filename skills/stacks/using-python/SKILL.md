@@ -130,6 +130,33 @@ def collect(item: str, items: list[str] = []) -> list[str]:
     return items
 ```
 
+## Write it once, for a reader that exists
+
+Duplication and dead code arrive one reasonable edit at a time, often from different agents each
+revising code they did not write, and every copy is a place the next fix misses:
+
+- **Before writing a formula, threshold, tolerance or lookup, search for it by its inputs**, not by
+  the name you would give it: a copy someone else wrote has another name or none. Found, call it;
+  not found, give it one home beside its inputs.
+- **Never copy a function to change one value or one end**; take the difference as a parameter.
+  Copies that already disagree are a bug: decide which is right and prove it with a test.
+- **A view, preview, command or test helper calls the model's rule**; it never re-derives it.
+- **Add an output in the same change as the code that reads it.** A field, key, option or parameter
+  nothing reads is dead on arrival, and a test that only exercises it is not a reader. A parameter
+  every caller passes the same value is a constant.
+- **A comment names only what exists in this repository**: no task or phase id, no document from
+  another project, no function that is not there. Those go stale the day they are written.
+- **Leave nothing your change made unused.** When new code replaces old, delete the old in the same
+  change, then every helper, test, asset (icon, image, sound, scene), configuration key and string only
+  it used, until nothing new is unused. Anything that was already unused, list in your hand-off for the
+  owner to decide rather than deleting it: it may be kept on purpose. Before finishing, read your diff:
+  every new name has a reader.
+
+Two or three repeated lines, or one number meaning two things, are not duplication. Ruff's default
+rules catch an unused import or local, not an unused function, method, attribute or argument (the
+`ARG` rules are opt-in), so a `_`-prefixed name is proved unused by searching its module, and a public
+one by searching every caller, entry points and configuration included.
+
 ## Keep changes proportionate
 
 Do not introduce decorators, metaclasses, descriptors, generic frameworks, or concurrency merely to

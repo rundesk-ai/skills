@@ -1,0 +1,71 @@
+{
+ "date": "2026-10-27",
+ "skill": "using-csharp",
+ "skill_hash": "f52ca652a2b424fe",
+ "score": 0.0,
+ "cases": 1,
+ "cases_version": 2,
+ "cases_run": [
+  "q04-revisions"
+ ],
+ "agents": {
+  "claude": {
+   "version": "2.1.311",
+   "model": "claude-sonnet-5-5",
+   "judge": "claude-opus-5-5",
+   "fired": "seq2 8/8 steps with a skill table in AGENTS.md; seq1 10/12 with the plain fixture AGENTS.md",
+   "near_miss_fired": null,
+   "better": 0,
+   "same": 1,
+   "worse": 0,
+   "score": 0.0,
+   "quality": {
+    "q04-revisions": {
+     "seq2 (this skill's files)": {
+      "none-old": [
+       10,
+       10
+      ],
+      "none-new": [
+       9,
+       9
+      ],
+      "skill-new": [
+       10,
+       10
+      ],
+      "tokens_mean": {
+       "none-old": 893424,
+       "none-new": 920933,
+       "skill-new": 1093428
+      }
+     },
+     "seq1 (an earlier version of the section)": {
+      "none": [
+       10,
+       10,
+       9
+      ],
+      "skill": [
+       10,
+       10,
+       10
+      ],
+      "tokens_mean": {
+       "none": 538572,
+       "skill": 762606
+      }
+     },
+     "verdict": "same"
+    }
+   }
+  },
+  "codex": {
+   "skipped": "not run this time"
+  },
+  "grok": {
+   "skipped": "not run this time"
+  }
+ },
+ "notes": "q04 is a sequential case: four fresh agents in turn revise one tree (a crossing give-up, a HUD readout with a 'later' route display, replacing random van spawn, a hold back for large cars), each tempted to retype a rule, re-derive it in the view, build for later or leave the old path behind; graded once on the final tree against a rubric frozen before the first run, blind to arm. Arms in seq2 share a realistic AGENTS.md from the writing-agent-instructions house template (bench/using-csharp/arms/q04-revisions): none-old has today's step 4, none-new adds 'delete what the change leaves unused', skill-new adds the skill table and installs the skill. Every arm in both runs scored 9-10 of 10, every final tree passed dotnet test, and IDE0051/52/60 found nothing in any of them: the case does not discriminate, because Sonnet 5.5 already finds every existing home in a 1,000-line tree. The one duplication the judge listed in every run (current-speed stopping distance beside the VanSpec.BrakingDistance const) is a fixture artifact: a const cannot call a method. The two none-new misses were test-only additions (VanSystem.RouteOf; a test helper's discarded return), within noise at two runs. The skill cost about 20-40% more tokens. Not measured: the language skills other than C#, codex and grok, and a case at the scale where the source project's duplication arose."
+}

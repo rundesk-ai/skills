@@ -156,3 +156,9 @@ the parent's `_init` (only `super()` does); `Array[int].map()` returns an untype
 keeps the type; `str_to_var('Object(Node,…)')` builds a live node and `bytes_to_var` refuses objects; two
 scripts with one `class_name` resolve silently to one, and the checker reports it; an autoload named like
 a `class_name` fails both.
+
+## Write it once
+
+The write-once rules come from the cleanup history of a private multi-project C# simulation (2026-10), where about two dozen review rounds found formulas retyped in several files, a lookup copied three times with two tolerances, mirror-image methods, view code re-deriving model rules, outputs published with no reader, and replaced paths left behind, although its instructions already said to search before writing new logic. They are stack-neutral; the tooling line below is this language's.
+
+- The GDScript warnings `UNUSED_VARIABLE`, `UNUSED_LOCAL_CONSTANT`, `UNUSED_PARAMETER`, `UNUSED_SIGNAL` and `UNUSED_PRIVATE_CLASS_VARIABLE` default to warn: [ProjectSettings `debug/gdscript/warnings/*`](https://docs.godotengine.org/en/stable/classes/class_projectsettings.html).
