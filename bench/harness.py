@@ -1,13 +1,16 @@
-"""Benchmark the code-quality-reviewer subagent: no agent against two versions of it, graded blind.
+"""Benchmark a review subagent: no agent against two versions of it, graded blind.
 
-    python3 -I bench/code-quality-reviewer/harness.py run   OUT [--old REF] [--runs N] [--jobs N] [--cases q01-easy,...]
-    python3 -I bench/code-quality-reviewer/harness.py judge OUT [--jobs N]
-    python3 -I bench/code-quality-reviewer/harness.py score OUT
+    python3 -I bench/harness.py run   SUBJECT OUT [--old REF] [--runs N] [--jobs N] [--cases a,b,...]
+    python3 -I bench/harness.py judge SUBJECT OUT [--jobs N]
+    python3 -I bench/harness.py score SUBJECT OUT
 
-OUT is a scratch directory outside any git checkout: every run reviews a fresh copy of its fixture
-there. The arms are "none" (the case's brief to a plain session), "old" (the agent at git REF,
-default the newest tag) and "new" (the agent in the working tree). Each review is graded by a judge
-that sees the case's answer key and the review under a random id, never the arm. Findings the
+SUBJECT names subagents/SUBJECT.md and its cases in bench/SUBJECT/cases. A case's fixture is a
+folder in bench/SUBJECT/fixtures, or "other-subject/name" to reuse one from another subject.
+
+OUT is a new scratch directory outside any git checkout: every run reviews a fresh copy of its
+fixture there. The arms are "none" (the case's brief to a plain session), "old" (the agent at git
+REF, default the newest tag) and "new" (the agent in the working tree). Each review is graded by a
+judge that sees the case's answer key and the review under a random id, never the arm. Findings the
 judge marks "unsure" are ruled by a person in OUT/overrides.json ("<id>:<index>": "real", "false"
 or "neutral") before scoring; score refuses to run while any is unruled.
 """
@@ -24,9 +27,9 @@ import statistics as st
 import subprocess
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-HERE = os.path.join(ROOT, "bench", "code-quality-reviewer")
-AGENT = "subagents/code-quality-reviewer.md"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BENCH = os.path.join(ROOT, "bench")
+SUBJECT = HERE = AGENT = ""  # set by main() from the command line
 ARMS = ("none", "old", "new")
 REVIEW_MODEL = "claude-sonnet-5-5"  # the model the agent's claude settings name
 JUDGE_MODEL = "claude-opus-5-5"
@@ -46,10 +49,15 @@ def read_case(name):
     return fixture, key, brief.strip()
 
 
+def fixture_dir(fixture):
+    owner, _, name = fixture.rpartition("/")
+    return os.path.join(BENCH, owner or SUBJECT, "fixtures", name)
+
+
 def agent_json(text, path):
     _, front, body = text.split("---\n", 2)
     desc = re.search(r'^description: "?(.*?)"?$', front, re.M).group(1)
-    json.dump({"code-quality-reviewer": {"description": desc, "prompt": body.strip()}}, open(path, "w"))
+    json.dump({SUBJECT: {"description": desc, "prompt": body.strip()}}, open(path, "w"))
 
 
 def git(*args):
@@ -65,15 +73,15 @@ def refuse_checkout(out):
 def review(out, case, arm, n):
     fixture, _, brief = read_case(case)
     run = os.path.join(out, "runs", f"{case}-{arm}-{n}")
-    shutil.rmtree(run, ignore_errors=True)
-    shutil.copytree(os.path.join(HERE, "fixtures", fixture), run, ignore=shutil.ignore_patterns("__pycache__"))
+    # copytree refuses an existing folder, so a rerun needs a new OUT rather than deleting an old one.
+    shutil.copytree(fixture_dir(fixture), run, ignore=shutil.ignore_patterns("__pycache__"))
     cmd = ["claude", "-p", brief, "--model", REVIEW_MODEL, "--restricted", "--strict-mcp-config",
            "--tools", "Read,Grep,Glob,Bash",
            "--allowedTools", "Read,Grep,Glob,Bash(python3 -m unittest:*),Bash(npm test:*),Bash(node --test:*),"
                              "Bash(go test:*),Bash(php tests/run.php:*)",
            "--output-format", "stream-json", "--verbose"]
     if arm != "none":
-        cmd += ["--agents", os.path.join(out, "agents", arm + ".json"), "--agent", "code-quality-reviewer"]
+        cmd += ["--agents", os.path.join(out, "agents", arm + ".json"), "--agent", SUBJECT]
     # Go writes its caches under the home directory and may fetch a toolchain; keep both in OUT.
     env = dict(os.environ, GOCACHE=os.path.join(out, "go", "cache"), GOMODCACHE=os.path.join(out, "go", "mod"),
                GOTOOLCHAIN="local")
@@ -102,12 +110,13 @@ def review(out, case, arm, n):
 
 def cmd_run(a):
     out = os.path.abspath(a.out)
-    os.makedirs(os.path.join(out, "agents"), exist_ok=True)
+    os.makedirs(out)  # must be new: a run never reuses or clears an earlier one
+    os.makedirs(os.path.join(out, "agents"))
     refuse_checkout(out)
     old = a.old or git("describe", "--tags", "--abbrev=0").strip()
     agent_json(git("show", f"{old}:{AGENT}"), os.path.join(out, "agents", "old.json"))
     agent_json(open(os.path.join(ROOT, AGENT)).read(), os.path.join(out, "agents", "new.json"))
-    json.dump({"old": old, "new": "working tree", "head": git("rev-parse", "HEAD").strip(),
+    json.dump({"subject": SUBJECT, "old": old, "new": "working tree", "head": git("rev-parse", "HEAD").strip(),
                "claude": subprocess.run(["claude", "--version"], capture_output=True, text=True).stdout.strip()},
               open(os.path.join(out, "meta.json"), "w"), indent=1)
     jobs = []
@@ -143,7 +152,7 @@ Answer with JSON only, no prose, in this shape:
 
 
 def source(fixture):
-    root, parts = os.path.join(HERE, "fixtures", fixture), []
+    root, parts = fixture_dir(fixture), []
     for d, dirs, files in sorted(os.walk(root)):
         dirs[:] = sorted(x for x in dirs if x != "__pycache__")
         for f in sorted(files):
@@ -247,17 +256,21 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run")
-    r.add_argument("out")
     r.add_argument("--old", help="git ref for the old agent; default the newest tag")
     r.add_argument("--runs", type=int, default=3)
     r.add_argument("--jobs", type=int, default=9)
     r.add_argument("--cases", type=lambda s: s.split(","), help="comma-separated case names; default all")
     j = sub.add_parser("judge")
-    j.add_argument("out")
     j.add_argument("--jobs", type=int, default=9)
     s = sub.add_parser("score")
-    s.add_argument("out")
+    for parser in (r, j, s):
+        parser.add_argument("subject", help="a subagent name, as in subagents/<name>.md")
+        parser.add_argument("out")
     a = p.parse_args()
+    global SUBJECT, HERE, AGENT
+    SUBJECT, HERE, AGENT = a.subject, os.path.join(BENCH, a.subject), f"subagents/{a.subject}.md"
+    if not os.path.isfile(os.path.join(ROOT, AGENT)) or not os.path.isdir(os.path.join(HERE, "cases")):
+        sys.exit(f"no subagents/{a.subject}.md or no bench/{a.subject}/cases")
     {"run": cmd_run, "judge": cmd_judge, "score": cmd_score}[a.cmd](a)
 
 

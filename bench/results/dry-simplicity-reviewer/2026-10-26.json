@@ -1,0 +1,264 @@
+{
+ "date": "2026-10-26",
+ "subject": "dry-simplicity-reviewer",
+ "kind": "subagent",
+ "skill_hash": "20c9bb8a610bc2aa",
+ "compared": {
+  "none": "no subagent: the same brief to a plain session",
+  "old": "subagents/dry-simplicity-reviewer.md at v1.2.1",
+  "new": "this branch's rewrite"
+ },
+ "score": 0.287,
+ "cases": 7,
+ "cases_run": [
+  "d01-orders",
+  "d02-notify",
+  "d03-jobs",
+  "d04-ledger",
+  "d05-clean",
+  "d06-coincidental",
+  "d07-wrappers"
+ ],
+ "runs_per_arm": 3,
+ "agents": {
+  "claude": {
+   "version": "2.1.311",
+   "model": "claude-sonnet-5-5",
+   "judge": "claude-opus-5-5",
+   "arms": {
+    "none": {
+     "recall": 0.942,
+     "noise_per_run": 2.9,
+     "items_per_run": 7.43,
+     "not_worth_fixing_share": 0.391,
+     "precision": 0.633,
+     "tokens_median": 22453,
+     "clean_on_clean_code": "0/3"
+    },
+    "old": {
+     "recall": 0.883,
+     "noise_per_run": 2.9,
+     "items_per_run": 7.62,
+     "not_worth_fixing_share": 0.381,
+     "precision": 0.613,
+     "tokens_median": 23269,
+     "clean_on_clean_code": "0/3"
+    },
+    "new": {
+     "recall": 0.992,
+     "noise_per_run": 0.57,
+     "items_per_run": 4.57,
+     "not_worth_fixing_share": 0.125,
+     "precision": 0.9,
+     "tokens_median": 31141,
+     "clean_on_clean_code": "3/3"
+    }
+   },
+   "arms_with_d07_key_corrected": {
+    "none": {
+     "noise_per_run": 2.76,
+     "precision": 0.639
+    },
+    "old": {
+     "noise_per_run": 2.76,
+     "precision": 0.626
+    },
+    "new": {
+     "noise_per_run": 0.43,
+     "precision": 0.921
+    }
+   },
+   "by_case": {
+    "d01-orders": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 2.33,
+      "precision": 0.792,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 22391
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 3.33,
+      "precision": 0.756,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 39943
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.944,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 27063
+     }
+    },
+    "d02-notify": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 3,
+      "precision": 0.5,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 22356
+     },
+     "old": {
+      "recall": 0.833,
+      "noise_per_run": 2.67,
+      "precision": 0.543,
+      "clean": "0/3",
+      "consistency": 0.67,
+      "tokens_median": 22826
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.783,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 33275
+     }
+    },
+    "d03-jobs": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 1.33,
+      "precision": 0.827,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 22683
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 2,
+      "precision": 0.739,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 24376
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.67,
+      "precision": 0.889,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 31177
+     }
+    },
+    "d04-ledger": {
+     "none": {
+      "recall": null,
+      "noise_per_run": 5.67,
+      "precision": 0.472,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 23908
+     },
+     "old": {
+      "recall": null,
+      "noise_per_run": 6.33,
+      "precision": 0.479,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 24471
+     },
+     "new": {
+      "recall": null,
+      "noise_per_run": 0.33,
+      "precision": 0.944,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 32936
+     }
+    },
+    "d05-clean": {
+     "none": {
+      "recall": null,
+      "noise_per_run": 1.67,
+      "precision": 0.417,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 22269
+     },
+     "old": {
+      "recall": null,
+      "noise_per_run": 1.67,
+      "precision": 0.389,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 22191
+     },
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 25642
+     }
+    },
+    "d06-coincidental": {
+     "none": {
+      "recall": 0.833,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 0.67,
+      "tokens_median": 21667
+     },
+     "old": {
+      "recall": 0.75,
+      "noise_per_run": 0.67,
+      "precision": 0.85,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 21962
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25775
+     }
+    },
+    "d07-wrappers": {
+     "none": {
+      "recall": 0.875,
+      "noise_per_run": 6.33,
+      "precision": 0.424,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 23142
+     },
+     "old": {
+      "recall": 0.833,
+      "noise_per_run": 3.67,
+      "precision": 0.537,
+      "clean": "0/3",
+      "consistency": 0.78,
+      "tokens_median": 23652
+     },
+     "new": {
+      "recall": 0.958,
+      "noise_per_run": 1.67,
+      "precision": 0.739,
+      "clean": "0/3",
+      "consistency": 0.83,
+      "tokens_median": 32766
+     }
+    }
+   }
+  },
+  "codex": {
+   "skipped": "not run in this benchmark"
+  },
+  "grok": {
+   "skipped": "not run in this benchmark"
+  }
+ },
+ "notes": "Graded blind against answer keys frozen before any run; four cases reuse code-quality-reviewer fixtures under DRY-specific keys. 29 unsure findings ruled without arm labels: real when a genuine duplication, redundancy or defect has a concrete cost; false when a preference, marginal, or a behaviour change presented as cleanup. The d07 key listed deleting models.py as a decoy (D4); every arm flagged it in every run, and rightly, since User is only used by the round trip M4 removes. The key was corrected after the run; arms_with_d07_key_corrected gives the scores without D4. Headline: on d04 no agent and the v1.2.1 agent proposed merging the two parsers a decision record says must stay apart in 6 of 6 runs, the new agent in 0 of 3; on clean code (d05) only the new agent said nothing was worth consolidating (3 of 3)."
+}
