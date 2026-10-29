@@ -1,14 +1,15 @@
 +++
 skill = "writing-task-tickets"
-cases_version = 2
+cases_version = 3
 kind = "quality"
 difficulty = "medium"
 rubric = """
 result.1  Done when is a short list (six lines or fewer) of outcomes a stakeholder would recognise — comparing the vendors, tracing results to lead, source and vendor, opt-outs handled the same way, personal data kept out of analytics.
 result.2  No Done when line restates a technical guarantee: schema or format versions, retries, idempotency, duplicates, ordering, timestamps, response codes, contract tests or mapping categories.
-result.3  Problem is at most two sentences and states the business cost (vendor spend decided blind, or opt-out compliance unprovable).
+result.3  Written from a user's side (a texted shopper whose opt-out must work, or the person choosing between vendors), not the receiver's; Problem is at most two sentences and states the cost (vendor spend decided blind, or opt-out compliance unprovable).
 result.4  Names no person; drops the source-document, dependency, gate, evidence, rollout and readiness sections.
 result.5  Not included keeps the original's real out-of-scope items and adds no scope decision of its own.
+result.6  Any Technical notes are at most four one-sentence facts or constraints with a reason, none restating the schema, retries, idempotency, ordering or contract tests.
 conduct.1 Notes after the ticket are four or fewer one-sentence bullets, with nothing after them.
 """
 +++
