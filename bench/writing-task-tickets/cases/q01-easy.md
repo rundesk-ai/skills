@@ -1,14 +1,15 @@
 +++
 skill = "writing-task-tickets"
-cases_version = 2
+cases_version = 3
 kind = "quality"
 difficulty = "easy"
 rubric = """
-result.1  Uses only Title, Problem, Goal, Done when and an optional Not included; no requirement IDs, acceptance-criteria mapping, evidence, rollout, gates or readiness sections.
+result.1  Uses only Title, User story, Problem, Done when, an optional Not included and optional Technical notes; no requirement IDs, acceptance-criteria mapping, evidence, rollout, gates or readiness sections.
 result.2  Names no person anywhere in the ticket.
-result.3  Problem is at most two sentences and states what the spam problem costs or risks.
+result.3  The user story and Problem are written from the consumer's side (their request goes unseen); Problem is at most two sentences and states what that costs or risks.
 result.4  Every Done when line is an outcome someone could check pass or fail (for example a test email lands in the inbox), with no vague bar such as "reliably" or "properly".
 result.5  Adds no common-sense lines (no real customer data, no credentials in the ticket, don't touch production) and no requirement the original did not ask for.
+result.6  SPF, DKIM, DMARC and Cloudflare appear, if at all, only in Technical notes with a reason, never in Title, Problem or Done when.
 conduct.1 Notes after the ticket are four or fewer one-sentence bullets, with nothing after them, and no file paths or code.
 """
 +++

@@ -1,7 +1,7 @@
 # Examples
 
-Long, process-heavy tasks cut down to the four-section shape, and one split in two. Each lists what was dropped, the
-way a rewrite is handed back.
+Long, process-heavy or technical tasks rewritten from the user's side, and one split in two. Each
+lists what was dropped, the way a rewrite is handed back.
 
 ## An integration check
 
@@ -14,14 +14,15 @@ validation record. Named people owned the key, the handoff and the test.
 **After:**
 
 ```markdown
-**Title:** Confirm the partner API works for the quote tool
+**Title:** Know whether the partner connection can power the quote tool
+
+**User story**
+As the team building the quote tool, we want to know the partner connection works before we build
+on it, so that shoppers are not shown quotes it cannot deliver.
 
 **Problem**
-We don't know whether the existing partner integration can log in and return the responses the
-quote tool needs, so the feature can't be finished.
-
-**Goal**
-We know whether the integration works in a non-production environment, before building further.
+Nobody knows whether the existing partner connection can sign in and return what the quote tool
+needs. Until we do, the feature cannot be finished or promised to shoppers.
 
 **Done when**
 - Login and the main API calls are tested in non-production.
@@ -49,20 +50,24 @@ times that a delivered test email does not prove the request was acted on.
 **After:**
 
 ```markdown
-**Title:** Stop privacy emails landing in spam
+**Title:** Consumers' privacy requests reach the team, not spam
+
+**User story**
+As a consumer sending a privacy or Do Not Call request, I want my email seen by the team, so that
+my request is acted on.
 
 **Problem**
-Emails sent to the privacy inbox land in spam, so a privacy or Do Not Call request can go unseen
-before anyone reviews it.
-
-**Goal**
-Privacy emails arrive in the inbox, not spam.
+Emails sent to the privacy inbox land in spam, so a consumer's request can go unseen. A missed
+request is a compliance risk and a broken promise to that consumer.
 
 **Done when**
 - A test email to the privacy address lands in the inbox, not spam.
 - Recipients and the manual review process are unchanged.
 
 **Not included:** automating privacy requests, changing recipients or the mail provider, or the data-warehouse forecast (tracked separately).
+
+**Technical notes** (for engineering)
+- The likely cause is the sending domain's email authentication, and its DNS is managed in Cloudflare.
 ```
 
 **Dropped:**
@@ -72,7 +77,7 @@ Privacy emails arrive in the inbox, not spam.
 - The repeated disclaimer — the goal is only about delivery, so nobody reads more into it.
 - The names of the people who review and act on the inbox — "anyone reviews it" says what the reader needs.
 - "Test with no real customer data" — nobody would test with it anyway.
-- The record names (SPF, DKIM, DMARC) — how it is fixed is engineering's call.
+- The record-by-record fix (SPF, DKIM, DMARC) — how it is fixed is engineering's call; where the DNS lives stays as a technical note, since engineering would otherwise look for it.
 
 ## A technical spec collapsed to outcomes
 
@@ -89,15 +94,16 @@ the provider knows whether to retry". Accurate, and still an engineering spec.
 **After:**
 
 ```markdown
-**Title:** Compare the two SMS vendors fairly and stop texts the same way for both
+**Title:** Shoppers who opt out are stopped the same way, whichever vendor texts them
+
+**User story**
+As a shopper who gets texts about my quote, I want a stop or opt-out to work whichever company
+sends them, so that I am not texted after I said no. As the person choosing between the vendors,
+I want their results compared like for like, so that spend follows what works.
 
 **Problem**
-The two SMS vendors each describe what happens to the people they text in their own terms, so we cannot
-tell which vendor performs better or show that opt-outs are honoured the same way by both. Vendor
-spend is decided on guesswork, and opt-out compliance cannot be proven.
-
-**Goal**
-Every text event means the same thing whichever vendor sent it.
+The two SMS vendors each describe what happens to the people they text in their own terms. Opt-outs
+cannot be shown to work the same way for both, and vendor spend is decided on guesswork.
 
 **Done when**
 - Both vendors' results can be compared stage by stage, from first text to reply.
@@ -107,15 +113,19 @@ Every text event means the same thing whichever vendor sent it.
 - Each vendor's gaps — events it cannot report — are listed.
 
 **Not included:** changing how either vendor runs campaigns, work on the vendors' side, or turning this on for live traffic.
+
+**Technical notes** (for engineering)
+- Much of the event intake already exists; the new work is the shared stages, the assignment and source on each event, and keeping personal details out.
+- Each vendor still reports in its own format, so both must map into one shared set of stages.
 ```
 
 **Notes, as handed back:**
-- Much of the event intake already exists; the new work is the shared stages, the assignment and
-  source on each event, and keeping personal details out.
+- Two users share one story here, because opt-outs and comparison rest on the same shared events; split them if they ship separately.
 - "Engaged" is not defined anywhere — confirm what counts before results are compared.
 
 **Dropped:** the schema, versioning, retry, duplicate and timestamp rules, contract tests and
-mapping categories — the implementation planning derives them from these outcomes.
+mapping categories — the implementation planning derives them from these outcomes, and none is a
+fact engineering would otherwise miss.
 
 ## A task split in two
 
@@ -133,13 +143,13 @@ nothing.
 ```markdown
 Split in two: the format can be agreed now; the product decisions wait on leadership. Neither blocks the other.
 
-**Title:** Agree how partner outcome files are read and matched
+**Title:** Partners' outcome files are matched to the right leads
+
+**User story**
+As an analyst reporting on lead outcomes, I want every partner's file read and matched the same way, so that results can be trusted.
 
 **Problem**
-Partner outcome data arrives from several sources in different formats, and nothing defines how to match it to our leads.
-
-**Goal**
-One agreed way to read, match and check partner outcome files.
+Partner outcome data arrives from several sources in different formats, and nothing defines how to match it to our leads. Results reported from it cannot be trusted.
 
 **Done when**
 - Every current outcome source is listed with its owner and format.
@@ -152,13 +162,13 @@ One agreed way to read, match and check partner outcome files.
 
 ---
 
-**Title:** Settle the open product decisions for the reporting product
+**Title:** Leadership can settle the open decisions for the reporting product
+
+**User story**
+As a member of leadership, I want the reporting product's open decisions in one place, so that I can settle them.
 
 **Problem**
-The reporting product is an unapproved draft, so nobody can say who owns its data or whether to build or buy it.
-
-**Goal**
-Leadership has the open decisions in one place and can settle them.
+The reporting product is an unapproved draft, so nobody can say who owns its data or whether to build or buy it. The work behind it cannot start.
 
 **Done when**
 - Each open decision is listed with what it blocks.
