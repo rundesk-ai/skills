@@ -14,22 +14,26 @@ before it, so the joins are identical frames and the eye sees one shot.
   playback can switch at it.
 - **A seamless loop uses the same frame at both ends**: first and last frame conditioned on one
   image. Two similar frames give a visible hitch every cycle.
-- **Change place one human step at a time.** Moving the person to a new room or a distant spot is
-  several clips, each covering what a person could do in a few seconds, each started on the real
-  frame before it. Never pin a distant destination still as the end frame and let one clip
-  interpolate: the generator melts the gap, so objects pop in, garments change, doors double and
-  limbs pass through furniture. Use an end frame only when it is a few seconds of plausible motion
-  from the start frame.
+- **Film a change of place as the move itself.** Walking to another room is one beat: start on the
+  real frame, and write the route and the camera ("she walks down the hall, opens the door on the
+  left and steps inside; the camera follows behind her"). One clip holds it when it fits the
+  generator's duration; a longer move, or a span that failed, continues from the accepted part's
+  exact last frame. An end frame is a composition target, not a shortcut: pin one only when the
+  route the prompt directs can visibly reach it within the clip, through places the frames show. A
+  far or unexplained end frame left for the generator to interpolate melts the gap, so objects pop
+  in, garments change, doors double and limbs pass through furniture. Judge the actual crossing
+  through the middle, not the matching end, and start the next clip on the take's real extracted
+  last frame, never on the target still.
 - **Keep chains short.** Each generation from a generated frame drifts a little further: colour,
   light and face. When a sequence needs more than a handful of links, plan a cut and re-start the
   next part from an accepted keyframe; that part is then a reel, not a continuous shot.
 
 ## The workflow
 
-1. **Anchor and rest frame.** Make the rest frame by editing the person's anchor still into the
-   rest pose, at the delivery resolution and aspect ratio. Inspect it whole.
-2. **Plan the chain** on paper: every clip with its brief, start frame, end frame (usually free),
-   and the one motion it does. Mark which clips are loops.
+1. **Anchor.** The first clip starts on the person's accepted still at the delivery resolution and
+   aspect ratio, edited only when the first clip needs a different place or pose. Inspect it whole.
+2. **Brief the chain**: every clip with its beat, route and camera, its start frame and its end
+   frame (usually free). Mark which clips are loops.
 3. **Generate the first clip** from its keyframe. Judge it through the middle, not only the ends.
 4. **Accept or log the rejection.** A rejected take is regenerated from the same start frame; never
    from a frame of the rejected take.
