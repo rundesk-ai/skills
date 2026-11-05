@@ -61,7 +61,13 @@ so one improvement does not conceal a regression elsewhere.
    risk under test.
 6. **Tune concurrency after isolation.** Give workers unique databases, ports, paths, accounts, and
    other mutable resources. Measure worker counts on the actual runner: process startup, memory,
-   database connections, I/O, and CPU oversubscription can make more workers slower.
+   database connections, I/O, and CPU oversubscription can make more workers slower. When several
+   agents and a person share one machine, every heavy run (a build plus the suite, an acceptance
+   suite, coverage, mutation testing) takes one machine-wide lock inside each of the project's own
+   build and test scripts, not a wrapper an agent can skip; a second run waits and prints one line.
+   Concurrent runs collide on a shared database or port, and parallel full builds contend for the
+   same cores, so each runs slower than they would in turn. The stack's own guidance names a runner's
+   collisions and the lock command its platform has.
 7. **Balance shards by time.** Split a suite across CI machines only after one-machine concurrency is
    sound. Historical duration data usually balances better than test counts; new and changed cases
    still need deterministic assignment. Merge reports and prove the union discovered the same suite.

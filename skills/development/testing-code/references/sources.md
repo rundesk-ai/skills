@@ -254,6 +254,9 @@ clean regeneration.
   that case to 3 s. Two CI pushes each revealed one new failure under fail-fast, where one local run
   in CI's Linux image with fail-fast off showed all nine. An acceptance harness that hid the server's
   log left CI showing only the failed assertion.
+- The machine-wide lock for heavy runs is an owner operating requirement from the same service:
+  concurrent runs by the owner and agents destroyed each other's test databases. That parallel full
+  builds run slower than serial ones follows from contention for the same cores; not measured here.
 
 ## License
 
