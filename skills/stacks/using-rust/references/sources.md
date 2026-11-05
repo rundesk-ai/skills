@@ -285,3 +285,34 @@ missing toolchain without asking.
 The write-once rules come from the cleanup history of a private multi-project C# simulation (2026-10), where about two dozen review rounds found formulas retyped in several files, a lookup copied three times with two tolerances, mirror-image methods, view code re-deriving model rules, outputs published with no reader, and replaced paths left behind, although its instructions already said to search before writing new logic. They are stack-neutral; the tooling line below is this language's.
 
 - Observed with rustc 1.91.1 (2021 edition) on a library crate: an unused parameter and a never-read private field warned, an unused `pub(crate)` function warned, and an unused `pub` function did not.
+
+## Observed on a private axum, sqlx and Postgres service (2026-11)
+
+Measured on an Apple Silicon Mac under macOS and on GitHub-hosted 4-core Linux runners, with
+nextest, cargo-llvm-cov and cargo-mutants.
+
+- macOS first-run scan: 42 test binaries, an edit plus one test 97 s, of which about 72 s scanning
+  (a binary's first run 75 s, the same run again 0.7 s); one `tests/it/` crate plus an acceptance
+  crate 14 s. A fresh copy of a 67 MB test binary started in 0.40 s before and 0.01 s after adding
+  the host app under Developer Tools.
+- Clock precision: CI failed twice on `.632528295Z` against `.632528Z`; Postgres
+  [date/time types](https://www.postgresql.org/docs/current/datatype-datetime.html) store
+  microseconds.
+- `[profile.dev.package."*"] opt-level = 2`: clean cold build 45.6 s with, 26.2 s without; full
+  suite 18.7 s and 17.8 s; acceptance suite 38.8 s and 39.5 s. `debug = "line-tables-only"` and `0`
+  gave no local gain on macOS, where Cargo's default `split-debuginfo` is `unpacked`.
+- [Swatinem/rust-cache `action.yml`](https://github.com/Swatinem/rust-cache/blob/master/action.yml):
+  `cache-on-failure` defaults to false. Observed: every run of a never-green pipeline reported "No
+  cache found"; clippy 3.5–6 min, the llvm-cov build 6.5–10 min, `cargo install sqlx-cli` 1.5–2.3 min.
+- sqlx source: [`sqlx-core/src/testing`](https://github.com/launchbadge/sqlx/blob/main/sqlx-core/src/testing/mod.rs)
+  names the test database `_sqlx_test_` plus a hash of the test path, and
+  [`sqlx-postgres/src/testing`](https://github.com/launchbadge/sqlx/blob/main/sqlx-postgres/src/testing/mod.rs)
+  runs `drop database if exists` before `create database`. Observed: concurrent runs failed with
+  23505 on `pg_database_datname_index`. Observed: a malformed `.env` failed every query macro with
+  "error reading dotenv file" although `SQLX_OFFLINE` was set.
+- `timeout` dropping a write: from [`tokio::time::timeout`](https://docs.rs/tokio/latest/tokio/time/fn.timeout.html)
+  (the future is dropped when the deadline elapses), found reading a sticky-assignment upsert under
+  a 500 ms cap; a CI failure was consistent with it but not proven.
+- cargo-llvm-cov: the per-file summary reported a line missed that lcov and `--show-missing-lines`
+  did not, because the line ran only in another test binary's copy of the function.
+- nextest stops at the first failing test by default ([nextest: running](https://nexte.st/docs/running/)).

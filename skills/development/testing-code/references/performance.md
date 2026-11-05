@@ -51,7 +51,10 @@ so one improvement does not conceal a regression elsewhere.
    and in parallel proves no state leaks. Shared mutable state buys speed with order dependence.
 4. **Remove waiting, not synchronization.** Replace fixed sleeps with the event or condition that
    establishes completion and retain a diagnostic timeout. Reducing the sleep value only makes the
-   race harder to reproduce.
+   race harder to reproduce. A case that waits out a real production limit, such as a 30-second
+   request timeout, sets the whole suite's wall time: pass the limit in at construction, pin
+   production's value with its own case, and bound the call with an outer timeout so a lost limit
+   fails instead of hanging. That took one suite from 31 s to 18–20 s.
 5. **Move slow external behavior behind an owned boundary.** Unit tests use a maintained fake or
    stub for a remote service; a narrow contract or integration case catches drift. Keep a real local
    dependency when its serialization, transaction, query, filesystem, or process behavior is the
@@ -142,7 +145,10 @@ After optimizing the test work itself, inspect the workflow graph:
 - keep compatibility matrices separate from shards: environments repeat the suite to prove different
   contracts, while shards partition one inventory and must reunite into one complete result;
 - use fail-fast to reduce wasted work after a decisive failure when the remaining failures are not
-  required evidence; distinguish that from making the successful path faster; and
+  required evidence; distinguish that from making the successful path faster;
+- before pushing a fix for a CI job, run that job locally on CI's operating system (its container
+  image and service versions) with fail-fast off: CI under fail-fast shows one failure per push,
+  where two pushes each revealed one new failure and one local Linux run showed all nine; and
 - retain concise failure diagnostics. Removing logs, traces, or reports can reduce upload time while
   increasing the time from failure to correction.
 

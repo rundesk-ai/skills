@@ -6,8 +6,14 @@ a change.
 ## Where tests go
 
 - **Each file in `tests/` compiles as its own crate and binary**, so many files multiply link time;
-  one `tests/<name>/main.rs` with modules is faster. A binary-only crate cannot be tested by import:
-  move its logic into `lib.rs`. Helpers that `tests/` needs from the crate: see the `test-util`
+  one `tests/<name>/main.rs` with modules is faster. On macOS it is far worse: the system scans
+  every freshly linked executable on its first run, and an edit relinks every test binary. With 42
+  test files, an edit plus one test took 97 s, about 72 s of it the scan; merged into one crate
+  plus one acceptance crate, 14 s. Adding the terminal or agent app under System Settings ›
+  Privacy & Security › Developer Tools exempts what it starts (a 67 MB test binary's first start
+  went from 0.40 s to 0.01 s); `spctl developer-mode enable-terminal` shows the pane, and the app
+  needs a relaunch. That is the owner's machine setting: suggest it, never change it.
+  A binary-only crate cannot be tested by import: move its logic into `lib.rs`. Helpers that `tests/` needs from the crate: see the `test-util`
   feature in [organization](organization.md).
 - **Doctests** run only for library targets, and only under plain `cargo test` or `cargo test --doc`.
   Mark an example `no_run` when it must compile but not execute, and give `ignore` a reason.
@@ -40,5 +46,18 @@ the compiler's message.
 **`cargo check` is not `cargo build`.** Errors raised during monomorphization, such as a
 const-generic `assert!` on `N`, pass `cargo check` and fail `cargo build` with E0080. Before
 reporting that generic or const code compiles, build or test it.
+
+**Two runs of `#[sqlx::test]` against one Postgres server destroy each other.** Each test's
+database is named from a hash of the test's path, and an existing one of that name is dropped
+first, so the owner's run and an agent's (or two agents') delete each other's databases mid-test and
+fail with 23505 on `pg_database_datname_index`. Run the tests only through a project script that
+takes one machine-wide lock first: `flock` on Linux; macOS has no `flock(1)`, so use perl's `flock`
+on a file descriptor the shell holds open.
+
+**cargo-llvm-cov's per-file summary can report a covered line as missed.** Each test binary and
+each generic instantiation is a separate copy of a function, and the summary counts, per function,
+the best-covered copy, so a line run only in another copy shows as missed while the lcov output and
+`--show-missing-lines` list nothing. Cover the line within one binary, ideally with a unit test in
+the same module.
 
 Async tests: see `#[tokio::test]` in [async and concurrency](async-and-concurrency.md).

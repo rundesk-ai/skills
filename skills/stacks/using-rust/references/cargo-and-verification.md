@@ -28,12 +28,19 @@ cargo doc --workspace --no-deps                  # broken intra-doc links
   rechecks the workspace — and `RUSTFLAGS` rebuilds every dependency. Below 1.97, `-- -D warnings` is
   the only option: an older Cargo silently ignores `CARGO_BUILD_WARNINGS=deny` and reports green
   with the warning still there. Check `cargo -V` before relying on it.
-- **`cargo test` stops at the first failing test binary.** Add `--no-fail-fast` to see every failure
-  before deciding what broke.
+- **`cargo test` stops at the first failing test binary**, and nextest at the first failing test.
+  Add `--no-fail-fast` to either to see every failure before deciding what broke.
+- **sqlx's query macros read `.env` before honouring `SQLX_OFFLINE`.** A malformed `.env` (an
+  unterminated `DATABASE_URL="`) fails every build with dozens of identical "error reading dotenv
+  file" errors. A project script checks `.env` and the database first and stops with one line.
 - **Features.** `--all-features` alone misses breakage with defaults off and with single features.
   For a crate with features, add `cargo check --no-default-features` and, where installed,
   `cargo hack check --each-feature --no-dev-deps`.
 - **In CI**, build with `--locked` so a stale `Cargo.lock` fails rather than being silently rewritten.
+  `Swatinem/rust-cache` saves only after a successful job by default, so a pipeline that has not
+  yet passed builds cold on every run (clippy 3.5–6 min, a coverage build 6.5–10 min, on 4-core
+  runners); set `cache-on-failure: true` while it is red. A `cargo install` of a tool such as
+  `sqlx-cli` compiles on every cold run too (1.5–2.3 min): cache the binary or install a prebuilt one.
 - **Code behind `cfg` for another target is never compiled on yours.** A `#[cfg(windows)]` branch
   can be broken for months. Check it with `rustup target add x86_64-pc-windows-msvc` and
   `cargo check --target x86_64-pc-windows-msvc`. Keep `unexpected_cfgs` (on since 1.80) at warn or

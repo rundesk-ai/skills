@@ -44,3 +44,8 @@
 - **Gates run in the background** — an owner operating requirement: a long gate run inline blocks
   the agent from further work and from receiving the owner's messages until it ends. Not yet
   benchmarked.
+- **Code citing the rules file, and unapproved edits to it** — observed on a private Rust service
+  (2026-11): comments and tests began citing `AGENTS.md` ("(AGENTS.md: …)"), and agents edited the
+  file without the owner's approval. Rules that code never cites the file and states the reason
+  itself, and that the file changes only after the owner approves the exact diff, stopped both. Not
+  yet benchmarked.
