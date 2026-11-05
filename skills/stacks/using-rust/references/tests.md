@@ -13,8 +13,8 @@ a change.
   Privacy & Security › Developer Tools exempts what it starts (a 67 MB test binary's first start
   went from 0.40 s to 0.01 s); `spctl developer-mode enable-terminal` shows the pane, and the app
   needs a relaunch. That is the owner's machine setting: suggest it, never change it.
-  A binary-only crate cannot be tested by import: move its logic into `lib.rs`. Helpers that `tests/` needs from the crate: see the `test-util`
-  feature in [organization](organization.md).
+  A binary-only crate cannot be tested by import: move its logic into `lib.rs`. Helpers that
+  `tests/` needs from the crate: see the `test-util` feature in [organization](organization.md).
 - **Doctests** run only for library targets, and only under plain `cargo test` or `cargo test --doc`.
   Mark an example `no_run` when it must compile but not execute, and give `ignore` a reason.
 

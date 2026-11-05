@@ -159,6 +159,8 @@ once it spilled to the heap; size the inline capacity from the real distribution
 
 ## Slow builds
 
+- A slow edit-and-test loop on macOS with many `tests/*.rs` files is the first-run scan of every
+  relinked test binary, not the build: see [tests](tests.md).
 - `cargo build --timings` writes an HTML report of which crates take the time; see
   [organization](organization.md) for shaping the crate graph.
 - Generic functions at crate boundaries are compiled again in every caller. Keep a thin generic shim
