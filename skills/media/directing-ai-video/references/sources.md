@@ -14,14 +14,14 @@ and controls change; check the selected model's documentation before relying on 
 ## First and last frame conditioning
 
 - [Veo on Vertex AI — First and last frames](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/video/generate-videos-from-first-and-last-frames): a first frame and optional last frame; clip durations of 4, 6 or 8 seconds; 16:9 or 9:16 output.
-- [Kling — Start and end frames](https://kling.ai/quickstart/ai-video-start-end-frames): "the content of the first and last frame videos should be as similar as possible"; "significant differences may cause a lens switch". Direct provider evidence for never pinning a distant destination as the end frame.
+- [Kling — Start and end frames](https://kling.ai/quickstart/ai-video-start-end-frames): "the content of the first and last frame videos should be as similar as possible"; "significant differences may cause a lens switch". Direct provider evidence against an end frame the motion between cannot plausibly reach.
 - [Luma — Video generation API](https://docs.lumalabs.ai/docs/video-generation): start frame, end frame and both, and a `loop` option. The page gives examples without prose on loop behavior; the same-frame-both-ends loop rule is the portable form, usable on any generator with first and last frame inputs.
 
 ## Large gaps melt in the middle
 
 - [Generative Inbetweening through Frame-wise Conditions (FCVG)](https://arxiv.org/abs/2412.11755): temporal instability from "the ambiguous interpolation path between two key frames ... becomes particularly severe when there is a large motion gap between input frames".
 - [Generative Inbetweening: Adapting Image-to-Video Models for Keyframe Interpolation](https://arxiv.org/abs/2408.15239): distant keyframes are the hard case for coherent in-between motion.
-- [Keyframe divide-and-conquer for large motion](https://arxiv.org/abs/2504.08366): splits a large motion into recursively generated intermediate keyframes until each gap is small. Research form of "one human step at a time".
+- [Keyframe divide-and-conquer for large motion](https://arxiv.org/abs/2504.08366): splits a large motion into recursively generated intermediate keyframes until each gap is small. Research form of splitting a move only where its gap is too large to generate.
 - Together these support judging the middle of a clip, not its endpoints: the endpoints are conditioned and the failure is between them.
 
 ## Chains drift
@@ -60,14 +60,24 @@ source states these; they are the first rules to re-test when models change.
 
 - Subtle by default: movements and expressions sized small unless the brief asks for more, and
   small human expressions (blinks, breaths, a forming smile) rather than theatrical ones.
-- A hold line or do-not line in every prompt, plus the provider's negative-prompt field where one
+- A short keep line in every prompt, plus the provider's negative-prompt field where one
   exists, naming categories of change (nothing appears or disappears, clothing and light unchanged).
   This supersedes an earlier positive-only rule; the caveat that a vivid noun can plant itself on
   models without a negative channel rests on [Black Forest Labs — Negative prompting](https://docs.bfl.ai/guides/prompting_guide_t2i_negative).
   Veo and Kling document negative-prompt inputs.
 
 - Entry, loop and exit clips sharing one rest frame.
-- Changing place one human step at a time, as the practical form of the inbetweening research above.
+- One coherent physical beat per clip, written as plain motion, route and camera with a short keep
+  line, and constraints added only after a take shows the failure. This supersedes an earlier rule
+  of one micro-action per clip, a camera locked on her face, and many limb constraints: in
+  production runs, clips cut into micro-steps stalled and repeated a door reach, while one plainly
+  described walk, door opening and entry with a following camera moved believably. A side-by-side
+  test of prompt styles on the same frames found that a long list of what stays shrank the motion.
+  A change of place is never left for the generator to interpolate across an unexplained gap, as
+  the inbetweening research above shows. A checked end target that the directed, visible route
+  reaches within the clip is allowed: a door opened from the doorstep, a turn and a walk to the
+  far side of the room landed believably on such a target, and the next clip started on that
+  take's real extracted last frame.
 - Judging about one frame per second, and treating similarity scores as a filter, never acceptance.
 - Keeping visible life (breathing, weight shift) in every clip.
 - Generating new versus editing: describe light and camera only for an image with no parent; in an

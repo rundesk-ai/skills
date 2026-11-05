@@ -36,3 +36,11 @@
   existing dead code rather than deleting it. Measured once on a 1,000-line C# case with four
   sequential agents: arms with and without the clause both scored 9-10 of 10, so the benefit is
   unproven at that size.
+- **Workspaces left dirty** — the "leave the workspace clean" hard rule and done item are an owner
+  operating requirement: agents left reconciliation, release and scratch branches, worktrees,
+  temporary files and uncommitted work behind after finishing. The fast-forward note in Git
+  conventions follows from GitHub's [status checks](https://docs.github.com/en/pull-requests/reference/status-checks),
+  which belong to one commit, so a merge commit starts CI again. Not yet benchmarked.
+- **Gates run in the background** — an owner operating requirement: a long gate run inline blocks
+  the agent from further work and from receiving the owner's messages until it ends. Not yet
+  benchmarked.

@@ -1,6 +1,6 @@
 ---
 name: managing-github
-description: Use when work reaches a GitHub issue, pull request or review, release, tag, or deployment-branch step, including after finished development or when a discovered defect may need a duplicate search or an issue. It supplies template, authorization, submission, and stored-result checks for each. Do not use for repository or organization administration, GitHub Actions authoring, or code review with no hosted pull-request operation.
+description: Use when work reaches a GitHub issue, pull request or review, release, tag, deployment-branch, or post-merge branch and worktree cleanup step, including after finished development or when a discovered defect may need a duplicate search or an issue. It supplies template, authorization, submission, and stored-result checks for each. Do not use for repository or organization administration, GitHub Actions authoring, or code review with no hosted pull-request operation.
 ---
 
 # Manage GitHub
@@ -11,8 +11,8 @@ Use one safety contract, then load only the operation reference required by the 
 
 This skill owns externally stored GitHub issues, pull requests, pull-request reviews, releases, and
 their readback. It does not own local implementation, development planning, technical code-review
-judgment, generic branch maintenance, GitHub Actions design, repository settings, permissions,
-rulesets, secrets, or organization administration.
+judgment, branch maintenance beyond the cleanup a task owes, GitHub Actions design, repository
+settings, permissions, rulesets, secrets, or organization administration.
 
 The agent responsible for the overall outcome retains every GitHub mutation. A specialist may return
 a local branch, diff, commit, issue draft, pull-request draft, release recommendation, and evidence;
@@ -85,10 +85,17 @@ silently.
   duplicates; route security reports.
 - [Pull requests](references/pull-requests.md): inspect the review range, prepare or open a pull
   request, select explicit base and head, apply its template, inspect hosted review state, submit an
-  authorized comment, approval, or change request, link issues, and verify stored content and checks.
+  authorized comment, approval, or change request, link issues, verify stored content and checks,
+  merge, and clean up branches and worktrees afterward.
 - [Releases](references/releases.md): discover the repository release contract, choose a compatible
   version and exact tag, prepare or publish a release, verify its target and assets, recover from a
-  failed attempt, or reconcile a live deployment branch.
+  failed attempt, promote a commit without rerunning CI on unchanged content, or reconcile a live
+  deployment branch.
+
+End every task that created a branch, worktree, or pull request by following
+[Leave the workspace clean](references/pull-requests.md#leave-the-workspace-clean): the work is
+merged where it needs to go or handed back for approval by name, and no branch, worktree, or
+temporary file, directory, or project the task created is left behind.
 
 Read multiple operation references only when the request genuinely spans them. Read
 [references/sources.md](references/sources.md) when auditing or changing these GitHub workflow rules.

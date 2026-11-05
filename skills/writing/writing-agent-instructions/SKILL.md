@@ -72,9 +72,10 @@ The order follows a task from start to finish:
    5. Do not contradict the user without evidence: investigate, then answer with what you found. A
       bug the owner reports is real; reproduce it before planning a fix.
 3. **Hard rules** — the ask-first gates (persisted state, dependencies, deletions, commits, this
-   file), then the never-do rules. Each with its reason.
-4. **Git conventions** — only what differs from defaults, including whether agents commit at all
-   and that no machine authorship appears anywhere.
+   file), then the never-do rules, including leaving the workspace clean: no dirty work, unused
+   branch or worktree, or temporary file, directory or project left behind without a word. Each with its reason.
+4. **Git conventions** — only what differs from defaults, including whether agents commit at all,
+   how a commit is promoted to a deploying branch, and that no machine authorship appears anywhere.
 5. **Stack & architecture** — boundaries as what each part owns and must not do. Grep each "must
    not" against the code: if the code already breaks it, write "new code must not…" and name the
    existing exceptions, or drop the row. A table that describes intent as fact teaches agents the
@@ -85,9 +86,10 @@ The order follows a task from start to finish:
    cannot prove "no new warnings". A gate is one line; if a safe form needs a script, propose the
    script to the owner instead of pasting a shell block into the rules. Run the safe form once in a
    scratch copy and compare `git status` before and after: write what you observed, not what you
-   fear. Then the bold **Who runs the app** line: agents build to prove it compiles and hand off;
-   the owner runs the UI, and an agent never verifies it in a browser itself unless the owner says
-   so.
+   fear. A slow gate is run in the background, so the agent keeps working and can still read the
+   owner's messages while it runs. Then the bold **Who runs the app** line: agents build to prove
+   it compiles and hand off; the owner runs the UI, and an agent never verifies it in a browser
+   itself unless the owner says so.
 7. **Documentation duties** — which doc a change must keep true, in the same change, and the file
    where a trap an agent hits is recorded, so the next agent reads it.
 8. **Delegation and review** — when the repository uses other agents; review scaled to risk.
@@ -154,8 +156,9 @@ rule worth having is a check where one can be written.
 The definition of done opens with "Re-read this file and check each item below before calling the
 work done", then lists the evidence a finished task leaves: the named gates that passed,
 observed and not inferred; the test seen failing before the fix; the docs updated in the same
-change; UI handed to the owner with exactly what to look at. Name the gates rather than repeating
-their commands, and keep it to about five items. It ends with the report rule: the reply names what
+change; UI handed to the owner with exactly what to look at; the work merged where it belongs or
+handed back by name, with no branch, worktree or temporary file the task created left behind. Name the gates rather
+than repeating their commands, and keep it to about five items. It ends with the report rule: the reply names what
 was skipped or not checked, and any risk the owner must know.
 
 When a deliberate shortcut is taken, the rules can ask for it to be marked where it lives — a comment

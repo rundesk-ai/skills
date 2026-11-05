@@ -77,6 +77,11 @@ The first five need explicit approval. The rest are not negotiable.
 - **Commits — ask first.** Never commit or push unless told to.
 - **This file — ask first.** `CLAUDE.md` is a byte-identical copy; change both in the same commit.
 - **Never <the repository's costliest mistake>.** <Why, in one clause.> <What to do instead.>
+- **Leave the workspace clean.** End with the work committed, pushed and merged where it belongs,
+  or with exactly what awaits the owner's approval named. Delete every branch and worktree the task
+  created once it is merged or unused, and an earlier one proven merged; list the rest for the
+  owner. Delete every temporary file, directory and scratch project the task created. Never discard or stash work to look clean. Left-behind release and reconciliation branches
+  cost every later agent an investigation.
 - **Never sign work as a machine.** No agent, model or tool name, and no generated-by footer or
   co-author trailer, in any branch, commit, pull request or release. Your runtime may append one by
   default; strip it.
@@ -89,7 +94,9 @@ advice ("write clean code") is not a hard rule.
 ## Git conventions
 
 Only what differs from defaults: the type table for branches, commits and pull-request titles; the
-branch and commit format; which branches deploy. Say a deliberately repeated rule is repeated on
+branch and commit format; which branches deploy, and how a commit reaches them (a fast-forward
+keeps the commit CI already passed; a merge commit runs CI again and later looks like work that
+still needs reconciling). Say a deliberately repeated rule is repeated on
 purpose, and why.
 
 ## Stack & architecture
@@ -114,6 +121,10 @@ from the tree, or framework basics.
 Every command listed is safe to run: it leaves the tree unchanged. When a script bumps a version,
 rewrites tracked build output or applies fixes, give the non-mutating form instead and mark the
 mutating one as release-only.
+
+When a gate or the full suite takes more than a few seconds, add: "Run it in the background
+when your runtime can, and keep working on the task while it runs. A gate run inline blocks
+you from working and from reading the owner's messages. Done still needs its observed result."
 
 Always follow with the bold line: "**Who runs the app:** build to prove it compiles, then hand off —
 the owner runs the UI and judges it. Never open or drive the app in a browser yourself unless the
@@ -142,7 +153,9 @@ reads that file, not this conversation.
 Re-read this file and check each item below before calling the work done.
 
 1. `<check command>` passes — observed, not inferred.
-2. Every rule here held.
+2. Every rule here held, the clean workspace included: no branch or worktree the task created
+   remains, no temporary file or directory it made is left, and unmerged work is handed back by
+   name.
 3. New guaranteed behaviour is proven by a test seen failing without it.
 4. The docs that describe the change are true, and any trap you hit is recorded where the next
    agent will read it. UI is handed to the owner with exactly what to try.

@@ -109,3 +109,29 @@ are labeled separately.
   branch, remote branch, and linked worktree, while preserving default, production, release, and
   shared development branches and stopping on ambiguity or uncommitted work. This is an owner
   operating requirement, not a universal GitHub platform rule.
+- Finishing a task includes cleaning up the whole workspace: the reconciliation, release-prep,
+  and scratch branches, worktrees, temporary files, directories, and projects it created are
+  removed, an earlier branch or worktree is removed only with proof that it merged or holds no
+  commits, and any work still uncommitted, unpushed, or unmerged is reported by name instead of
+  left without a word. This is an owner operating requirement,
+  prompted by agents leaving reconciliation and release branches behind. It is not a GitHub
+  platform rule.
+- Waiting on a workflow happens in the background where the runtime allows, so the wait blocks
+  neither other work nor the owner's messages. This is an owner operating requirement.
+- CI runs once for each change in content: a commit is promoted by fast-forward where policy
+  allows, and an unchanged head is not updated or rerun just to get a fresh run. This is an owner
+  operating requirement. The sources below establish that checks attach to a commit, so a new
+  commit starts them again while the same commit carries them with it.
+
+## CI evidence and content comparison
+
+- GitHub's [Status checks](https://docs.github.com/en/pull-requests/reference/status-checks)
+  documents that status checks and check runs belong to a specific commit. This supports promoting
+  the commit that already passed rather than creating a new merge commit.
+- GitHub's [Events that trigger workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)
+  documents that pull-request activity such as `opened` and `synchronize` triggers `pull_request`
+  workflows. A new pull request can therefore run them again on an unchanged commit, so the skill
+  says to report this rather than prevent it.
+- Git's [`git diff` reference](https://git-scm.com/docs/git-diff) defines `A...B` as the changes on
+  `B` since its merge base with `A`. An empty result proves the deployment branch holds no content
+  that the canonical branch lacks.

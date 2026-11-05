@@ -1,22 +1,23 @@
 ---
 name: directing-ai-video
-description: Use when planning or directing an AI video generator to produce footage of a recurring person or character with a consistent face and natural, believable movement, including one continuous shot or loop built from several short clips, a short reel or sequence of shots with natural cuts, image-to-video, first and last frame clips, entrances, idle loops and exits, extending a clip, or fixing clips that jump, morph, flicker or freeze. It supplies a director's workflow with a plan and shot list before generating, clip chains on real extracted frames, cut grammar, prompts, mid-clip judging, a take log and QC. Do not use it for trimming, colour-matching or cutting together camera footage when no generator is involved, or for in-game sprite animation.
+description: Use when planning or directing an AI video generator to produce footage of a recurring person or character with a consistent face and natural, believable movement, including one continuous shot or loop built from several short clips, a short reel or sequence of shots with natural cuts, image-to-video, first and last frame clips, entrances, idle loops and exits, extending a clip, or fixing clips that jump, morph, flicker or freeze. It supplies a director's workflow with a plain motion brief before generating, clip chains on real extracted frames, cut grammar, prompts, mid-clip judging, a take log and QC. Do not use it for trimming, colour-matching or cutting together camera footage when no generator is involved, or for in-game sprite animation.
 ---
 
 # Directing AI video
 
 The agent here is the director. A video generator follows a short instruction for a few seconds
 and drifts beyond that; it cannot plan a scene, keep a face across shots or decide where to cut.
-Those are the director's job, done on paper before the first generation, then enforced take by take.
+Those are the director's job: decided in a short brief before the first generation, then enforced
+take by take.
 The deliverable is finished footage installed where it is used; a run that ends with nothing
 installed has failed, however many good takes it produced.
 
 ## The workflow at a glance
 
 1. Anchor: an accepted still of the person, at the delivery size and aspect ratio.
-2. Plan: choose the form, write the shot list and a brief for every shot, show it to the owner.
-3. Keyframes: edit each start frame from the anchor or the last accepted frame, one change each.
-4. Generate one clip from its start frame, with a motion-only prompt.
+2. Brief: choose the form, then write the motion, its route through the space and the camera.
+3. Start frame: the last accepted frame; edit a new still only where no real frame exists.
+4. Generate one clip from its start frame, with a plain motion prompt.
 5. Judge it through the middle, not only the ends; log the take and its reason.
 6. On a miss, name the failure and change one thing; after two misses, change the frames or plan.
 7. On a pass, keep it and build on it: extract its exact last frame for the next continuous clip.
@@ -31,27 +32,31 @@ installed has failed, however many good takes it produced.
    a continuous shot joins on identical frames, a reel joins on matched action and direction.
 2. **Read the workflow for that form** before writing a shot:
    [continuous chain](references/continuous-chain.md) or [reel](references/reel.md).
-3. **Write the plan**: purpose and length, the shot list, and a brief for every shot (below). When
-   someone owns the footage, show them the plan before spending generations; changing a line costs
-   nothing, changing a generated chain costs every take after it.
+3. **Write the brief** (below). One continuous scene needs one brief, and the generation can start
+   from it. A reel adds a shot list, shown to whoever owns the footage before generating, because a
+   changed line there costs nothing and a changed sequence costs every shot after it.
 4. **Check what already exists.** A clip that already covers a shot, or nearly does, is reused or
    continued, not generated again.
 
 ## Write the shot brief
 
+Write the motion, route and camera first, plainly, as a person would describe the shot; then one
+short keep line. Add a constraint only after a take shows the failure it prevents: a brief padded
+with precautions shrinks the motion and leaves the generator guessing which line matters.
+
 ```text
-Shot:       entry-02, the courier walks from the door to the counter
-Stays:      the courier (anchor still), uniform, parcel in right hand; shop interior; light
-Moves:      the courier, three unhurried steps forward; breathing and parcel sway
-Camera:     locked, eye level, medium-wide
-Start:      last frame of entry-01, extracted
-End:        free (or: keyframe K3, courier at the counter)
-Acceptance: same face and uniform throughout, parcel never changes hand, no object appears,
-            feet plant and do not slide, joins invisibly to entry-01 and loop-01
+Shot:    entry-02, the courier comes in from the street and sets the parcel down
+Motion:  she pushes the shop door open, walks in at an unhurried pace and puts the parcel on the counter
+Route:   through the door on the left of frame, across the shop floor to the counter at the centre
+Camera:  locked, eye level, medium-wide (or: follows behind her at shoulder height)
+Keep:    the same courier, uniform and parcel; the shop as the start frame shows it
+Start:   last frame of entry-01, extracted        End: free
 ```
 
 ## Make keyframes by editing, not generating
 
+A clip that continues another starts on its real last frame and needs no new still. Make a keyframe
+only where no real frame exists yet: the first shot, a reel's new angle, or a hold a loop must meet.
 Every start, end or pinned frame descends from an accepted still of the person. Make each new
 keyframe by editing the nearest accepted frame, changing one thing (the pose, or the camera angle,
 or the setting), at the exact resolution and aspect ratio of the clip; a mismatched input is
@@ -72,31 +77,38 @@ animates like one.
 ## Prompt the motion only
 
 The start frame already supplies the person, place, light and style. The prompt describes what
-happens next in one or two present-tense sentences, then a **hold line** saying what must not
+happens next in one or two present-tense sentences, then a short **keep line** saying what must not
 change:
 
 ```text
-Good: The courier takes three unhurried steps toward the counter, the parcel swinging slightly in
-      her right hand. Nothing else in the scene changes: no objects or people appear or disappear,
-      her clothes and the parcel stay the same, and the lighting does not change. The camera stays
-      still.
+Good: The courier pushes the shop door open, walks in at an unhurried pace with the parcel in her
+      right hand and sets it on the counter. The camera follows behind her at shoulder height.
+      Same courier, uniform and parcel; nothing appears or disappears; the light does not change.
 
 Bad:  Cinematic 8K shot of a beautiful courier in a detailed shop who walks over, smiles, puts the
       parcel down and looks around as the camera pushes in.
 ```
 
-- **One motion per clip.** Walk, or turn, or sit, never all three; split at a rest point.
-- **State movement as a change of position in the frame**: from where to where, how far ("from the
-  doorway on the left to the desk at the centre, three steps"). A bare verb ("she moves", "drifts")
-  comes back as bobbing in place. Check the subject actually moved before judging anything else.
-- **Lock the camera** unless the shot is the camera move, and say so in every prompt; generators
-  add drift on their own, and a drifting camera breaks the next join or cut.
-- **End every prompt with the hold line**, and put the same list in the generator's negative-prompt
-  field when it has one: no objects or people appear or disappear, clothing, hair and props do not
-  change, the lighting does not change, the camera does not move. Generators fill time with
-  invention, and things arriving from nowhere is their commonest continuity failure. Name the
-  categories of change, not vivid specifics ("no new objects appear", not "no red balloon"): on a
-  model without a negative channel a vivid noun can plant the thing it names.
+- **One physical beat per clip.** A beat is what a person does in one go without stopping: walking
+  down a hall, opening the door on the left and stepping inside is one beat; walking in, sitting
+  down and starting to type is three. Cutting a beat into micro-steps (reach for the handle, grip
+  it, push) restarts the body in every clip, and each restart stalls, repeats or misses the reach.
+  Split a beat only when it will not fit the generator's duration, or a take failed at a span you
+  can name; continue from the accepted part's exact last frame.
+- **State movement as a route through the space**: from where to where, past what, through which
+  door already in the frame ("from the doorway on the left to the desk at the centre"). A bare verb
+  ("she moves", "drifts") comes back as bobbing in place. Check the subject actually moved before
+  judging anything else.
+- **Say what the camera does** in every prompt: "the camera stays still" for holds, loops and
+  gestures, or the move a person filming would make ("the camera follows behind her at shoulder
+  height"). Generators add drift on their own, and an unstated camera drifts and breaks the next
+  join or cut.
+- **End every prompt with a short keep line**, and put the same list in the generator's
+  negative-prompt field when it has one: the same person, clothes and props, nothing appears or
+  disappears, the light does not change. Generators fill time with invention, and things arriving
+  from nowhere is their commonest continuity failure. Name the categories of change, not vivid
+  specifics ("no new objects appear", not "no red balloon"): on a model without a negative channel
+  a vivid noun can plant the thing it names.
 - **Nothing arrives from nowhere.** Everything in the clip is already in the start frame, or enters
   by a visible route the brief names (a door, the frame edge).
 - Reuse the same words for the person and setting in every clip.
@@ -120,9 +132,9 @@ action:
 - **Motion has a cause and an order.** A person shifts weight before stepping, looks before turning,
   reaches before grasping. Describe the movement in that order; a body that moves all at once moves
   like a puppet.
-- **Keep the face toward the camera where you can.** Turns through profile and back are where
-  identity drifts: the face that comes back is a stranger. Keep turns small, or end the clip in
-  profile and check the face before continuing.
+- **Turns cost identity.** A face that turns through profile and back is where identity drifts:
+  the face that comes back is a stranger. In a shot facing her, keep turns small. In a shot that
+  follows her from behind, let the face stay away, and check it against the anchor when it returns.
 - **Keep the whole body in frame, or clearly out of it.** Hands and feet cut by the frame edge
   regrow wrong when they re-enter.
 
@@ -165,15 +177,17 @@ every candidate:
 2. Check each sampled frame against the anchor: the face; five fingers per hand; two arms, two
    legs and two feet attached and bending the right way; no limb through the body or an object;
    garments and props; objects in the scene (none appearing, vanishing or doubling); the light
-   and colour holding steady, with no relight or exposure drift partway through; movements and
-   expressions the size the brief asked for, not bigger.
-3. Watch it at speed for the motion: one action, real speed, feet planted and not sliding, weight
+   and colour holding steady, with no relight or exposure drift partway through; a door that opens
+   on its hinges and stays one door in one wall; movements and expressions the size the brief asked
+   for, not bigger.
+3. Watch it at speed for the motion: the one beat, real speed, feet planted and not sliding, weight
    carried believably, blinks and breathing, no warping, no freeze.
 4. Play it joined to its neighbours: a continuous join must be invisible, a reel cut must feel
    motivated.
 
 Similarity scores between frames are a filter for gross failures, never acceptance; two frames can
-score as near-identical while a hand has six fingers or a door has appeared.
+score as near-identical while a hand has six fingers or a door has appeared. Matching endpoints do
+not pass a clip whose body morphs or jumps across the room between them.
 
 Record every take in the log with its outcome. A clip that passes is kept and built on, never
 regenerated; a later session that cannot see why a take failed generates it again.
@@ -192,12 +206,13 @@ thing in the next take:
 | What failed | Next move |
 |---|---|
 | Face changes mid-clip | Shorter clip; smaller turn; keep the face toward camera and larger in frame; restart from an accepted frame |
-| Hands, feet or limbs break during the action | Slow and simplify the action; describe it limb by limb; keep hands and feet in frame |
+| Hands, feet or limbs break during the action | Slow and simplify the action; name the failing limb and what it does; keep hands and feet in frame |
 | Feet slide, body floats | State the pace and the steps; name where the weight goes and when feet plant |
 | Nothing moves, or it reads as a still | Ask for small concrete life: breathing, blink, weight shift |
-| Too much happens | One action per clip; split at a rest point |
+| Too much happens | Cut what the beat does not need; split at the rest point nearest the failed span |
+| Micro-step clips stall or repeat a reach | Rejoin them into the one beat, with its route and camera, from the last accepted frame |
 | Garment or object pops in or changes | Shorter gap between start and end frame; remove the end frame; name the item in the prompt |
-| Camera drifts | "The camera stays still" in every prompt; a start frame composed for the whole action |
+| Camera drifts | State the camera in every prompt; a start frame composed for the whole action |
 | Jump at a continuous join | Re-extract the exact last frame; check size and rate match |
 
 The same failure twice means change the frames or the plan, not the wording: a closer start frame,
@@ -230,9 +245,10 @@ frame, sampling a clip or joining clips.
 
 ## QC before calling it done
 
-- [ ] A written plan and shot list preceded generation; every clip has a brief.
+- [ ] Every clip had a plain brief (motion, route, camera, keep); a reel's shot list preceded it.
 - [ ] The log has every take, with a reason for each rejection.
-- [ ] Sampled middle frames pass the face, hands, feet, limbs, garments, props and scene checks.
+- [ ] Sampled middle frames pass the face, hands, feet, limbs, garments, props, doors and scene
+      checks; no morph or jump hides behind matching endpoints.
 - [ ] Every clip moves at real speed with planted feet and visible life; none reads as a still.
 - [ ] Continuous joins are invisible and loops play three cycles without a hitch; reel cuts keep
       screen direction and feel motivated.

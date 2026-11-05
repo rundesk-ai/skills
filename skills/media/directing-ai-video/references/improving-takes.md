@@ -77,10 +77,28 @@ After:  She stands behind the desk, breathing slowly, blinking now and then, shi
 A vase appears on the desk at 3 s; the blazer gains a pocket; a second door opens in the wall. The
 end frame was too far from the start frame, and the model filled the gap with invention.
 
-End the prompt with the hold line ("Nothing else in the scene changes: no objects or people appear
+End the prompt with the keep line ("Nothing else in the scene changes: no objects or people appear
 or disappear ..."), and put it in the negative-prompt field when there is one. Then remove the end
-frame, or replace it with one a few seconds of plausible motion away. When the clip
-must reach a distant state, add clips between: each starts on the previous real last frame.
+frame, or replace it with one a few seconds of plausible motion away. When the clip must reach a
+distant place, film the move itself from the start frame, with its route and camera in the prompt;
+pin an end target only where that route visibly reaches it within the clip.
+
+## Micro-steps stall or repeat
+
+A move cut into small clips (step to the door, reach for the handle, grip it, push) bobs in place,
+reaches twice, or misses the handle, and every clip adds a join. Each clip restarts the body, and a
+pinned end a step away leaves no room to travel.
+
+```text
+Before: She lifts her right hand toward the handle of the door on her left. Nothing else in the
+        scene changes. The camera stays still.
+After:  She walks along the corridor behind reception at an unhurried pace, opens the door on the
+        left wall and steps inside. The camera follows behind her at shoulder height. Same woman,
+        blazer and corridor; nothing appears or disappears.
+```
+
+Write the whole beat once, with its route and camera. Judge the door and the clothes through the
+middle as for any take, and split only at the span that failed.
 
 ## Movement or expression too big
 
@@ -98,8 +116,9 @@ After:  A small closed-mouth smile forms as she glances a little to her right to
 A slow push-in nobody asked for, or a pan that leaves the subject. Many models add camera motion
 unless told otherwise, and a prompt rewriter may add it on purpose.
 
-End every prompt with "The camera stays still." When a provider has a prompt-enhancement option,
-check whether it rewrote the camera.
+Say the camera in every prompt: "The camera stays still", or the move you chose ("The camera
+follows behind her at shoulder height"). When a provider has a prompt-enhancement option, check
+whether it rewrote the camera.
 
 ## Prompts for a chain
 
