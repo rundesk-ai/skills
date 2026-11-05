@@ -159,6 +159,8 @@ once it spilled to the heap; size the inline capacity from the real distribution
 
 ## Slow builds
 
+- A slow edit-and-test loop on macOS with many `tests/*.rs` files is the first-run scan of every
+  relinked test binary, not the build: see [tests](tests.md).
 - `cargo build --timings` writes an HTML report of which crates take the time; see
   [organization](organization.md) for shaping the crate graph.
 - Generic functions at crate boundaries are compiled again in every caller. Keep a thin generic shim
@@ -168,7 +170,10 @@ once it spilled to the heap; size the inline capacity from the real distribution
 - Debug builds of heavy dependencies make tests and tools slow:
   `[profile.dev.package."*"] opt-level = 3` made a SHA-256 loop 7.7x and a regex 3.1x faster while
   rebuilding your own crate stays fast. Generic code such as serde's is compiled in your crate's
-  profile and gains little (1.3x).
+  profile and gains little (1.3x). It is not free: on an axum and sqlx service, `opt-level = 2` for
+  dependencies made a clean build 45.6 s instead of 26.2 s and the test suites no faster (18.7 s
+  against 17.8 s). Measure both on the project before keeping it. On macOS, lowering `debug` to
+  `line-tables-only` or `0` gained nothing locally, since debug info stays out of the binary there.
 - Alternating feature sets, `RUSTFLAGS` or lint flags between runs throws away the incremental
   cache. Keep one set of flags per target directory. Cargo 1.99 disables incremental compilation
   when `CI` is set.

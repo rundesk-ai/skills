@@ -93,6 +93,11 @@ loop {
 
 Or move the non-cancel-safe work into its own task fed by a channel.
 
+**`timeout` around a write cancels the write.** When `tokio::time::timeout` fires it drops the
+future, possibly before the query was even sent, so a write meant to persist while the caller moves
+on (serving a response without waiting, say) is silently lost. Spawn the write and time out only the
+wait: `timeout(cap, &mut handle)` on its `JoinHandle` leaves the task running.
+
 **A pinned future that stops being polled while it holds a place in a queue.**
 *Symptom:* the task hangs forever, with no error and no CPU, usually under load.
 *Cause:* `select!` on `&mut fut` where another arm wins and then awaits something. `fut` has already

@@ -58,7 +58,9 @@ Bad:  mock the serializer and call the result an integration test.
 ## Make one case trustworthy
 
 - Arrange only relevant state, perform one action, and assert the contract.
-- Name the condition and behavior; make failures print useful expected and actual values.
+- Name the condition and behavior; make failures print useful expected and actual values. A case
+  that starts a server or process prints that process's warnings and errors when it fails; CI
+  otherwise shows the assertion and never the cause.
 - Cover only material partitions such as normal, empty, invalid, maximum, repeated, unauthorized,
   partial, or concurrent behavior. Take the values from what real producers emit and existing
   consumers accept — alternate representations, missing and malformed among them — not from the

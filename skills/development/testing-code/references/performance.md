@@ -51,14 +51,23 @@ so one improvement does not conceal a regression elsewhere.
    and in parallel proves no state leaks. Shared mutable state buys speed with order dependence.
 4. **Remove waiting, not synchronization.** Replace fixed sleeps with the event or condition that
    establishes completion and retain a diagnostic timeout. Reducing the sleep value only makes the
-   race harder to reproduce.
+   race harder to reproduce. A case that waits out a real production limit, such as a 30-second
+   request timeout, sets the whole suite's wall time: pass the limit in at construction, pin
+   production's value with its own case, and bound the call with an outer timeout so a lost limit
+   fails instead of hanging. That took one suite from 31 s to 18–20 s.
 5. **Move slow external behavior behind an owned boundary.** Unit tests use a maintained fake or
    stub for a remote service; a narrow contract or integration case catches drift. Keep a real local
    dependency when its serialization, transaction, query, filesystem, or process behavior is the
    risk under test.
 6. **Tune concurrency after isolation.** Give workers unique databases, ports, paths, accounts, and
    other mutable resources. Measure worker counts on the actual runner: process startup, memory,
-   database connections, I/O, and CPU oversubscription can make more workers slower.
+   database connections, I/O, and CPU oversubscription can make more workers slower. When several
+   agents and a person share one machine, every heavy run (a build plus the suite, an acceptance
+   suite, coverage, mutation testing) takes one machine-wide lock inside each of the project's own
+   build and test scripts, not a wrapper an agent can skip; a second run waits and prints one line.
+   Concurrent runs collide on a shared database or port, and parallel full builds contend for the
+   same cores, so each runs slower than they would in turn. The stack's own guidance names a runner's
+   collisions and the lock command its platform has.
 7. **Balance shards by time.** Split a suite across CI machines only after one-machine concurrency is
    sound. Historical duration data usually balances better than test counts; new and changed cases
    still need deterministic assignment. Merge reports and prove the union discovered the same suite.
@@ -142,7 +151,10 @@ After optimizing the test work itself, inspect the workflow graph:
 - keep compatibility matrices separate from shards: environments repeat the suite to prove different
   contracts, while shards partition one inventory and must reunite into one complete result;
 - use fail-fast to reduce wasted work after a decisive failure when the remaining failures are not
-  required evidence; distinguish that from making the successful path faster; and
+  required evidence; distinguish that from making the successful path faster;
+- before pushing a fix for a CI job, run that job locally on CI's operating system (its container
+  image and service versions) with fail-fast off: CI under fail-fast shows one failure per push,
+  where two pushes each revealed one new failure and one local Linux run showed all nine; and
 - retain concise failure diagnostics. Removing logs, traces, or reports can reduce upload time while
   increasing the time from failure to correction.
 

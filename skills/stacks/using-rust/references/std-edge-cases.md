@@ -175,3 +175,9 @@ let log = String::from_utf8_lossy(&out.stdout);
 
 - **`Instant` for elapsed time, `SystemTime` for wall-clock time.** `SystemTime` can jump backwards,
   so `duration_since` returns `Err` and must not be unwrapped in a timeout or rate limiter.
+- **Clock precision differs by platform.** `SystemTime::now()` and `Utc::now()` carry nanoseconds on
+  Linux and microseconds on macOS, and Postgres `timestamptz` stores microseconds. A test comparing
+  a clock-derived time with a stored or returned one passes on macOS and fails only on Linux CI
+  (`.632528295Z` against `.632528Z`), and an API promising microseconds leaks nanoseconds. Truncate
+  to microseconds (`trunc_subsecs(6)`) in the test clock and at the boundary that stores or echoes
+  the value.

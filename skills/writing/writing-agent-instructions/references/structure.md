@@ -75,7 +75,10 @@ The first five need explicit approval. The rest are not negotiable.
 - **Dependencies — ask first.** Adding, removing, or version-bumping a <package manager> package.
 - **Deletions — ask first.** Any file outside the task's immediate scope.
 - **Commits — ask first.** Never commit or push unless told to.
-- **This file — ask first.** `CLAUDE.md` is a byte-identical copy; change both in the same commit.
+- **This file — ask first.** Change it only after the owner approves the exact diff. `CLAUDE.md`
+  is a byte-identical copy; change both in the same commit.
+- **Never cite this file in code.** A comment or test states the reason itself, not "(AGENTS.md:
+  …)"; the citation goes stale when the rule moves.
 - **Never <the repository's costliest mistake>.** <Why, in one clause.> <What to do instead.>
 - **Leave the workspace clean.** End with the work committed, pushed and merged where it belongs,
   or with exactly what awaits the owner's approval named. Delete every branch and worktree the task

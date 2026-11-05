@@ -249,6 +249,15 @@ duration; prove the shard union; optimize the CI graph after test work; and acce
 when comparable before/after runs preserve discovery, assertion strength, failure sensitivity, and
 clean regeneration.
 
+- Observed on a private Rust service (2026-11): a case waiting out a 30 s production request
+  timeout set the suite at 31 s; passing the limit in at construction took the suite to 18–20 s and
+  that case to 3 s. Two CI pushes each revealed one new failure under fail-fast, where one local run
+  in CI's Linux image with fail-fast off showed all nine. An acceptance harness that hid the server's
+  log left CI showing only the failed assertion.
+- The machine-wide lock for heavy runs is an owner operating requirement from the same service:
+  concurrent runs by the owner and agents destroyed each other's test databases. That parallel full
+  builds run slower than serial ones follows from contention for the same cores; not measured here.
+
 ## License
 
 Portions are adapted from material published by Rundesk AI under the MIT License.
