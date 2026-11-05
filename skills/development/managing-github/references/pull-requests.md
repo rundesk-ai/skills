@@ -214,6 +214,7 @@ worktree, require a clean status and remove that exact worktree with `git worktr
 force-remove an unclean or locked worktree. Then delete the exact local and remote head refs:
 
 ```sh
+git fetch <base-remote> <base>
 git switch <base>
 git merge --ff-only <base-remote>/<base>
 git branch -D <head>
@@ -226,3 +227,30 @@ the disposable ref is complete; a squash merge is not an ancestor of the updated
 
 Finally, verify the local listing and remote query return no matching ref. Report preserved
 long-lived branches and any cleanup withheld because a guard failed.
+
+## Leave the workspace clean
+
+Finish every task by cleaning up after it, not only after the main pull request. Agents leave
+behind reconciliation, release-prep, retry, and scratch branches and linked worktrees, and every
+later agent then has to work out whether each one still matters.
+
+1. List every branch and worktree the task created, locally and on the remote. Apply the cleanup
+   above to each one whose pull request merged. A branch that ended up unused, with no pull request
+   and no commit beyond its base (`git log <base-remote>/<base>..<branch>` prints nothing), is
+   deleted with `git branch -d` and removed from the remote.
+2. List the other branches and worktrees in the repository. Remove one created earlier, by any
+   agent, only when the same proof holds: a stored merged pull request at its exact head, or no
+   commit beyond its base, a clean worktree, and none of the long-lived roles above. List every
+   other one for the owner, with its last commit and any open pull request, rather than deleting
+   work whose purpose you cannot prove.
+3. Delete every temporary file, directory, clone, and scratch project the task created, inside the
+   repository or outside it, such as body files, logs, downloads, and test copies. Delete only what
+   you know the task created; list anything else you find for the owner.
+4. Check `git status --short` in every worktree you touched. The work must be committed, pushed,
+   and merged where it needs to go. When the owner wants to approve a commit, push, or merge first,
+   stop there and name the exact uncommitted files, unpushed branches, or open pull requests you are
+   handing back. Never discard, stash, or force-remove uncommitted work to make the workspace look
+   clean.
+
+Report what you removed, what you left for the owner and why, and any work still waiting on their
+approval.

@@ -28,15 +28,38 @@ pull-request content and is not work to repeat.
 Do not reopen implementation, delegate another review, rebuild the development plan, or rerun the
 previous exact-head validation merely because release execution has begun. Use one bounded wait
 mechanism for each required post-merge, release, or deployment workflow rather than repeatedly
-polling it. Then do only the release contract's remaining work: select and confirm the version and
+polling it, in the background when the runtime allows, so the wait does not block other work or
+the owner's messages. Then do only the release contract's remaining work: select and confirm the version and
 tag, publish through the repository's automation or documented manual path, verify stored release
 state and artifacts, exercise the required production check, and reconcile a deployment branch only
 when the repository requires it.
 
-A release-only version commit or pull request is new content and must pass its own required gates.
 If the default-branch workflow fails, the release range or tag is uncertain, authorization does not
 cover the exact release, or deployment needs corrective work, report the release blocker and stop.
 Do not turn release administration into an implementation cycle without authority for that work.
+
+## Run CI once per content
+
+Checks attach to a commit, so moving the commit that already passed carries its evidence, and
+every new commit starts CI again, even one with no new content. Promote that commit itself:
+
+- Promote to a production or release branch by fast-forward when the repository allows it, so
+  the branch tip becomes the commit that already passed. A merge commit is a new commit: it runs CI
+  again, and it leaves a commit on that branch that later looks like unreconciled work.
+- Do not update a pull-request branch from its base, rebase it, add an empty commit, or rerun a
+  workflow when that pull request's content has not changed and its required checks already passed
+  on its current head. Do it only when branch protection requires an up-to-date head or a check
+  failed for reasons outside the code.
+- When a new pull request's head is a commit that already passed, as when promoting `main` to
+  `production` in a pull request, a workflow triggered by pull-request events may still run
+  again. That comes from the workflow's configuration. Report it to the owner and propose a
+  fix rather than editing the workflow or bypassing a required check.
+
+Before waiting on CI for a promotion, compare its head with the commit that already passed:
+`git rev-parse <head>^{tree} <passed-commit>^{tree}`. Equal trees mean the content is identical,
+so a failure there comes from the branch, event, or environment, not the code. Report it that way.
+
+A release-only version commit or pull request is new content and must pass its own required gates.
 
 ## Classify the branch before reconciling it
 
@@ -48,9 +71,18 @@ alone:
 - An isolated product-version branch exists to build or support a specific release line.
 
 For a live deployment branch, post-production reconciliation is part of release completion when the
-repository contract requires it. After production verification, fetch both branches, compare the
-deployed commit with the canonical branch, and return deployment-only content through the required
-pull-request, review, and check path. Do not merge the canonical branch into the deployment branch
+repository contract requires it. After production verification, fetch both branches and list what
+the deployment branch holds that the canonical branch does not:
+
+```sh
+git fetch <remote> <canonical> <deploy>
+git diff <remote>/<canonical>...<remote>/<deploy>
+```
+
+Empty output means there is nothing to reconcile, even when promotion left a merge commit on the
+deployment branch. Open no reconciliation branch or pull request for a commit that carries no
+content. Otherwise return only that deployment-only content through the required pull-request,
+review, and check path, on one reconciliation branch for the release. Do not merge the canonical branch into the deployment branch
 and call that reconciliation. Prove the deployed commit is reachable from the updated canonical
 branch; under squash or rebase policy, instead prove no deployment-only content remains.
 
@@ -156,3 +188,8 @@ After a failure, inspect the remote tag, workflow runs, draft, and published rel
 Never delete, move, or recreate a published tag to conceal an error. Follow repository policy for a
 corrective release, or use the next patch under the fallback policy. Report success only with the
 stored URL, tag, target commit, compatibility rationale, and observed verification.
+
+A release is complete only after cleanup. Remove the release-prep, version-bump, and
+reconciliation branches and worktrees the release created once their pull requests have merged,
+following the cleanup in [Pull requests](pull-requests.md). The release and deployment branches
+themselves stay.
