@@ -1,0 +1,287 @@
+{
+ "date": "2026-11-10",
+ "skill": "writing-agent-instructions",
+ "skill_hash": "575f5d8db52eaf89",
+ "cases_version": 1,
+ "score": 0.67,
+ "cases": 8,
+ "runs_per_arm": 3,
+ "agents": {
+  "claude": {
+   "version": "2.1.322",
+   "model": "claude-opus-5-5",
+   "fired": "9/9",
+   "routing": "3/5",
+   "routing_by_case": {
+    "r01-direct": "fired",
+    "r02-indirect": "not fired",
+    "r03-adjacent": "not fired",
+    "r04-out-of-scope": "fired",
+    "r05-edge": "not fired"
+   },
+   "near_miss_fired": true,
+   "better": 2,
+   "same": 1,
+   "worse": 0,
+   "score": 0.67,
+   "quality": {
+    "easy": {
+     "with": 0.76,
+     "without": 0.81,
+     "delta": -0.05,
+     "spread_with": [
+      0.71,
+      0.86,
+      0.71
+     ],
+     "spread_without": [
+      0.71,
+      0.86,
+      0.86
+     ],
+     "judged_better": [
+      "with",
+      "same",
+      "without"
+     ],
+     "verdict": "same",
+     "tokens_with": 206654,
+     "tokens_without": 153422,
+     "value": -0.9,
+     "fails_with": [
+      "conduct.1",
+      "result.5"
+     ],
+     "fails_without": [
+      "conduct.1",
+      "result.5"
+     ]
+    },
+    "medium": {
+     "with": 0.82,
+     "without": 0.41,
+     "delta": 0.41,
+     "spread_with": [
+      0.85,
+      0.77,
+      0.85
+     ],
+     "spread_without": [
+      0.46,
+      0.38,
+      0.38
+     ],
+     "judged_better": [
+      "with",
+      "with",
+      "with"
+     ],
+     "verdict": "with",
+     "tokens_with": 485794,
+     "tokens_without": 141245,
+     "value": 1.2,
+     "fails_with": [
+      "conduct.2",
+      "result.10",
+      "result.8",
+      "result.9"
+     ],
+     "fails_without": [
+      "conduct.2",
+      "result.1",
+      "result.11",
+      "result.2",
+      "result.3",
+      "result.5",
+      "result.7",
+      "result.8",
+      "result.9"
+     ]
+    },
+    "complex": {
+     "with": 0.85,
+     "without": 0.76,
+     "delta": 0.09,
+     "spread_with": [
+      0.91,
+      0.82,
+      0.82
+     ],
+     "spread_without": [
+      0.73,
+      0.82,
+      0.73
+     ],
+     "judged_better": [
+      "with",
+      "with",
+      "with"
+     ],
+     "verdict": "with",
+     "tokens_with": 450513,
+     "tokens_without": 206036,
+     "value": 0.4,
+     "fails_with": [
+      "result.7",
+      "result.9"
+     ],
+     "fails_without": [
+      "conduct.2",
+      "result.2",
+      "result.7",
+      "result.9"
+     ]
+    }
+   }
+  },
+  "codex": {
+   "version": "0.167.0",
+   "model": "gpt-6-astra",
+   "fired": "9/9",
+   "routing": "4/5",
+   "routing_by_case": {
+    "r01-direct": "fired",
+    "r02-indirect": "fired",
+    "r03-adjacent": "not fired",
+    "r04-out-of-scope": "not fired",
+    "r05-edge": "fired"
+   },
+   "near_miss_fired": true,
+   "better": 2,
+   "same": 1,
+   "worse": 0,
+   "score": 0.67,
+   "quality": {
+    "easy": {
+     "with": 0.81,
+     "without": 0.86,
+     "delta": -0.05,
+     "spread_with": [
+      0.86,
+      0.71,
+      0.86
+     ],
+     "spread_without": [
+      0.86,
+      0.86,
+      0.86
+     ],
+     "judged_better": [
+      "same",
+      "without",
+      "same"
+     ],
+     "verdict": "same",
+     "tokens_with": 130065,
+     "tokens_without": 79772,
+     "value": -1.0,
+     "fails_with": [
+      "conduct.1",
+      "result.5"
+     ],
+     "fails_without": [
+      "conduct.1"
+     ]
+    },
+    "medium": {
+     "with": 0.92,
+     "without": 0.31,
+     "delta": 0.62,
+     "spread_with": [
+      0.92,
+      0.92,
+      0.92
+     ],
+     "spread_without": [
+      0.23,
+      0.38,
+      0.31
+     ],
+     "judged_better": [
+      "with",
+      "with",
+      "with"
+     ],
+     "verdict": "with",
+     "tokens_with": 232812,
+     "tokens_without": 260473,
+     "value": -22.4,
+     "fails_with": [
+      "result.10"
+     ],
+     "fails_without": [
+      "conduct.1",
+      "conduct.2",
+      "result.1",
+      "result.11",
+      "result.2",
+      "result.3",
+      "result.5",
+      "result.6",
+      "result.8",
+      "result.9"
+     ]
+    },
+    "complex": {
+     "with": 0.76,
+     "without": 0.55,
+     "delta": 0.21,
+     "spread_with": [
+      0.73,
+      0.64,
+      0.91
+     ],
+     "spread_without": [
+      0.45,
+      0.55,
+      0.64
+     ],
+     "judged_better": [
+      "with",
+      "with",
+      "with"
+     ],
+     "verdict": "with",
+     "tokens_with": 374066,
+     "tokens_without": 141061,
+     "value": 0.9,
+     "fails_with": [
+      "conduct.1",
+      "conduct.2",
+      "result.7",
+      "result.9"
+     ],
+     "fails_without": [
+      "conduct.1",
+      "conduct.2",
+      "result.2",
+      "result.3",
+      "result.6",
+      "result.7",
+      "result.9"
+     ]
+    }
+   }
+  },
+  "grok": {
+   "skipped": "installed (1.0.77) but not run: the skill is also installed for the user on this machine and grok offers no way to hide it, so its without-skill arm would not be a control"
+  }
+ },
+ "cost": {
+  "standing_tokens": 194,
+  "body_tokens": 3600,
+  "references_tokens": 5400,
+  "note": "standing measured on claude with a one-word prompt; body and references estimated at four characters per token"
+ },
+ "judge": "claude-opus-5-5; each with/without pair graded together, arms unlabeled and order randomized, with script-observed facts (files identical, line count, test exit, drift probe); skilled outputs behind the failed items read by hand",
+ "notes": [
+  "First benchmark of this skill. Rubrics frozen before the first run. User-level copies of the skill were hidden from both arms (claude --setting-sources project; codex with a scratch HOME).",
+  "q01 (add one rule): no difference on either agent. Both arms wrote the same rule into both files and fixed the command line that caused the behaviour; the skilled arm cost 35 to 60 percent more tokens and reworded an unrelated definition-of-done item more often.",
+  "q02 (set up a new repository): the skilled arm is better on both agents. From the skill: the section order, the smallest-complete-change rule adapted to the repository's own guards, ask-first gates, non-mutating gate commands, the broken boundary written as 'new code must not' with its exception, and a numbered definition of done. Its files run 131 to 158 lines for about 300 lines of code, against 58 to 67 without.",
+  "q03 (clean up a bloated, drifted file): the skilled arm is better in all six pairs, mostly by reconciling the two copies and adding a drift test; pinned headings were kept by both arms. Skilled failures: never-rules carried from the house template without a reason, 'Every rule here held' as a done item, and a style line or architecture table brought back.",
+  "Rubric bias to know: q02 result.1-2 and q03 result.2 require a byte-identical CLAUDE.md with a check, which is this skill's house rule. Every without-skill run of q02 and three of six of q03 (all on claude) instead made CLAUDE.md a one-line '@AGENTS.md' import, which cannot drift. Without those items the q02 delta stays large (claude 0.79 vs 0.48, codex 0.91 vs 0.36) and the q03 delta on claude disappears (0.83 vs 0.83; codex 0.73 vs 0.60).",
+  "q02 result.10 (names no skill missing from the repository) is unreliable for the skilled arm: deploying the skill for the run puts it in the repository's skills folder, and the files then listed it. The same runs show the skill step written into repositories that ship no skills.",
+  "Routing: claude 3/5, codex 4/5. Claude did not load the skill for r02 (it answered that the rule already existed and added a contract test instead) and loaded it for r04, writing a SKILL.md, which the description declines. Codex loaded it for r05, a support-staff roster, then set it aside.",
+  "Not measured: grok; depth cost per reference (the transcript search cannot tell a reference that was opened from one SKILL.md links to); behaviour of an agent working under the generated file (step 8.6 of the skill)."
+ ]
+}

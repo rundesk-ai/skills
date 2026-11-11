@@ -1,0 +1,7 @@
+CREATE TABLE items (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  unit TEXT NOT NULL,
+  quantity INTEGER NOT NULL CHECK (quantity >= 0),
+  low_at INTEGER NOT NULL DEFAULT 1
+);

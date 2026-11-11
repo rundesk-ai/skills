@@ -1,0 +1,16 @@
+{
+  "name": "tally",
+  "version": "2.4.1",
+  "private": true,
+  "description": "Count lines, words and bytes in files, with JSON output for scripts.",
+  "bin": { "tally": "src/cli.js" },
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test",
+    "lint": "node scripts/lint.js",
+    "build": "node scripts/build.js",
+    "release": "node scripts/release.js"
+  },
+  "license": "MIT"
+}

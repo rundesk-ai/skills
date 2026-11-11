@@ -1,0 +1,4 @@
+CREATE TABLE shopping (
+  item_id INTEGER PRIMARY KEY REFERENCES items(id) ON DELETE CASCADE,
+  added_on TEXT NOT NULL
+);
