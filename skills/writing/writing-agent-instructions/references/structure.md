@@ -25,7 +25,7 @@ Not here: a feature tour, the project's history, the team.
 ```markdown
 ## Before you work
 
-Load light; pull depth only when the task needs it.
+Read only as deep as the task needs; the skills in step 1 are the exception.
 
 1. **Load every skill the work calls for — all of them, in one pass, before anything else.** An
    agent that has started editing has stopped loading. Working on something whose skill you never
@@ -49,10 +49,10 @@ Load light; pull depth only when the task needs it.
    nothing the task did not send you to — improvements are mentioned, not made. Be lazy about the
    solution, never about the change: finish every caller, test, fixture and doc it breaks, and delete
    the code, tests, assets and config it leaves unused; list anything already unused for the owner,
-   since it may be kept on purpose. Never
-   cut validation at trust boundaries, error handling that prevents data loss, security, or
-   accessibility — and code you move or merge keeps its own.
-5. **Do not contradict the user without evidence.** Investigate, then answer with what you found —
+   since it may be kept on purpose. Never cut validation at trust boundaries, error handling that
+   prevents data loss, security, accessibility, or anything the owner asked for — and code you move
+   or merge keeps its own.
+5. **Do not contradict the owner without evidence.** Investigate, then answer with what you found —
    not a hunch, and not agreement you have not checked. A bug the owner reports is real; reproduce
    it before planning a fix.
 ```
@@ -60,9 +60,10 @@ Load light; pull depth only when the task needs it.
 Rows in the skill table name the work the way it arrives ("Anything a person sees or clicks"), not
 the skill's own title. Pair skills on a row when the work needs both, and list each skill once where
 it applies. List the repository's skills folder first; every skill in the table must appear there.
+When the repository ships no skills, leave step 1 and its table out and renumber.
 
-Adapt step 4 to the repository: name its own platform APIs, its data-loss paths and its trust
-boundary in place of the generic nouns. Step 2 names docs, not source files.
+Adapt the smallest-change rule to the repository: name its own platform APIs, its data-loss paths
+and its trust boundary in place of the generic nouns. Step 2 names docs, not source files.
 
 ## Hard rules
 
@@ -81,16 +82,18 @@ The first five need explicit approval. The rest are not negotiable.
   …)"; the citation goes stale when the rule moves.
 - **Never <the repository's costliest mistake>.** <Why, in one clause.> <What to do instead.>
 - **Leave the workspace clean.** End with the work committed, pushed and merged where it belongs,
-  or with exactly what awaits the owner's approval named. Delete every branch and worktree the task
-  created once it is merged or unused, and an earlier one proven merged; list the rest for the
-  owner. Delete every temporary file, directory and scratch project the task created. Never discard or stash work to look clean. Left-behind release and reconciliation branches
-  cost every later agent an investigation.
+  or with exactly what awaits the owner's approval named. Delete every branch, worktree, temporary
+  file, directory and scratch project the task created, and an earlier branch proven merged; list
+  the rest for the owner. Never discard or stash work to look clean. What is left behind costs
+  every later agent an investigation.
 - **Never sign work as a machine.** No agent, model or tool name, and no generated-by footer or
   co-author trailer, in any branch, commit, pull request or release. Your runtime may append one by
   default; strip it.
 ```
 
-Every approval gate's label ends "— ask first". Every never-rule carries its reason. The
+Every approval gate's label ends "— ask first". Keep only the gates this repository has something
+behind — a tool that stores nothing has no persisted-state gate — and make the count in the opening
+line match. Every never-rule carries its reason, a shortened house rule included. The
 repository-specific ones come from what actually went wrong or would be expensive here; generic
 advice ("write clean code") is not a hard rule.
 
@@ -129,7 +132,8 @@ When a gate or the full suite takes more than a few seconds, add: "Run it in the
 when your runtime can, and keep working on the task while it runs. A gate run inline blocks
 you from working and from reading the owner's messages. Done still needs its observed result."
 
-Always follow with the bold line: "**Who runs the app:** build to prove it compiles, then hand off —
+When the repository has an app or interface a person runs, follow with the bold line: "**Who runs
+the app:** build to prove it compiles, then hand off —
 the owner runs the UI and judges it. Never open or drive the app in a browser yourself unless the
 owner asks, and never claim a visual result works without the owner's check."
 
@@ -156,9 +160,9 @@ reads that file, not this conversation.
 Re-read this file and check each item below before calling the work done.
 
 1. `<check command>` passes — observed, not inferred.
-2. Every rule here held, the clean workspace included: no branch or worktree the task created
-   remains, no temporary file or directory it made is left, and unmerged work is handed back by
-   name.
+2. <The two or three rules work here most often breaks> held, and the workspace is clean: no
+   branch or worktree the task created remains, no temporary file or directory it made is left,
+   and unmerged work is handed back by name.
 3. New guaranteed behaviour is proven by a test seen failing without it.
 4. The docs that describe the change are true, and any trap you hit is recorded where the next
    agent will read it. UI is handed to the owner with exactly what to try.

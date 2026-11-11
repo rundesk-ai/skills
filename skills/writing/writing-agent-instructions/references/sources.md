@@ -29,7 +29,7 @@
   all copies or substantial portions of the Software; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT
   WARRANTY OF ANY KIND.
 - **Orphans left by finished changes** — the "delete what it leaves unused; list anything already
-  unused for the owner" clause of step 4 comes from a private multi-project simulation (2026-10)
+  unused for the owner" clause of the smallest-change rule comes from a private multi-project simulation (2026-10)
   whose instructions already carried the full smallest-change rule, yet about two dozen review rounds
   removed helpers, tests, assets and comments whose only caller an earlier change had removed. Its
   review log also held already-unused code for the owner to decide on, which is why the clause lists
@@ -49,3 +49,11 @@
   file without the owner's approval. Rules that code never cites the file and states the reason
   itself, and that the file changes only after the owner approves the exact diff, stopped both. Not
   yet benchmarked.
+- **House lines written where they do not apply** — the first benchmark of this skill (2026-11-10,
+  Claude and Codex, three runs per arm) found skilled files of 131 to 158 lines for about 300 lines
+  of code, a "load the skills" step written into repositories that ship none, house never-rules
+  shortened until their reason was gone, and "Every rule here held" as a done item; on a one-rule
+  edit the skilled arm scored no higher than the control and reworded an unrelated line more often.
+  The rules that scale the file to the code, drop the skill step and inapplicable gates, keep a
+  shortened rule's reason, name checkable done items, and change only the rule asked for come from
+  those runs.
