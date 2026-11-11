@@ -1,0 +1,14 @@
+{
+  "name": "courier",
+  "version": "1.8.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test",
+    "lint": "node scripts/lint.js",
+    "dev": "node src/server.js",
+    "db:migrate": "node scripts/migrate.js",
+    "db:reset": "node scripts/reset.js"
+  }
+}

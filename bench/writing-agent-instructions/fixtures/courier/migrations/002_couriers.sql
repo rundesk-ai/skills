@@ -1,0 +1,1 @@
+CREATE TABLE couriers (id BIGINT PRIMARY KEY, role TEXT NOT NULL);

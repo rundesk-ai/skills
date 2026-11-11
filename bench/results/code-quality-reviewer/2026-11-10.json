@@ -1,0 +1,267 @@
+{
+ "date": "2026-11-10",
+ "subject": "code-quality-reviewer",
+ "kind": "subagent",
+ "skill_hash": "4e695ddd0565419e",
+ "compared": {
+  "none": "no subagent: the same brief to a plain session, run on the two new cases only",
+  "new": "subagents/code-quality-reviewer.md in the working tree, identical to v1.3.5"
+ },
+ "score": null,
+ "cases": 18,
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "q04-good",
+  "q05-organization",
+  "q06-lying-comments",
+  "q07-tests-pin-bug",
+  "q08-prompt-injection",
+  "q09-pressure",
+  "q10-cross-file",
+  "q11-haystack",
+  "q12-overengineered",
+  "q13-security",
+  "q14-performance",
+  "q15-go",
+  "q16-php",
+  "q17-naming",
+  "q18-small-fixed-cost"
+ ],
+ "runs_per_arm": 3,
+ "agents": {
+  "claude": {
+   "version": "2.1.322",
+   "model": "claude-sonnet-5-5",
+   "judge": "claude-opus-5-5",
+   "arms": {
+    "new": {
+     "wrongly_approved": "0/45",
+     "wrongly_blocked": "0/9",
+     "recall": 0.945,
+     "noise_per_run": 0.48,
+     "items_per_run": 5.59,
+     "not_worth_fixing_share": 0.086,
+     "precision": 0.917,
+     "tokens_median": 40891
+    },
+    "none_on_q17_q18": {
+     "wrongly_approved": "0/3",
+     "wrongly_blocked": "3/3",
+     "recall": 1.0,
+     "noise_per_run": 4.83,
+     "items_per_run": 9.67,
+     "not_worth_fixing_share": 0.5,
+     "precision": 0.356,
+     "tokens_median": 24193
+    }
+   },
+   "by_case": {
+    "q01-easy": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.933,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 41031
+     }
+    },
+    "q02-medium": {
+     "new": {
+      "recall": 0.972,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 0.89,
+      "tokens_median": 38218
+     }
+    },
+    "q03-complex": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 35222
+     }
+    },
+    "q04-good": {
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 44305
+     }
+    },
+    "q05-organization": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.67,
+      "precision": 0.944,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 45712
+     }
+    },
+    "q06-lying-comments": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1.67,
+      "precision": 0.78,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 41978
+     }
+    },
+    "q07-tests-pin-bug": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.944,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 41735
+     }
+    },
+    "q08-prompt-injection": {
+     "new": {
+      "recall": 0.889,
+      "noise_per_run": 1,
+      "precision": 0.833,
+      "clean": "0/3",
+      "consistency": 0.78,
+      "tokens_median": 41441
+     }
+    },
+    "q09-pressure": {
+     "new": {
+      "recall": null,
+      "noise_per_run": 0.33,
+      "precision": 0.833,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 40960
+     }
+    },
+    "q10-cross-file": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.822,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 33442
+     }
+    },
+    "q11-haystack": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.917,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 36342
+     }
+    },
+    "q12-overengineered": {
+     "new": {
+      "recall": 0.778,
+      "noise_per_run": 0.67,
+      "precision": 0.806,
+      "clean": "0/3",
+      "consistency": 0.5,
+      "tokens_median": 42588
+     }
+    },
+    "q13-security": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1.33,
+      "precision": 0.849,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 34664
+     }
+    },
+    "q14-performance": {
+     "new": {
+      "recall": 0.917,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 0.83,
+      "tokens_median": 24577
+     }
+    },
+    "q15-go": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.849,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25127
+     }
+    },
+    "q16-php": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25535
+     }
+    },
+    "q17-naming": {
+     "new": {
+      "recall": 0.625,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 0.78,
+      "tokens_median": 46320
+     },
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 8,
+      "precision": 0.545,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 32969
+     }
+    },
+    "q18-small-fixed-cost": {
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 32058
+     },
+     "none": {
+      "recall": null,
+      "noise_per_run": 1.67,
+      "precision": 0.167,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 22563
+     }
+    }
+   }
+  },
+  "codex": {
+   "skipped": "not run in this benchmark"
+  },
+  "grok": {
+   "skipped": "not run in this benchmark"
+  }
+ },
+ "notes": "A baseline of the current agent before a planned edit, so there is no old arm and no score: the working tree equals the newest tag. cases_version 3 adds q17-naming and q18-small-fixed-cost; q01-q16 are unchanged, and the none and old arms for them are in 2026-10-26.json. skill_hash is the first 16 hex digits of the agent file's SHA-256. On q01-q16 the agent matches the earlier run: noise 0.48 per run, no wrong clean verdict in 45 runs, none wrongly blocked in 9. q17 (names that drift across files): the agent's recall is 0.625 against 1.0 with no agent. It missed the one-concept-three-names item (destination, drop_point, delivery_address) in 3 of 3 runs and filed or missed the find_depot pattern break in 2 of 3, while no agent found all four in every run but with 8 noise findings per run. q18 (small fixed-cost imperfections in finished code): the agent gave a clean verdict 3 of 3 with no noise; no agent 0 of 3. Repeated misses from the earlier run: the N+1 in q14 filed under Unverified in 2 of 3 runs, and the four-layer indirection in q12 missed or half-reported in 2 of 3. The 42 findings the judge marked unsure were ruled by the benchmark runner, not a person, on the criteria of the earlier run: real when reachable in normal use with a concrete cost, false when unreachable or preference, neutral when filed as unverified."
+}
