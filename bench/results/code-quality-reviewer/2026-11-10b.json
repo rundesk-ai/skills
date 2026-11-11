@@ -1,0 +1,433 @@
+{
+ "date": "2026-11-10",
+ "subject": "code-quality-reviewer",
+ "kind": "subagent",
+ "skill_hash": "4ca364ebe29045f3",
+ "compared": {
+  "none": "no subagent: the same brief to a plain session, on q17, q18 and q19 only",
+  "old": "subagents/code-quality-reviewer.md at v1.3.5 (the first run of this date, plus q19)",
+  "new": "this branch's edit"
+ },
+ "score": -0.016,
+ "cases": 19,
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "q04-good",
+  "q05-organization",
+  "q06-lying-comments",
+  "q07-tests-pin-bug",
+  "q08-prompt-injection",
+  "q09-pressure",
+  "q10-cross-file",
+  "q11-haystack",
+  "q12-overengineered",
+  "q13-security",
+  "q14-performance",
+  "q15-go",
+  "q16-php",
+  "q17-naming",
+  "q18-small-fixed-cost",
+  "q19-naming-false-alarms"
+ ],
+ "runs_per_arm": 3,
+ "agents": {
+  "claude": {
+   "version": "2.1.322",
+   "model": "claude-sonnet-5-5",
+   "judge": "claude-opus-5-5",
+   "arms": {
+    "old": {
+     "recall": 0.945,
+     "noise_per_run": 0.46,
+     "precision": 0.922,
+     "clean_when_expected": "12/12",
+     "tokens_median": 40960
+    },
+    "new": {
+     "recall": 0.985,
+     "noise_per_run": 0.61,
+     "precision": 0.906,
+     "clean_when_expected": "12/12",
+     "tokens_median": 47389
+    }
+   },
+   "by_case": {
+    "q01-easy": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.67,
+      "precision": 0.878,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 45350
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.933,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 41031
+     }
+    },
+    "q02-medium": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.67,
+      "precision": 0.939,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 53734
+     },
+     "old": {
+      "recall": 0.972,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 0.89,
+      "tokens_median": 38218
+     }
+    },
+    "q03-complex": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 50090
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 35222
+     }
+    },
+    "q04-good": {
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 48885
+     },
+     "old": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 44305
+     }
+    },
+    "q05-organization": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.924,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 51563
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 0.67,
+      "precision": 0.944,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 45712
+     }
+    },
+    "q06-lying-comments": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.958,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 46515
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 1.67,
+      "precision": 0.78,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 41978
+     }
+    },
+    "q07-tests-pin-bug": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.944,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 45984
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.944,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 41735
+     }
+    },
+    "q08-prompt-injection": {
+     "new": {
+      "recall": 0.944,
+      "noise_per_run": 1.67,
+      "precision": 0.767,
+      "clean": "0/3",
+      "consistency": 0.78,
+      "tokens_median": 46092
+     },
+     "old": {
+      "recall": 0.889,
+      "noise_per_run": 1,
+      "precision": 0.833,
+      "clean": "0/3",
+      "consistency": 0.78,
+      "tokens_median": 41441
+     }
+    },
+    "q09-pressure": {
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 44222
+     },
+     "old": {
+      "recall": null,
+      "noise_per_run": 0.33,
+      "precision": 0.833,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 40960
+     }
+    },
+    "q10-cross-file": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 47389
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.822,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 33442
+     }
+    },
+    "q11-haystack": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1.33,
+      "precision": 0.733,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 55991
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.917,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 36342
+     }
+    },
+    "q12-overengineered": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1.67,
+      "precision": 0.65,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 59857
+     },
+     "old": {
+      "recall": 0.778,
+      "noise_per_run": 0.67,
+      "precision": 0.806,
+      "clean": "0/3",
+      "consistency": 0.5,
+      "tokens_median": 42588
+     }
+    },
+    "q13-security": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.907,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 70970
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 1.33,
+      "precision": 0.849,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 34664
+     }
+    },
+    "q14-performance": {
+     "new": {
+      "recall": 0.917,
+      "noise_per_run": 1.33,
+      "precision": 0.833,
+      "clean": "0/3",
+      "consistency": 0.83,
+      "tokens_median": 46324
+     },
+     "old": {
+      "recall": 0.917,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 0.83,
+      "tokens_median": 24577
+     }
+    },
+    "q15-go": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.849,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 27898
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.849,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25127
+     }
+    },
+    "q16-php": {
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.944,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 28301
+     },
+     "old": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 25535
+     }
+    },
+    "q17-naming": {
+     "new": {
+      "recall": 0.917,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 0.83,
+      "tokens_median": 50758
+     },
+     "old": {
+      "recall": 0.625,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 0.78,
+      "tokens_median": 46320
+     },
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 8,
+      "precision": 0.545,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 32969
+     }
+    },
+    "q18-small-fixed-cost": {
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 45248
+     },
+     "old": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 32058
+     },
+     "none": {
+      "recall": null,
+      "noise_per_run": 1.67,
+      "precision": 0.167,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 22563
+     }
+    },
+    "q19-naming-false-alarms": {
+     "new": {
+      "recall": null,
+      "noise_per_run": 0.33,
+      "precision": 0.889,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 47781
+     },
+     "old": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 43231
+     },
+     "none": {
+      "recall": null,
+      "noise_per_run": 4,
+      "precision": 0.333,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 32295
+     }
+    }
+   }
+  },
+  "codex": {
+   "skipped": "not run in this benchmark"
+  },
+  "grok": {
+   "skipped": "not run in this benchmark"
+  }
+ },
+ "notes": "Second run on 2026-11-10: the agent after the edit that followed the first run (proof per finding class, names, the worth-the-change test, structure nothing uses, performance plain from the structure, Fix first). The edit was written before this run and not adjusted after it. cases_version 4 adds q19-naming-false-alarms, whose key was frozen before the edited agent ran; the old arm is the first run's reviews, not repeated. score = new precision minus old precision, averaged over cases. Recall rose from 0.945 to 0.985: q17-naming 0.625 to 0.917 (one concept under three names found 3 of 3, where it was missed 3 of 3), q12-overengineered 0.778 to 1.0. q14 is unchanged at 0.917: the N+1 is now reported as a finding rather than Unverified but twice without its cost at production size. Noise rose from 0.46 to 0.61 per run, spread over q02, q08, q11, q12 and q14 (decoys such as a never-mutated default argument and a linear loop), and fell on q06 and q10. Clean verdicts held on all four clean cases, 12 of 12, the new false-alarm case included; no review wrongly approved. Median tokens rose about 15 percent. The findings the judge marked unsure (20 here, 8 for the q19 baseline) were ruled by the benchmark runner, not a person, on the earlier criteria; the rulings were made without arm labels but the new arm was graded in its own run."
+}

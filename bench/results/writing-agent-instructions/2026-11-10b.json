@@ -1,0 +1,364 @@
+{
+ "date": "2026-11-10",
+ "skill": "writing-agent-instructions",
+ "skill_hash": "a5bcd173a3a20f64",
+ "cases_version": 1,
+ "score": 0.67,
+ "cases": 8,
+ "runs_per_arm": 3,
+ "agents": {
+  "claude": {
+   "version": "2.1.322",
+   "model": "claude-opus-5-5",
+   "fired": "9/9",
+   "routing": "4/5",
+   "routing_by_case": {
+    "r01-direct": "fired",
+    "r02-indirect": "fired",
+    "r03-adjacent": "not fired",
+    "r04-out-of-scope": "fired",
+    "r05-edge": "not fired"
+   },
+   "near_miss_fired": true,
+   "better": 2,
+   "same": 0,
+   "worse": 1,
+   "score": 0.67,
+   "quality": {
+    "easy": {
+     "with": 0.76,
+     "without": 0.81,
+     "delta": -0.05,
+     "spread_with": [
+      0.86,
+      0.71,
+      0.71
+     ],
+     "spread_without": [
+      0.71,
+      0.86,
+      0.86
+     ],
+     "judged_better": [
+      "with",
+      "without",
+      "without"
+     ],
+     "verdict": "without",
+     "tokens_with": 207583,
+     "tokens_without": 153422,
+     "value": -0.9,
+     "fails_with": [
+      "conduct.1",
+      "result.5"
+     ],
+     "against_old_skill": {
+      "new": 0.76,
+      "old": 0.76,
+      "judged_better": [
+       "new",
+       "old",
+       "same"
+      ]
+     },
+     "agents_md_lines": {
+      "new": [
+       33,
+       34,
+       33
+      ],
+      "old": [
+       33,
+       33,
+       33
+      ]
+     }
+    },
+    "medium": {
+     "with": 0.85,
+     "without": 0.44,
+     "delta": 0.41,
+     "spread_with": [
+      0.77,
+      0.92,
+      0.85
+     ],
+     "spread_without": [
+      0.46,
+      0.38,
+      0.46
+     ],
+     "judged_better": [
+      "with",
+      "with",
+      "with"
+     ],
+     "verdict": "with",
+     "tokens_with": 547225,
+     "tokens_without": 141245,
+     "value": 1.0,
+     "fails_with": [
+      "conduct.2",
+      "result.2",
+      "result.8"
+     ],
+     "against_old_skill": {
+      "new": 0.82,
+      "old": 0.79,
+      "judged_better": [
+       "old",
+       "new",
+       "new"
+      ]
+     },
+     "agents_md_lines": {
+      "new": [
+       101,
+       121,
+       106
+      ],
+      "old": [
+       158,
+       137,
+       151
+      ]
+     }
+    },
+    "complex": {
+     "with": 0.82,
+     "without": 0.67,
+     "delta": 0.15,
+     "spread_with": [
+      0.91,
+      0.82,
+      0.73
+     ],
+     "spread_without": [
+      0.64,
+      0.73,
+      0.64
+     ],
+     "judged_better": [
+      "with",
+      "with",
+      "with"
+     ],
+     "verdict": "with",
+     "tokens_with": 410797,
+     "tokens_without": 206036,
+     "value": 0.7,
+     "fails_with": [
+      "result.7",
+      "result.8",
+      "result.9"
+     ],
+     "against_old_skill": {
+      "new": 0.94,
+      "old": 0.82,
+      "judged_better": [
+       "new",
+       "new",
+       "new"
+      ]
+     },
+     "agents_md_lines": {
+      "new": [
+       107,
+       93,
+       97
+      ],
+      "old": [
+       139,
+       126,
+       134
+      ]
+     }
+    }
+   }
+  },
+  "codex": {
+   "version": "0.167.0",
+   "model": "gpt-6-astra",
+   "fired": "9/9",
+   "routing": "4/5",
+   "routing_by_case": {
+    "r01-direct": "fired",
+    "r02-indirect": "fired",
+    "r03-adjacent": "not fired",
+    "r04-out-of-scope": "not fired",
+    "r05-edge": "fired"
+   },
+   "near_miss_fired": true,
+   "better": 2,
+   "same": 1,
+   "worse": 0,
+   "score": 0.67,
+   "quality": {
+    "easy": {
+     "with": 0.86,
+     "without": 0.81,
+     "delta": 0.05,
+     "spread_with": [
+      0.86,
+      0.86,
+      0.86
+     ],
+     "spread_without": [
+      0.86,
+      0.86,
+      0.71
+     ],
+     "judged_better": [
+      "same",
+      "same",
+      "with"
+     ],
+     "verdict": "same",
+     "tokens_with": 127346,
+     "tokens_without": 79772,
+     "value": 1.1,
+     "fails_with": [
+      "conduct.1"
+     ],
+     "against_old_skill": {
+      "new": 0.86,
+      "old": 0.81,
+      "judged_better": [
+       "same",
+       "new",
+       "same"
+      ]
+     },
+     "agents_md_lines": {
+      "new": [
+       33,
+       34,
+       33
+      ],
+      "old": [
+       34,
+       34,
+       34
+      ]
+     }
+    },
+    "medium": {
+     "with": 0.92,
+     "without": 0.41,
+     "delta": 0.51,
+     "spread_with": [
+      0.92,
+      0.92,
+      0.92
+     ],
+     "spread_without": [
+      0.38,
+      0.38,
+      0.46
+     ],
+     "judged_better": [
+      "with",
+      "with",
+      "with"
+     ],
+     "verdict": "with",
+     "tokens_with": 322870,
+     "tokens_without": 260473,
+     "value": 8.2,
+     "fails_with": [
+      "result.10"
+     ],
+     "against_old_skill": {
+      "new": 0.9,
+      "old": 0.87,
+      "judged_better": [
+       "old",
+       "new",
+       "same"
+      ]
+     },
+     "agents_md_lines": {
+      "new": [
+       110,
+       101,
+       103
+      ],
+      "old": [
+       131,
+       143,
+       135
+      ]
+     }
+    },
+    "complex": {
+     "with": 0.7,
+     "without": 0.55,
+     "delta": 0.15,
+     "spread_with": [
+      0.73,
+      0.64,
+      0.73
+     ],
+     "spread_without": [
+      0.45,
+      0.64,
+      0.55
+     ],
+     "judged_better": [
+      "with",
+      "with",
+      "with"
+     ],
+     "verdict": "with",
+     "tokens_with": 368017,
+     "tokens_without": 141061,
+     "value": 0.7,
+     "fails_with": [
+      "conduct.1",
+      "conduct.2",
+      "result.7",
+      "result.9"
+     ],
+     "against_old_skill": {
+      "new": 0.73,
+      "old": 0.73,
+      "judged_better": [
+       "same",
+       "same",
+       "old"
+      ]
+     },
+     "agents_md_lines": {
+      "new": [
+       83,
+       99,
+       84
+      ],
+      "old": [
+       92,
+       88,
+       88
+      ]
+     }
+    }
+   }
+  },
+  "grok": {
+   "skipped": "installed (1.0.77) but not run: the skill is also installed for the user on this machine and grok offers no way to hide it, so its without-skill arm would not be a control"
+  }
+ },
+ "cost": {
+  "standing_tokens": 194,
+  "note": "standing as measured earlier the same day; the description did not change"
+ },
+ "judge": "claude-opus-5-5, arms unlabeled and order randomized, with script-observed facts. Each edited-skill run was graded twice: paired with the same day's no-skill run (with, without) and paired with the same day's old-skill run (against_old_skill).",
+ "notes": [
+  "Second run on 2026-11-10: the skill after the edits that followed the first run. Cases and rubrics unchanged. The without-skill and old-skill runs are the first run's, not repeated; only the edited skill was run again.",
+  "The edits were written before this run and not adjusted after it.",
+  "What changed: files are shorter. Setup files went from 137-158 to 101-121 lines on Claude and 131-143 to 101-110 on Codex; cleanup files from 126-139 to 93-107 on Claude, unchanged on Codex. The 'load the skills' step is gone on Claude where the repository ships none.",
+  "What did not: rubric pass rates against the old skill are within the judge's own run-to-run spread (about 0.1) except the cleanup task on Claude (0.94 vs 0.82, judged better 3 of 3). The one-rule edit is still no better than no skill: 'change only that' did not stop Claude rewording the definition-of-done line about building, which is arguably part of the same fix.",
+  "Still failing with the skill: never-rules without a reason on the cleanup task (mostly 'never commit to main', carried from the old file), Codex replies that do not account for the old file or name what was not checked, and q02 result.10, which stays unreliable because deploying the skill puts it in the repository's skills folder.",
+  "Routing: Claude 4/5 (still loads the skill to write a SKILL.md), Codex 4/5 (still loads it for the support roster). The description did not change, so the move from 3/5 on Claude is run-to-run variation.",
+  "Rubric bias, as before: q02 result.1-2 and q03 result.2 reward the house byte-identical copy over an '@AGENTS.md' import."
+ ]
+}

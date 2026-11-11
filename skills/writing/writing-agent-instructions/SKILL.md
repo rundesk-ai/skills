@@ -36,6 +36,10 @@ the new wording says the same thing. Request every link (`curl -I` or `gh api`);
 every other file carrying the same stale link is named in your reply. A skill the old file names that
 is installed nowhere is reported, not carried over.
 
+**When adding or changing one rule, change only that.** Find what in the file causes the behaviour —
+a command listed as routine, a line that contradicts the new rule — and fix it with the rule. Leave
+every other line as written, and mention what else you would change.
+
 **Report what the code already breaks.** When a rule you write is broken in the code today — an
 active local endpoint, a component crossing a stated boundary — say so in your reply. Writing the
 rule does not fix the code, and the owner needs to know.
@@ -65,15 +69,17 @@ The order follows a task from start to finish:
    1. Load every skill the work needs, in one pass, before editing, from a "The work | Load" table;
       the table is the floor, not the list; load them again after a compaction. List the
       repository's skills folder first: every skill in the table must appear there. A skill
-      installed for the user rather than the repository gets no row.
+      installed for the user rather than the repository gets no row, and a repository that ships
+      no skills gets no skill step at all.
    2. Read the always-read docs, then the area doc when the task enters that area.
    3. Read a file before editing it; search before writing new logic.
-   4. Make the smallest complete change — step 4 below.
-   5. Do not contradict the user without evidence: investigate, then answer with what you found. A
+   4. Make the smallest complete change — the smallest-change rule below.
+   5. Do not contradict the owner without evidence: investigate, then answer with what you found. A
       bug the owner reports is real; reproduce it before planning a fix.
 3. **Hard rules** — the ask-first gates (persisted state, dependencies, deletions, commits, this
-   file), then the never-do rules, including leaving the workspace clean: no dirty work, unused
-   branch or worktree, or temporary file, directory or project left behind without a word. Each with its reason.
+   file), keeping only the gates this repository has something behind; then the never-do rules,
+   including leaving the workspace clean: no dirty work, unused branch or worktree, or temporary
+   file, directory or project left behind without a word. Each with its reason.
 4. **Git conventions** — only what differs from defaults, including whether agents commit at all,
    how a commit is promoted to a deploying branch, and that no machine authorship appears anywhere.
 5. **Stack & architecture** — boundaries as what each part owns and must not do. Grep each "must
@@ -86,17 +92,20 @@ The order follows a task from start to finish:
    cannot prove "no new warnings". A gate is one line; if a safe form needs a script, propose the
    script to the owner instead of pasting a shell block into the rules. Run the safe form once in a
    scratch copy and compare `git status` before and after: write what you observed, not what you
-   fear. A slow gate is run in the background, so the agent keeps working and can still read the
-   owner's messages while it runs. Then the bold **Who runs the app** line: agents build to prove
-   it compiles and hand off; the owner runs the UI, and an agent never verifies it in a browser
+   fear. A gate that takes more than a few seconds is run in the background, so the agent keeps
+   working and can still read the owner's messages while it runs. When the repository has an app
+   or interface a person runs, add the bold **Who runs the app** line: agents build to prove it
+   compiles and hand off; the owner runs the UI, and an agent never verifies it in a browser
    itself unless the owner says so.
 7. **Documentation duties** — which doc a change must keep true, in the same change, and the file
    where a trap an agent hits is recorded, so the next agent reads it.
 8. **Delegation and review** — when the repository uses other agents; review scaled to risk.
 9. **Definition of done** — last, numbered, observed evidence.
 
-Omit a section with nothing specific to say. Worked galleries of good and bad code go in a linked
-file, not an appendix: they are the bulk of every oversized rules file.
+Omit a section with nothing specific to say, and scale the file to the code: a small repository
+with one owner rarely needs Git conventions, Documentation duties or Delegation and review, and its
+file sits well under the range in step 8. Worked galleries of good and bad code go in a linked file,
+not an appendix: they are the bulk of every oversized rules file.
 
 ## 4. Build in the smallest complete change
 
@@ -105,7 +114,8 @@ under-finish: a fixed function with its callers left broken. Every file carries 
 you work that holds both lines, in five parts:
 
 1. List every place the change must reach — callers, tests, fixtures, config, exports — then take
-   the first option that fully works (the ladder).
+   the first option that fully works (the ladder: does it need to exist; is it already here; does
+   the platform or an installed dependency do it; otherwise the least new code).
 2. Add no abstraction, wrapper, option, config or "for later" code nobody asked for; keep the
    structure the code already has, and prefer deleting to adding. This is the part that cuts code:
    a ladder alone stops at "the least new code", and an agent counts a wrapper or an option as part
@@ -115,6 +125,7 @@ you work that holds both lines, in five parts:
    leaves unused — code, tests, assets, config — listing anything already unused for the owner.
 5. Never cut validation, data-loss guards, security, accessibility, or anything the user asked for
    — and code moved or merged keeps its own.
+
 [Structure](references/structure.md) has the house wording to start from.
 
 Keep all five parts, and adapt every generic noun to this repository: its platform APIs instead of
@@ -131,8 +142,9 @@ rule.
   applies it literally and nowhere else.
 - **Say what to do instead** when forbidding something.
 - **Label, rule, reason.** Each hard rule opens with a bold label of two to five words, then the
-  rule, then its reason in one clause — three lines at most. Bold the label, not the sentences; if
-  everything is bold, nothing is. No capitals for emphasis — current models overreact to shouting.
+  rule, then its reason in one clause — five lines at most, and a house rule shortened to fit
+  keeps its reason. Bold the label, not the sentences; if everything is bold, nothing is. No
+  capitals for emphasis — current models overreact to shouting.
 - **Put the costliest mistakes first.** Agents weight earlier instructions more.
 - **Add a rule after a real mistake**, and say what it prevents.
 - **When a rule is duplicated on purpose**, say so and why, so nobody "cleans it up".
@@ -157,9 +169,11 @@ The definition of done opens with "Re-read this file and check each item below b
 work done", then lists the evidence a finished task leaves: the named gates that passed,
 observed and not inferred; the test seen failing before the fix; the docs updated in the same
 change; UI handed to the owner with exactly what to look at; the work merged where it belongs or
-handed back by name, with no branch, worktree or temporary file the task created left behind. Name the gates rather
-than repeating their commands, and keep it to about five items. It ends with the report rule: the reply names what
-was skipped or not checked, and any risk the owner must know.
+handed back by name, with no branch, worktree or temporary file the task created left behind. Name
+the gates rather than repeating their commands, and keep it to about five items. Every item names
+something an agent can check: "every rule here held" alone is not one, so name the rules this
+repository's work most often breaks. It ends with the report rule: the reply names what was skipped
+or not checked, and any risk the owner must know.
 
 When a deliberate shortcut is taken, the rules can ask for it to be marked where it lives — a comment
 such as `shortcut: <the limit>, <when to revisit>` — so a reviewer reads it as a decision, and the
@@ -196,9 +210,14 @@ evidence behind the length, emphasis and ordering advice.
   Fix: keep both halves in one rule. Proof: the rule in the file names callers, tests and docs.
 - **Finishing read as fixing only what breaks.** Symptom: review rounds keep finding helpers, tests,
   assets and config whose only caller an earlier change removed. Cause: "finish the change" covers
-  what fails to compile, and an orphan compiles. Fix: step 4 says to delete what the change leaves
-  unused. Proof: the rule in the file names it.
+  what fails to compile, and an orphan compiles. Fix: the smallest-change rule says to delete what
+  the change leaves unused. Proof: the rule in the file names it.
 - **The ladder kept without what not to add.** Symptom: agents still add a helper, option or wrapper
-  layer and call it the least new code. Cause: step 4 condensed to the ladder, its "add no
-  abstraction, wrapper, option, config or 'for later' code" sentence dropped. Fix: keep that
-  sentence in step 4, naming this repository's own usual over-builds. Proof: the rule names them.
+  layer and call it the least new code. Cause: the smallest-change rule condensed to the ladder,
+  its "add no abstraction, wrapper, option, config or 'for later' code" sentence dropped. Fix: keep
+  that sentence in the rule, naming this repository's own usual over-builds. Proof: the rule names
+  them.
+- **House lines written where they do not apply.** Symptom: a "load the skills" step in a repository
+  that ships none, a "who runs the app" line in a library, a delegation section in a one-person
+  tool, a file twice as long as the code needs. Cause: the house wording copied whole. Fix: keep a
+  line only when this repository gives it something to say. Proof: every line names something here.

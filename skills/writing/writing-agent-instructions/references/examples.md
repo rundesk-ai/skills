@@ -65,8 +65,9 @@ pairs skills, says why it exists, and why loading happens first:
    It is deliberately duplicated here because a description alone does not get read in time.
 ```
 
-**The desktop app** — the smallest-change rule in house wording. Pair it with the "finish everything it
-breaks" half (see Structure) so it cannot be read as permission to skip work:
+**The desktop app** — an older, shorter form holding only the "touch nothing else" part of the
+smallest-change rule. On its own it reads as permission to skip work; the full five-part house
+wording is in Structure:
 
 ```markdown
 4. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
