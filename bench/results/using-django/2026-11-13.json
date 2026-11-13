@@ -1,0 +1,69 @@
+{
+ "date": "2026-11-13",
+ "skill": "using-django",
+ "skill_hash": "da0c9b6529ca49fa",
+ "score": 0.67,
+ "cases": 6,
+ "cases_version": 1,
+ "cases_run": [
+  "q01-easy",
+  "q02-medium",
+  "q03-complex",
+  "r01-direct",
+  "r02-indirect",
+  "r03-near-miss"
+ ],
+ "agents": {
+  "claude": {
+   "version": "2.1.323",
+   "model": "claude-sonnet-5-5",
+   "judge": "claude-opus-5-5",
+   "routing": "3/6 (direct 2/2, indirect 0/2, near miss correctly silent 1/2)",
+   "near_miss_fired": "1/2, loaded then set aside on seeing Flask and Alembic",
+   "fired_on_quality": "6/9 (q01 0/3, q02 3/3, q03 3/3)",
+   "better": 2,
+   "same": 1,
+   "worse": 0,
+   "score": 0.67,
+   "quality": {
+    "q01-easy": {
+     "with": 0.44,
+     "without": 0.42,
+     "runs_per_arm": 3,
+     "spread_with": [0.42, 0.42, 0.5],
+     "spread_without": [0.42, 0.42, 0.42],
+     "verdict": "same",
+     "tokens_with": [182306, 126747, 238136],
+     "tokens_without": [180405, 99383, 125627]
+    },
+    "q02-medium": {
+     "with": 0.94,
+     "without": 0.79,
+     "runs_per_arm": 3,
+     "spread_with": [0.94, 0.94, 0.94],
+     "spread_without": [0.75, 0.88, 0.75],
+     "verdict": "better",
+     "tokens_with": [494571, 219565, 189443],
+     "tokens_without": [141570, 203921, 172848]
+    },
+    "q03-complex": {
+     "with": 1.0,
+     "without": 0.69,
+     "runs_per_arm": 3,
+     "spread_with": [1.0, 1.0, 1.0],
+     "spread_without": [0.67, 0.67, 0.72],
+     "verdict": "better",
+     "tokens_with": [386232, 324204, 548274],
+     "tokens_without": [325550, 301438, 378878]
+    }
+   }
+  },
+  "codex": {
+   "skipped": "installed, not run this time: Claude only to bound cost on the first run"
+  },
+  "grok": {
+   "skipped": "installed, not run this time: Claude only to bound cost on the first run"
+  }
+ },
+ "notes": "Fixture: a runnable Django 6.1.3 / DRF 3.18.3 bookings API on SQLite with deploy traps latent (empty MEDIA_ROOT in .env.example, curl health check on a slim image, inner nginx sending X-Forwarded-Proto $scheme, no DEFAULT_PERMISSION_CLASSES, fields='__all__', an irreversible RunPython, a fallback SECRET_KEY, a role-derived is_staff in User.save()). Each skilled run paired with an unskilled one, copied to anonymous directories, A/B shuffled, graded by a judge that ran pytest and manage.py check itself. q01 (admin staff tick does not stick): the skill fired in no run, so the arms are the same work; one judge verdict favoured the skilled run on a demotion detail, counted here as same. No run in either arm added a regression test or reproduced first. q02 (own-bookings list and double-tap-safe cancel): every run in both arms filtered get_queryset, locked or conditionally updated, and enqueued with on_commit; all six returned 200 rather than a 4xx on a repeat cancel. The skill's fields='__all__' row and its check gate made the difference: all three skilled runs flagged the serializer and reported manage.py check; unskilled runs flagged it once in three and reported check partially. q03 (deploy readiness after a merge broke an import): every skilled run read settings-and-deployment and fixed in code what unskilled runs mostly listed for ops: manage.py check added to CI (3/3 against 0/3), RunPython.noop reverse (3/3 against 0/3 fixed), Python health check with Host and proto, required secret key with check --deploy run. Both arms fixed the nginx header and the import. Routing: the indirect request (http pagination links) was solved correctly in both runs without loading the skill; the easy and indirect cases show the description does not pull in one-step fixes. Cost: mean tokens rose 74% on q02 (one skilled run used 495k; the median rise is 27%) and 25% on q03."
+}
