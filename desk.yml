@@ -9,3 +9,10 @@ processes:
     working_dir: null
     auto_start: false
     env: {}
+skills:
+  - managing-github
+  - testing-code
+  - using-python
+  - writing-agent-instructions
+  - writing-prose
+  - writing-skills
