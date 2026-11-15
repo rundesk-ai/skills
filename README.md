@@ -5,7 +5,7 @@
 **Practical workflows for your coding agent.** Debug a stubborn issue, design an interface, research
 a market, or build a game with reusable guidance for the job.
 
-This open-source catalog contains **72 standalone skills across 8 categories**, plus **4 review
+This open-source catalog contains **73 standalone skills across 8 categories**, plus **4 review
 subagents**. Pick the skills your project needs and use them with an agent that supports `SKILL.md`.
 
 **[Get Rundesk →](https://rundesk.app/)** · [Find a skill](#find-a-skill) ·
@@ -194,11 +194,12 @@ Expand a category to browse its skills. Each link opens the skill's instructions
 ### Languages and stacks
 
 <details>
-<summary><strong>Stacks · 22 skills</strong> — Guidance for the languages, frameworks, databases, and tools you use.</summary>
+<summary><strong>Stacks · 23 skills</strong> — Guidance for the languages, frameworks, databases, servers, and tools you use.</summary>
 
 - **Languages:** [C++](skills/stacks/using-cpp/) · [C#](skills/stacks/using-csharp/) · [GDScript](skills/stacks/using-gdscript/) · [JavaScript and TypeScript](skills/stacks/using-javascript/) · [PHP](skills/stacks/using-php/) · [Python](skills/stacks/using-python/) · [Rust](skills/stacks/using-rust/)
 - **Web:** [Django](skills/stacks/using-django/) · [Inertia](skills/stacks/using-inertia/) · [Laravel](skills/stacks/using-laravel/) · [React](skills/stacks/using-reactjs/) · [Tailwind CSS](skills/stacks/using-tailwindcss/) · [Vue and Nuxt](skills/stacks/using-vuejs/)
 - **Databases:** [MySQL](skills/stacks/using-mysql/) · [PostgreSQL](skills/stacks/using-postgres/) · [SQLite](skills/stacks/using-sqlite/)
+- **Servers:** [Ubuntu Server](skills/stacks/using-ubuntu-server/)
 - **Desktop:** [Electron](skills/stacks/using-electron/) · [Tauri](skills/stacks/using-tauri/)
 - **Games and 3D:** [Axmol](skills/stacks/using-axmol/) · [Blender](skills/stacks/using-blender/) · [Godot](skills/stacks/using-godot/) · [Unreal Engine](skills/stacks/using-unreal-engine/)
 
