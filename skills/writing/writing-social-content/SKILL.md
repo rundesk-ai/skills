@@ -105,7 +105,8 @@ Check in this order:
 2. **Audience value:** one useful message for the actual follower, viewer, searcher, or saver.
 3. **Platform fit:** correct fields, sequence, visual-copy relationship, discovery context, and action.
 4. **Voice:** approved author or brand patterns adapted to the moment without copied catchphrases.
-5. **Language:** clarity, grammar, rhythm, English variant, names, links, and scannability.
+5. **Language:** clarity, grammar, varied rhythm, people or things as the subjects rather than
+   abstractions, no stock glue, English variant, names, links, and scannability.
 6. **Accessibility:** meaning beyond visuals, useful text alternatives, readable hashtags and emoji,
    captions or transcripts where needed, and no essential information conveyed only by style.
 7. **Boundary:** return drafts and requirements as text; do not post, schedule, upload, or engage.

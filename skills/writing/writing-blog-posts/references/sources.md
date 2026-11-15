@@ -21,6 +21,10 @@ The research behind this skill. Read it when a rule here is questioned or needs 
 
 ## AI tells
 - Wikipedia, Signs of AI writing: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+- Jeanette Sherman, *Why "Slop" Looks So Sloppy* (essay): model prose links sentences well but does
+  not build to a point, puts abstractions in the subject slot, and leans on stock connective phrases.
+  The basis of the structural edit building to the owner's point, and of the abstraction and stock-glue
+  tells.
 
 ## Developer blogs (voice and structure models)
 - The owner's picks (Cliff Harris, Andy Sztark, Aaron Francis) and others reviewed, with what each

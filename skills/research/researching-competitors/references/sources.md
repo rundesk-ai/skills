@@ -153,6 +153,14 @@ Ownership of the acquired platforms is corroborated four ways: the
 the seller's 10-K subsequent-events note above, the former owner's own landing-page notice, and the
 shared guidelines' defined operator.
 
+## Writing the return
+
+- Jeanette Sherman, *Why "Slop" Looks So Sloppy* (essay, cited by author and title): a piece that
+  states evidence in parallel and asserts its conclusion at the end leaves the reader to build the
+  argument. With [Digital.gov's plain-language guidance](https://digital.gov/guides/plain-language/writing/clear-short)
+  that a paragraph starts with the sentence that "captures the essence of everything in the
+  paragraph", it supports opening the return with its tiered answer.
+
 ## What is deliberately not cited
 
 - **ISO/IEC 25010** and the **DESMET** evaluation methodology. Both are the obvious standards for

@@ -53,8 +53,11 @@ How the voice asks for action:
 ```
 
 Compression reveals weak voice work: many drafts collapse into `Unlock`, `Transform`, `Discover`,
-or `Game-changing`. Replace generic promotion with the brand's actual relationship, specific offer,
-and concrete value. Voice is not decorative; it determines who feels addressed and what kind of
+or `Game-changing`, an abstraction doing the action (`Efficiency meets simplicity`), or glue that
+performs a turn without making one (`It's not just X, it's Y`). Replace generic promotion with the
+brand's actual relationship, specific offer, and concrete value, said as who does what: the
+customer, the product, the team (`Your installer calls within the hour`, when that is the approved
+term). Voice is not decorative; it determines who feels addressed and what kind of
 promise the advertiser appears to make.
 
 Preserve voice across variants while changing the persuasive hypothesis. A brand does not become a

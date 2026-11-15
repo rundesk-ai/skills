@@ -139,8 +139,18 @@ rule.
 - **Make it checkable.** Name the command, path, value or pattern. "Run `pnpm check` before
   claiming done" is a rule; "keep quality high" is not.
 - **Give the reason in one clause**, or the failure it prevents. An agent given a bare imperative
-  applies it literally and nowhere else.
+  applies it literally and nowhere else. Give the real reason: when the owner did not say why
+  ("we added this after the March incident"), keep their words or ask, never invent a cause; a
+  made-up reason misleads every agent that reads it.
 - **Say what to do instead** when forbidding something.
+- **Write from where the agent stands.** Open a conditional rule with what the agent will see
+  ("When a migration fails on CI…"), not with the history behind it, and name things as the
+  repository does: the real command, directory and term, never the author's shorthand. Make the
+  agent or the component that acts the subject: "CI runs both gates", not "validation is
+  performed".
+- **One term per thing.** Once it is "the gate", it is never "the check" or "the validation"
+  elsewhere in the file; an agent reads a new word as a new thing and applies the rule to one of
+  them. Cut lead-ins such as "It's important to" and "Make sure to"; every session pays for them.
 - **Label, rule, reason.** Each hard rule opens with a bold label of two to five words, then the
   rule, then its reason in one clause — five lines at most, and a house rule shortened to fit
   keeps its reason. Bold the label, not the sentences; if everything is bold, nothing is. No

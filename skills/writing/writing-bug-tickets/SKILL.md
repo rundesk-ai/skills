@@ -90,7 +90,9 @@ dropped. Never mention what you did not do or could not file.
 ## Wording
 
 - **No people's names.** Name the role or the account type. Assignment is a tracker field.
-- **Plain words**, short active sentences, each thing said once.
+- **Plain words**, short active sentences with whoever or whatever acts as the subject — "Outlook
+  users never receive the reset email", not "Email delivery is impacted" — each thing said once. No
+  stock transitions ("Ultimately,", "It's not X, it's Y").
 
 ## Check before handing over
 

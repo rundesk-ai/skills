@@ -64,6 +64,11 @@ change; verify current mechanics when they matter.
   rejects ads or destinations that deceive by omission or misleading product and business
   information. It supports reviewing the whole ad-to-destination promise.
 
+- Jeanette Sherman, *Why "Slop" Looks So Sloppy* (essay) identifies abstractions acting as
+  subjects and stock connective phrases such as `not just X, but Y` as reliable tells of model
+  prose. It supports naming the customer or product as the actor and cutting that glue under
+  compression; it is an essay, not advertising policy.
+
 ## Derived rules and limits
 
 - The message spine, attraction angles, voice card, query-to-destination path, asset roles, and

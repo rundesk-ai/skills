@@ -35,6 +35,9 @@ Defaults for system text in any register; a product's documented voice takes pre
 | Unchosen exclamation marks and emoji in system text | The product's defined feedback style | Prevents accidental tone changes in operational text |
 | Minimizers (simply, just, easily, only) | Omit | They add no recovery information and can understate difficulty |
 | Hedging (`it looks like`, `it seems`, `apparently`) | State what is known | Erodes trust in every other message |
+| An abstraction doing the action (`An error has occurred`, `This setting enables control over reminders`) | The thing that acts and what it does: `Could not connect to the payment provider.`, `Sends a reminder 3 days before the due date.` | The reader needs who or what acted, and on what; an abstract subject hides both |
+| Lead-ins that announce a sentence (`Please note that`, `It's important to`, `In order to`, `Don't worry,`) | Start with the fact or the instruction | The reader scans for the fact, and a lead-in delays it in every message |
+| A category where the value is known (`exceeds the limit`, `some fields`, `recently`) | The value, the field, the date: `exceeds 10 MB`, `Email and Phone`, `on Mar 4` | A specific can be acted on and checked; never fill one the system does not know |
 
 ## 1. Shared mechanics
 

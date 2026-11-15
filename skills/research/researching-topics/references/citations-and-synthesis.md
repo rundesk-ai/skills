@@ -72,7 +72,11 @@ Read once for the decision and once against the evidence:
 - Are fact, inference, recommendation, and uncertainty distinguishable?
 - Are source conflicts and evidence limits represented proportionately?
 - Were current facts, versions, corrections, and persistent links rechecked?
-- Can repetition, source-by-source narration, or decorative detail be removed?
+- Does each finding lead to the next or to the bottom line, rather than sitting in a list any order
+  would fit?
+- Can repetition, source-by-source narration, or decorative detail be removed? Are the subjects
+  the people, organizations and studies that did something ("the 2024 survey found"), not
+  abstractions ("the landscape is shifting"), with stock transitions such as "Ultimately," cut?
 
 Do not claim certainty from source count. Explain confidence through evidence quality, independence,
 agreement, and applicability.

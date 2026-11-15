@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-15",
+  "skill": "writing-prose",
+  "skill_hash": "e4c31c7f588e8efa",
+  "cases_version": 1,
+  "score": 0.33,
+  "cases": 7,
+  "agents": {
+    "claude": {
+      "version": "subagents of Claude Code",
+      "model": "claude-sonnet-5-5 (arms), claude-opus-5-5 (judge)",
+      "fired": "3/3",
+      "routing": "unmeasured",
+      "near_miss_fired": "unmeasured",
+      "better": 1,
+      "same": 1,
+      "worse": 1,
+      "score": 0.33,
+      "quality": {
+        "easy": {"with": 0.67, "without": 0.73, "delta": -0.07, "spread_with": 0.2, "spread_without": 0.6},
+        "medium": {"with": 0.83, "without": 0.83, "delta": 0.0, "spread_with": 0.0, "spread_without": 0.0},
+        "complex": {"with": 0.95, "without": 0.71, "delta": 0.24, "spread_with": 0.14, "spread_without": 0.0}
+      },
+      "tokens_per_run_all_three_cases": {"with": 33366, "without": 29411}
+    },
+    "codex": {"skipped": "not run: arms ran as Claude Code subagents, not agent CLIs"},
+    "grok": {"skipped": "not run: arms ran as Claude Code subagents, not agent CLIs"}
+  },
+  "method": "Three runs per arm, each run doing all three quality cases in one session; the skilled arm saw the description in a skill listing and loaded SKILL.md itself (3/3 loaded, none opened examples.md). One blind judge scored every rubric item 0/1. Routing cases r01-r04 were written but not run in fresh sessions.",
+  "notes": "q01 easy: two of three skilled runs kept a 'several smaller fixes' catch-all from 'fix: misc' and one derived '4x faster'; the control was as good or better. The rule against catch-alls sits only in examples.md, which no run opened. q02 medium: indistinguishable; every run in both arms kept an empty praise line from the notes ('team's been great'), which the skill does not address. q03 complex: every skilled run built a chain and put actors in the subjects, every control wrote parallel bullet reasons with abstract subjects; the coherence and actors sections did it."
+}

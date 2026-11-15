@@ -13,8 +13,14 @@ the trace check matters more than this list.
 - **Avoiding plain verbs.** "serves as", "features", "offers" where "is" or "has" would do.
 - **AI vocabulary.** "delve", "crucial", "intricate", "tapestry", "landscape", "realm", "navigate",
   "foster", "additionally", "moreover", "furthermore".
+- **Abstractions doing the action.** "That number changes everything", "Accumulated shortcuts create
+  friction". Make the subject whoever or whatever acted in the owner's notes: "I", "the build", "my
+  players". When the notes don't say who did it, ask rather than picking someone.
 - **Negative parallelisms.** "It's not just X, it's Y", "not only... but also". The owner sometimes uses a
   plain "X isn't Y. It's Z." in their own words; keep theirs, don't add more.
+- **Stock glue.** Phrases that announce a transition instead of making one: "Here's the thing:",
+  "Honestly?", "Let that sink in.", "Still X. Still Y. Just Z.", "In today's fast-paced world". Keep the
+  links that carry the owner's logic ("because", "so", "which means").
 - **Reflexive triads.** Lists of three added for rhythm when the owner gave two things or four.
 - **Vague attribution.** "experts say", "many developers feel", "studies show" with no source.
 - **Hedging.** "it's worth noting", "generally speaking", "in many cases", "arguably". The owner commits.

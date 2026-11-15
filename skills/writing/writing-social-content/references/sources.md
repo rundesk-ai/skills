@@ -44,6 +44,12 @@ change; verify current mechanics when they matter.
   available beyond decoration. Its web guidance informs social copy but does not document each
   platform's accessibility implementation.
 
+- Jeanette Sherman, *Why "Slop" Looks So Sloppy* (essay) diagnoses model prose as strong on
+  sentence links, weak on building to a point, and flat in rhythm, with abstractions as subjects and
+  stock connective phrases (`Here's the thing`, `Let that sink in`) as reliable tells. It supports
+  the actor-as-subject, stock-glue and varied-rhythm rules in copy and voice; it is an essay, not
+  platform guidance.
+
 ## Derived rules and limits
 
 - `Instagram feed`, `carousel`, `Reel`, `Story`, and `Pinterest Pin` are separated because their

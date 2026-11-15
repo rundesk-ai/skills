@@ -75,6 +75,9 @@ sources and are not a promise of a universal conversion lift.
   supports specific labels, one primary action, visible pending feedback, and protection from
   duplicate submission at both client and server boundaries. Its documented Notify incident links
   double-clicking to duplicate invitations; it does not prescribe one button position for marketing.
+- Jeanette Sherman, *Why "Slop" Looks So Sloppy* (essay) identifies abstractions acting as
+  subjects and stock connective phrases as reliable tells of model prose. It supports writing section
+  copy about what the visitor, provider or product does; it is an essay, not conversion evidence.
 
 ## Forms, errors, and completion
 
