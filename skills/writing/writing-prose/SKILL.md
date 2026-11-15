@@ -1,6 +1,6 @@
 ---
 name: writing-prose
-description: Use when writing, rewriting or reviewing prose a person will read — a doc, README, guide, PRD, proposal, report, summary, email, announcement, release notes, a pull request or issue description, a status update, or any reply longer than a few lines — and when a draft reads as generic, padded, listy or machine-written. It supplies the order of work for a piece that builds to one point, sentences with real actors, varied cadence and real specifics, with checks to run before and after drafting. Do not use for code, code comments, or names and labels inside an interface.
+description: Use when writing, rewriting or reviewing prose a person will read — a doc, README, guide, PRD, proposal, report, summary, email, announcement, release notes, a pull request or issue description, a status update, or any reply longer than a few lines — and when a draft reads as generic, padded, listy or machine-written. It supplies the order of work for a piece that builds to one point, written from the reader's side with real actors and nouns, varied cadence and real specifics, with checks to run before and after drafting. Do not use for code, code comments, or names and labels inside an interface.
 ---
 
 # Writing prose
@@ -10,20 +10,25 @@ cause is usually the same: the sentences link to each other well (**cohesion**),
 not build to a point (**coherence**), and every sentence has the same rhythm (**cadence**). The
 fixes come in that order of importance: **coherence, then cadence, then cohesion.** A reader
 forgives a clumsy sentence around a clear point; polished sentences with no point leave them
-cheated, and no amount of polish rescues that.
+cheated, and no amount of polish rescues that. Underneath all three is perspective: write from
+where the reader sits, about who does what, in the reader's own words.
 
 ## Before drafting
 
 1. **Write the point in one sentence:** what the reader should believe or do by the end. If you
    cannot, you are not ready to draft. Work it out, or ask for it. When the requester gave you a
-   thesis and their reasons, the piece argues that, not a safer consensus version. When you have
-   only a topic, propose a point and say you did; don't write a balanced survey of the topic.
-2. **Name the reader** and what they will do with the text: decide, approve, follow steps, look
-   something up. That decides the form (see [Fit the form](#fit-the-form)).
+   thesis and their reasons, the piece argues that, not a safer consensus version. The point, the
+   angle and the judgment are the requester's to supply: a point you generate from a bare topic
+   drifts to the safe average. With only a topic, ask for the point; when you cannot ask, propose
+   one and say plainly it is your proposal. Never write a balanced survey in its place.
+2. **Name the reader, what they already know, and what they will do with the text:** decide,
+   approve, follow steps, look something up. That decides the form (see
+   [Fit the form](#fit-the-form)) and which words need no explaining.
 3. **List the claims that support the point, strongest first,** then order them as a chain in which
    each depends on the one before: because A, B; because B, C; so the point.
 4. **Find where a skeptical reader stops agreeing,** and plan where the text answers them.
-5. **Decide the ending, then the opening that sets it up.**
+5. **Decide the ending, then the opening that sets it up,** or draft through to the conclusion and
+   then rewrite the opening so it points there.
 
 ## Coherence: build a chain, not a list
 
@@ -34,10 +39,34 @@ rather than earned. Any paragraph could move or go and nothing would break.
   but moves nobody comes out.
 - **Rank the support.** Lead with the strongest reason or build to it on purpose; five reasons given
   equal weight read as no reason.
-- **Answer the objection in the text.** The strongest pieces make the objection part of the
-  conclusion ("the debt work isn't a delay on their requests; it's the fastest route to them").
+- **Shepherd the reader.** Notice where a reader would wander off the path or stop agreeing, and
+  close that path where it opens: answer the objection, or raise an idea and reject it in the open.
+  The strongest pieces make the objection part of the conclusion ("the debt work isn't a delay on
+  their requests; it's the fastest route to them").
 - **Keep every promise.** An analogy, question or setup in the opening pays off later. An ending
   that restates the opening is not a payoff; a callback works only if the middle earned it.
+- **Don't argue in bullets.** A bullet list drops the "because" between claims, so the reader gets
+  parallel assertions and has to build the chain themselves. Bullets are for things that really are
+  parallel: steps, options, a checklist, items to compare.
+
+## Perspective: write from the reader's side
+
+The reader was not there while you worked. They don't know your file names, your ticket numbers,
+the order you tried things in, or the label you coined an hour ago, and nothing in the text tells
+you what they are missing, because to you it all reads as obvious.
+
+- **Lead with what the reader gets, not what you did.** "Exports now finish in under a minute," then
+  how, only if they need the how to trust or repeat it. A report that narrates the work in the order
+  it happened ("First I looked at…, then I tried…") makes the reader dig for the result.
+- **Hold one point of view.** Where the text speaks to the reader, call them "you" and the writer
+  "I" or "we", and keep it. Never call the reader "the user" in text they read, and don't drift
+  between "we", "the team" and "one".
+- **Start from what they know and end on what is new.** Open a sentence with something the reader
+  already has (the thing they asked about, the term from the last sentence), and put the new
+  information last, where a reader puts the weight. The first words of each paragraph and heading
+  carry the point, because a skimming reader reads little else.
+- **Write for the least-informed reader you are writing for.** Define a term the first time it
+  appears, or replace it with the plain words it stands for.
 
 ## Sentences: actors, not abstractions
 
@@ -50,13 +79,28 @@ do, software included:
 - "Our engineers spend three of every ten days working around the old builder."
 - "Once every team uses the same schema, the billing service can drop its translation layer."
 
-Make the subject the one who acts and the verb what they do. "We analyze the data," not "an analysis
+An occasional abstract subject is fine; paragraph after paragraph of them is the tell. Make the
+subject the one who acts and the verb what they do. "We analyze the data," not "an analysis
 of the data is conducted." If you cannot name the actor, you may not understand the claim well
 enough to make it; find out before writing it.
 
-## Cut stock glue
+## Nouns: the reader's words for concrete things
 
-Cut connective phrases that perform a transition without doing one:
+- **Name the thing, not its category.** "The Export button", "the March invoice run", "the two
+  admins at the customer", not "the functionality", "the process", "stakeholders", "the solution",
+  "resources". A category noun marks where a specific should have been.
+- **Use the reader's word,** not the code's or yours: "invoice" when the reader says invoice, even
+  if the table is `billing_documents`. When the reader needs both, as in a developer guide, give the
+  reader's word and the identifier once, together.
+- **One term per thing.** Once it is "the import", it stays "the import", not "the upload", "the
+  sync" and "the ingestion" in turn. A reader assumes a new word means a new thing.
+- **Put the action back in the verb.** "Decide," not "make a decision"; "we migrated the data," not
+  "the migration of the data was performed". A noun made from a verb hides both the action and who
+  did it.
+
+## Cut what performs instead of saying
+
+**Stock glue** is a connective phrase that performs a transition without making one:
 
 - "Not just X, but Y" · "It's not X, it's Y"
 - "Here's the thing:" · "Now for the important part:"
@@ -65,8 +109,27 @@ Cut connective phrases that perform a transition without doing one:
 - "Ultimately," · "At the end of the day,"
 - "In today's fast-paced world…"
 
-Keep the links that carry logic: "because", "so", "which means", a pronoun that points at one
-specific thing, a callback to a term defined earlier.
+Good writers use these devices too; the tell is reaching for them by reflex, several to a piece.
+Default to cutting them, and keep one only where it does a turn the text needs. Keep the links that
+carry logic: "because", "so", "which means", a pronoun that points at one specific thing, a callback
+to a term defined earlier.
+
+The same test, does this sentence tell the reader anything, removes the other tells of machine
+prose:
+
+- **Signposts and wrap-ups:** "In this section, we'll explore…", "It's worth noting that", "In
+  summary,". Say the thing; a summary is earned only by a long piece.
+- **Empty praise and reassurance:** "great progress", "the team has been amazing", "rest assured",
+  "moving in the right direction". Replace with the fact behind it or cut it. A thank-you that names
+  what someone did ("Priya's script cut the validation run from a day to an hour") is a fact; keep
+  it.
+- **Catch-alls:** "various improvements", "and more", "other fixes". Name the items or leave them
+  out.
+- **Hedge stacks and inflation:** "may potentially help to", "truly", "incredibly", "robust",
+  "seamless", "leverage", "delve", "pivotal", "serves as" where "is" would do, adjectives in threes
+  ("fast, reliable and scalable"), and a trailing clause that asserts significance (", highlighting
+  the importance of…"). One honest qualifier where the doubt is real; otherwise the plain claim.
+- **Vague attribution:** "experts say", "studies show", "many users feel". Name who, or drop it.
 
 ## Cadence: length steers attention
 
@@ -75,7 +138,8 @@ Readers skim long sentences and slow down on short ones. Use that on purpose.
 - **Don't hold one rhythm.** Both failures are common: every line a three-word fragment, or every
   paragraph eight dense sentences.
 - **A short sentence or one-line paragraph marks where the reader should stop:** the verdict, the
-  surprising number, the decision, the ask. Once or twice in a piece; every line short means none is.
+  surprising number, the decision, the ask. Once or twice in a piece; every line short means none
+  is.
 - **Let length follow the content.** Explanation, nuance and evidence run long; turns, verdicts and
   asks are short. A brief aside is fine when it serves the point.
 
@@ -90,7 +154,9 @@ and ask, or mark the gap ("[conversion rate?]").
 
 What gets read is what is new to the reader and what serves something they are trying to do. "The
 two features your biggest customer asked for" lands; "customer expectations" does not. A surprise
-needs a payoff; one without it earns a glance and is forgotten.
+works when it breaks a pattern on purpose and then resolves into the point; one without that payoff
+earns a glance and is forgotten. Novelty wears out: a device everyone now uses (the self-deprecating
+hook, a line per sentence, the contrarian opener) is no longer a surprise.
 
 ## Fit the form
 
@@ -108,6 +174,8 @@ The rules hold everywhere; their weight changes with what the reader came to do.
   invoices as CSV", not "CSV export functionality has been introduced"). Lead with what changed for
   them; put the ask or the decision on its own short line where it lands; stop when the point is
   made.
+- **Short-attention forms** (a social post, a headline, the top of a landing page): novelty does
+  the most work. One deliberate pattern break, resolved into the point in the next line.
 - **A summary** states what was found or decided first, then only the support the reader needs to
   trust it. A summary that walks through everything in the order it happened is a log.
 
@@ -121,7 +189,13 @@ the structure and apply these rules to the prose inside it.
 - [ ] **Deletion test.** Does the point survive removing a paragraph? Then cut that paragraph.
 - [ ] **Subject scan.** Read the subject of every sentence. Most should be people or concrete
       things; rewrite each one where an abstraction acts.
-- [ ] **Glue scan.** Search for the stock phrases above and remove them.
+- [ ] **Reader check.** Does the first paragraph give the reader the result, not your process? Is
+      every name, label and abbreviation one this reader already knows or is told once? One point
+      of view throughout?
+- [ ] **Noun scan.** Replace each category noun (functionality, process, solution, stakeholders)
+      with the thing it stands for; one term per thing; verbs back out of nouns.
+- [ ] **Glue scan.** Search for the stock phrases, signposts, empty praise, catch-alls and
+      inflated words above, and remove them.
 - [ ] **Cadence scan.** Are sentence lengths actually varied, and does each short line sit at a
       real point of emphasis?
 - [ ] **Promise check.** Does every setup in the opening pay off?
@@ -130,5 +204,5 @@ the structure and apply these rules to the prose inside it.
 - [ ] **Stance check.** When the task was to argue or recommend, does the piece commit?
 
 Read [Examples](references/examples.md) for worked rewrites (an argument, a doc section, release
-notes and a status email) when rewriting a draft or teaching the difference, and
-[Sources](references/sources.md) when auditing or changing a rule here.
+notes, a status email and a report of finished work) when rewriting a draft or teaching the
+difference, and [Sources](references/sources.md) when auditing or changing a rule here.

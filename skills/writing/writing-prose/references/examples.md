@@ -95,3 +95,32 @@ being described; with none to hand, the line says what changed without a figure.
 What changed: the news comes first, and the ask gets its own short paragraph. "Some challenges"
 became the actual problem and its size. "Great progress" became a count. The writer takes a
 position on the decision rather than listing options.
+
+## Perspective: reporting finished work
+
+The task: tell the person who asked what was done about slow invoice exports.
+
+**Draft** (the writer's side):
+
+> I started by investigating the export functionality. After reviewing the codebase, I identified
+> that the `build_rows` helper was performing an N+1 query against `billing_documents`. I then
+> implemented a solution leveraging `prefetch_related`, which should significantly enhance
+> performance. Additionally, I made various other improvements. Overall, the export process is now
+> more robust and efficient.
+
+**Rewrite** (the reader's side):
+
+> Invoice exports for your largest account now finish in 40 seconds instead of 9 minutes.
+>
+> The export was loading each invoice's line items with a separate database query, about 12,000
+> of them for that account. It now loads them in one. I also fixed the CSV header, which said
+> "Amount (USD)" for accounts billed in euros.
+>
+> I didn't change exports under 1,000 invoices; they were already under five seconds.
+
+What changed: the result the reader cares about comes first, in their word ("invoice exports", not
+"the export functionality" or `billing_documents`). The process shrinks to the one cause they need
+to trust the fix, with the identifier dropped because this reader doesn't need it. "Various other
+improvements" became the one other change, named. "Should significantly enhance" became the
+measured numbers; with none measured, the rewrite would say so rather than promise. The last line
+answers the question the reader would ask next.
