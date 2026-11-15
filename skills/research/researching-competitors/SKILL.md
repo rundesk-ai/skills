@@ -107,6 +107,10 @@ checks.
 
 ## Return
 
+Open with one sentence that answers the question asked, in the asker's terms and with its tier
+("Example Inc. lists seats from $29 and documents SSO; migration tooling is not established"), then
+the record that supports it.
+
 ```text
 Competitor: Example Inc.
 Business:   $X revenue FY2025, two segments, names us among competitors in Item 1
