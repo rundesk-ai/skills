@@ -25,9 +25,14 @@ Do not print all four as a formula. A strong visual may carry recognition; an es
 may need less context; a story may delay the product while preserving its promise. The sequence is
 an audit of why someone would care, not a caption template.
 
-Use concrete nouns and verbs. Cut throat-clearing, vague inspiration, duplicate setup, inflated
-adjectives, and unearned urgency. Short is not automatically clear, and long is not automatically
-substantial. Give the idea the space its surface and audience need, within verified constraints.
+Use concrete nouns and verbs, with the person or thing that acts as the subject: `Support leads now
+answer every channel from one inbox`, not `Efficiency meets simplicity`. Cut throat-clearing, vague
+inspiration, duplicate setup, inflated adjectives, unearned urgency, and stock glue that announces a
+turn without making one: `Here's the thing:`, `Honestly?`, `Let that sink in.`, `It's not X, it's Y`,
+`Still X. Still Y. Just Z.` Vary sentence length on purpose: a line set apart marks the one point
+that matters, and a post that gives every sentence its own line has nothing left to mark. Short is
+not automatically clear, and long is not automatically substantial. Give the idea the space its
+surface and audience need, within verified constraints.
 
 ## Preserve voice without performing it
 

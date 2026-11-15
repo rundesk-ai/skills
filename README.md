@@ -5,7 +5,7 @@
 **Practical workflows for your coding agent.** Debug a stubborn issue, design an interface, research
 a market, or build a game with reusable guidance for the job.
 
-This open-source catalog contains **71 standalone skills across 8 categories**, plus **4 review
+This open-source catalog contains **72 standalone skills across 8 categories**, plus **4 review
 subagents**. Pick the skills your project needs and use them with an agent that supports `SKILL.md`.
 
 **[Get Rundesk →](https://rundesk.app/)** · [Find a skill](#find-a-skill) ·
@@ -125,13 +125,14 @@ Expand a category to browse its skills. Each link opens the skill's instructions
 </details>
 
 <details>
-<summary><strong>Writing · 8 skills</strong> — Turn ideas into posts, copy, tickets, plans, and agent instructions.</summary>
+<summary><strong>Writing · 9 skills</strong> — Turn ideas into clear prose, posts, copy, tickets, plans, and agent instructions.</summary>
 
 - [Advertising copy](skills/writing/writing-advertising-copy/)
 - [Agent instructions](skills/writing/writing-agent-instructions/)
 - [Blog posts](skills/writing/writing-blog-posts/)
 - [Bug tickets](skills/writing/writing-bug-tickets/)
 - [Implementation plans](skills/writing/writing-implementation-plans/)
+- [Prose for people](skills/writing/writing-prose/)
 - [Skills](skills/writing/writing-skills/)
 - [Social content](skills/writing/writing-social-content/)
 - [Task tickets](skills/writing/writing-task-tickets/)

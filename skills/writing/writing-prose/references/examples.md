@@ -1,0 +1,97 @@
+# Examples
+
+Each example shows a draft, a rewrite, and what changed. The figures in the rewrites are
+illustrative; in real work they come from your context or you ask for them.
+
+## An argument: pay down the debt first
+
+The task: argue that a team should pay down technical debt before building features.
+
+**Draft** (cohesive, incoherent):
+
+> Technical debt represents a significant challenge for modern engineering organizations.
+> Accumulated shortcuts create friction across the development lifecycle. Velocity suffers as
+> complexity compounds. Meanwhile, customer expectations continue to evolve, and competitive
+> pressure demands rapid iteration. Investing in code quality unlocks long-term scalability.
+> Ultimately, prioritizing technical debt is not just a technical decision, but a strategic one.
+
+**Rewrite:**
+
+> Last quarter, our engineers spent three of every ten days working around the old campaign builder
+> instead of improving it. Each new feature took longer because someone first had to trace which of
+> four duplicate send functions was actually live. If we spend the next sprint collapsing those into
+> one, every feature after that gets cheaper, including the two our biggest customer is asking for.
+> So the debt work isn't a delay on their requests.
+>
+> It's the fastest route to them.
+
+| | Draft | Rewrite |
+|---|---|---|
+| Subjects | Abstractions: debt, shortcuts, velocity, investing | Actors: engineers, someone, we |
+| Structure | Five parallel claims, conclusion asserted | A chain: time lost, why, the fix, the payoff |
+| Specifics | None; nothing can be checked | Numbers a reader could verify |
+| Cadence | One medium rhythm, closed with "not just X, but Y" | A long build, then one short line where the point lands |
+| Objection | Ignored | "Debt delays the customer" becomes the conclusion |
+
+## Reference: a setup section
+
+**Draft:**
+
+> Environment configuration is an important aspect of getting the project running. Various
+> settings can be adjusted to accommodate different workflows. It is worth noting that the database
+> connection must be configured prior to running migrations, and that the test suite relies on a
+> separate database.
+
+**Rewrite:**
+
+> Copy `.env.example` to `.env` and set `DATABASE_URL` to your local database. Run `make migrate`;
+> it fails with "connection refused" until the database is running.
+>
+> The tests use their own database, set by `TEST_DATABASE_URL`, so running them never touches your
+> local data.
+
+What changed: the reader is the actor and the first sentence is the first thing they do. Exact
+names replace "various settings". The likely failure is named with the error they will see. "It is
+worth noting" and "an important aspect" are gone; no stance was needed, only the default.
+
+## Short form: release notes
+
+**Draft:**
+
+> - Enhanced export functionality to provide greater flexibility.
+> - Various performance improvements and bug fixes.
+> - Improved the user experience of the settings page.
+
+**Rewrite:**
+
+> - You can now export invoices as CSV from the Invoices page.
+> - Search results load in about a second on accounts with 10,000+ contacts, down from five.
+> - Fixed: saving Settings no longer signs you out on Safari.
+
+What changed: each line is one change, with the reader as the actor and what they can now do or
+no longer suffer. "Various improvements" is either named or cut. The numbers come from the release
+being described; with none to hand, the line says what changed without a figure.
+
+## Short form: a status email
+
+**Draft:**
+
+> Hi all, I wanted to give a quick update on where things stand with the migration. The team has
+> been making great progress across multiple workstreams. There have been some challenges with the
+> data validation piece, but overall things are moving in the right direction. Ultimately, we remain
+> committed to delivering a high-quality outcome.
+
+**Rewrite:**
+
+> The migration will finish on 4 December, a week later than planned.
+>
+> 38 of 41 tables are moved. The other three hold invoice history, and 2% of their rows fail
+> validation because of currency codes that predate 2019. We are mapping those codes by hand this
+> week.
+>
+> I need one decision by Friday: do we migrate the 2% as-is and flag them, or hold the cutover until
+> they are clean? I'd flag them; finance has confirmed nobody reports on those rows.
+
+What changed: the news comes first, and the ask gets its own short paragraph. "Some challenges"
+became the actual problem and its size. "Great progress" became a count. The writer takes a
+position on the decision rather than listing options.

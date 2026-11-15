@@ -85,9 +85,11 @@ High-intent visitors may need an action immediately plus concise proof and quali
 awareness or higher-risk decisions may need explanation, evidence, process, and objection handling
 before the form. A long page is not automatically bad; an unstructured or repetitive page is.
 
-Keep each section answerable from its heading. Frontload the information-bearing words. Use short
-paragraphs, bullets, comparison or process structure only when it helps the visitor decide. Do not
-write every section as a slogan followed by generic marketing copy.
+Keep each section answerable from its heading. Frontload the information-bearing words. Write what
+the visitor, the provider or the product does (`A licensed installer reviews your answers and sends
+quotes`), not what an abstraction does (`Quality meets convenience`). Use short paragraphs, bullets,
+comparison or process structure only when it helps the visitor decide. Do not write every section as
+a slogan followed by generic marketing copy or stock glue such as `It's not just X, it's Y`.
 
 ## Choose a layout around the conversion mode
 

@@ -57,6 +57,9 @@ Verified 7 August 2026 against the linked pages.
 - [ACRL Framework: Research as Inquiry](https://www.ala.org/acrl/standards/ilframework#research)
   — basis for organizing information meaningfully, synthesizing sources, drawing reasonable
   conclusions, and keeping disagreement visible as part of the scholarly conversation.
+- Jeanette Sherman, *Why "Slop" Looks So Sloppy* (essay) — basis for the audit lines on a chain of
+  findings rather than a reorderable list, people and studies as subjects rather than abstractions,
+  and cutting stock transitions that link sentences without doing work.
 
 ## Good/bad pairs
 

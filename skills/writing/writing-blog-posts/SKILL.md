@@ -17,7 +17,7 @@ This matters more here than in most places. The owner writes for developers and 
 
 3. **Pick the edit level.** Use the lightest level that gets the piece there:
    - Already a draft in prose: line edit and copyedit. Keep structure unless it's genuinely confusing.
-   - Notes or bullets: structural edit. Order the owner's points, turn them into flowing paragraphs in their voice, with headings only if it's a post a reader navigates (see [Notes should become prose](#notes-should-become-prose-not-tidied-bullets)). The sentences can be new; the content can't.
+   - Notes or bullets: structural edit. Find the point the owner is making, then order their points so each leads to the next and the post builds to it; when you can't tell what the point is, ask in the report rather than picking one. Turn them into flowing paragraphs in their voice, with headings only if it's a post a reader navigates (see [Notes should become prose](#notes-should-become-prose-not-tidied-bullets)). The sentences can be new; the content can't.
    - Devlog notes: see [devlogs](references/devlogs.md).
 
 4. **Edit.** Follow [the one rule](#the-one-rule-add-nothing-the-owner-didnt-give-you) and [sound like a person](#it-has-to-sound-like-a-person-wrote-it) below. Keep their stance at the same strength. Remove the AI tells in [AI tells](references/ai-tells.md). Follow the voice guide's rules.
@@ -63,7 +63,7 @@ When there's tension between "polished" and "sounds like them", pick "sounds lik
 
 Faithful isn't the same as finished. A common miss is keeping one sentence per line in the order the bullets came, which reads like cleaned-up notes rather than a post. The job is to make the owner's points flow the way they'd say them out loud.
 
-- Join related points into real paragraphs of two to four sentences. Use the owner's own words, and connect them with small joining words ("so", "but", "and that's the thing", "which is why") only where the link between the two points is already in the notes. A joining word must not create a reason, cause, or conclusion the owner didn't give.
+- Join related points into real paragraphs of two to four sentences. Use the owner's own words, and connect them with small joining words ("so", "but", "which is why") only where the link between the two points is already in the notes. A joining word must not create a reason, cause, or conclusion the owner didn't give.
 - Vary the rhythm: a longer sentence that carries the reasoning, then a short one that lands it. One-line paragraphs are for emphasis, not the default: one or two in a whole post. If most of your paragraphs are a single sentence or map one-to-one onto the owner's bullets, merge again.
 - Short notes make a short post, and that's fine. Short isn't the problem; choppy is. A 250-word post in three real paragraphs reads better than the same words in nine fragments.
 - Headings only where they help a reader navigate. An opinion or story post (the owner sharing a take, a frustration, a lesson) gets no headings by default: it runs as one piece, joined by spoken transitions built from the owner's lines ("And PRs are where I notice it most"), with at most one `---` before the closing thought. Headings belong in posts a reader jumps around in: tutorials, comparisons, reference lists, long build stories, postmortems. A heading every couple of paragraphs makes a blog post read like a website with sections, and each one resets the voice. Never put a heading over a single short paragraph, and don't add headings to a draft the owner already wrote as flowing prose.

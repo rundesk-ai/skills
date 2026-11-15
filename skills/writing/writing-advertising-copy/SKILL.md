@@ -103,7 +103,8 @@ Audit in this order:
 
 1. **Offer truth:** identity, terms, availability, price, state, action, and destination.
 2. **Audience relevance:** recognizable intent, need, desire, objection, and vocabulary.
-3. **Attraction:** a specific supported value and reason to believe, not generic hype.
+3. **Attraction:** a specific supported value and reason to believe, with the customer or product
+   as the actor, not generic hype or an abstraction doing the action.
 4. **Voice:** recognizable brand or author under compression, without copied phrases.
 5. **Message match:** query or placement, ad promise, CTA, and destination agree.
 6. **Asset system:** fields fit current limits; combinations work; variants test real differences.

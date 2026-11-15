@@ -111,7 +111,9 @@ the notes that matter.
 - **No people's names.** Name the role or place. Assignment is a tracker field, and a name in the
   body goes stale when the work changes hands.
 - **Plain words** for someone outside engineering, everywhere but the technical notes; expand an
-  acronym or drop it. Short active sentences, no hedging. Say each thing once.
+  acronym or drop it. Short active sentences with the user or a concrete thing as the subject —
+  "Brokers ask support for the lead list every month", not "Manual processes create friction" — no
+  hedging, no stock transitions ("Ultimately,", "not just X, but Y"). Say each thing once.
 
 ## Leave out
 

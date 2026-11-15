@@ -22,6 +22,15 @@ The public guidance behind the rules, each narrowed to the audience and ecosyste
   across Microsoft admin products; the authors conclude that consistent terminology and content
   patterns improve predictability and scanning. The evidence concerns those products, not every
   audience.
+- Jeanette Sherman, *Why "Slop" Looks So Sloppy* (essay, cited by author and title; no online copy
+  located on 2026-11-15) diagnoses model-written text as abstractions acting as subjects, stock
+  connective phrases that perform a transition without doing one, and vague claims that cannot be
+  checked. The voice defaults' rows on abstract subjects, lead-ins and categories in place of known
+  values apply that diagnosis to interface text.
+- [Digital.gov, Writing for understanding](https://digital.gov/guides/plain-language/writing)
+  states that "Active voice makes it clear who should do what" and that the actor should be the
+  subject. This supports naming the thing that acts in errors and help text; the product's chosen
+  voice still decides whether the system speaks as "we".
 
 ## Accessibility
 
