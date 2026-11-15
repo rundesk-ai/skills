@@ -13,6 +13,10 @@ forgives a clumsy sentence around a clear point; polished sentences with no poin
 cheated, and no amount of polish rescues that. Underneath all three is perspective: write from
 where the reader sits, about who does what, in the reader's own words.
 
+Scrubbing the tics (the em dashes, "not X, but Y", "honestly?") does not fix this. Text with every
+tic removed still reads as machine-made when it has no point, no chain and one rhythm, because those
+live in the structure of the whole piece, not in any sentence.
+
 ## Before drafting
 
 1. **Write the point in one sentence:** what the reader should believe or do by the end. If you
@@ -38,7 +42,9 @@ rather than earned. Any paragraph could move or go and nothing would break.
 - **Every paragraph moves the reader toward the point.** A paragraph that is true and interesting
   but moves nobody comes out.
 - **Rank the support.** Lead with the strongest reason or build to it on purpose; five reasons given
-  equal weight read as no reason.
+  equal weight read as no reason. Judge strength by this reader: the reason that touches what they
+  are trying to do, or answers what they would object to, beats the one that sounds most general.
+  When you cannot tell, ask the requester which reason carries the argument.
 - **Shepherd the reader.** Notice where a reader would wander off the path or stop agreeing, and
   close that path where it opens: answer the objection, or raise an idea and reject it in the open.
   The strongest pieces make the objection part of the conclusion ("the debt work isn't a delay on
@@ -181,6 +187,27 @@ The rules hold everywhere; their weight changes with what the reader came to do.
 
 When a form has its own required structure (a template, a ticket shape, a platform's fields), keep
 the structure and apply these rules to the prose inside it.
+
+## Improving a draft
+
+The same rules apply when the text already exists, yours or someone else's, but the order matters
+more: coherence is a property of the whole piece, so no amount of sentence editing creates it.
+Work from the outside in, and don't polish a paragraph you may cut.
+
+1. **Find the draft's point.** Write it in one sentence. If the draft has none, that is the
+   finding; ask the author for it, or propose one and say so, before touching a sentence.
+2. **Fix the structure.** Write one line per paragraph saying what it claims, then run the shuffle
+   and deletion tests on that outline. Reorder into a chain, cut what moves nobody, add the missing
+   objection, and check the opening's promises against the ending.
+3. **Set the cadence.** Find the one or two places the reader must stop, and land them short; let
+   the explanation around them run long.
+4. **Then the sentences:** subjects, nouns, perspective, and the performative phrases, last.
+5. **Keep what is the author's:** their point, their facts and their voice. Never add a claim,
+   number or name they did not give; mark the gap instead.
+
+When asked to review rather than rewrite, report in the same order: whether the piece has a point
+and a chain first, then cadence, then sentence-level fixes, each with the passage quoted and the
+change it needs. A review that lists only phrase-level edits has skipped the part that matters.
 
 ## After drafting, run the checks
 

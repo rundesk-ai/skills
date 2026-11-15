@@ -136,6 +136,12 @@ foresee; an agent given a bare imperative applies it literally and stops there. 
 NEVER in capitals is usually a sentence missing its reason — add the failure it prevents, and the
 emphasis becomes unnecessary.
 
+**Write from where the agent stands.** It reads the skill mid-task, looking for what to do next:
+open each step with what it will see or decide, make the agent or the thing that acts the subject
+("the installer reads frontmatter as YAML", not "frontmatter parsing is performed"), and keep one
+term per thing through every file, because an agent reads a new word as a new concept. Cut lead-ins
+such as "It's important to" and "Make sure to"; they cost every load and change nothing.
+
 - Keep the core procedure, one strong default and the non-obvious traps in `SKILL.md`.
 - Give exact commands for fragile operations; give judgment where several approaches work.
 - Introduce every reference with when to read it. Keep one source of truth and link rather than

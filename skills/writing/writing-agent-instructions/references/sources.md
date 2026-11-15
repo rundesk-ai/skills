@@ -57,3 +57,13 @@
   The rules that scale the file to the code, drop the skill step and inapplicable gates, keep a
   shortened rule's reason, name checkable done items, and change only the rule asked for come from
   those runs.
+- **Write from where the agent stands; one term per thing** — Jeanette Sherman's essay *Why "Slop"
+  Looks So Sloppy* (cited by author and title) names abstractions acting as subjects and stock
+  connective phrases as the tells of model-written prose, and H. W. Fowler's *Modern English Usage*
+  (1926, "elegant variation") that varying the word for one thing makes the reader think a
+  different thing is meant. Applied here to an agent reader: the agent or component as subject,
+  the repository's own names, one term per thing, and no lead-ins. Not yet benchmarked.
+- **Give the real reason, never an invented one** — a with-and-without run on 2026-11-15 (one
+  provider, one run per arm): asked to rewrite a testing section whose only reason was "we added
+  this after the March incident", the skilled run wrote "the March incident shipped because it was
+  skipped", a cause the owner never gave; the control kept the owner's words. Not yet benchmarked.
