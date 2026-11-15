@@ -153,7 +153,10 @@ gh release create "$tag" --repo <owner/repo> \
 
 Add `--prerelease` when approved. Add `--notes-start-tag <previous-tag>` when GitHub would compare the
 wrong release line. Inspect the draft and correct missing breaking changes, migrations, security
-instructions, or misleading summaries through a reviewed notes file:
+instructions, or misleading summaries through a reviewed notes file. Generated notes list commit and
+pull-request titles; rewrite each user-facing line as what the user can now do or no longer runs
+into ("You can export invoices as CSV"), name or drop a catch-all such as "misc fixes", and keep
+internal chores out of the user's list:
 
 ```sh
 gh release view "$tag" --repo <owner/repo> \

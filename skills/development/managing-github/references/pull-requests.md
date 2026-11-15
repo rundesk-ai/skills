@@ -97,8 +97,16 @@ The work is done, so the body reports it rather than specifying it:
   with the reason.
 - State a breaking change or material risk in one bold line, and blockers or readiness plainly.
 
-Delete generic filler, repeated request text, changed-file inventories, and claims such as “works as
-expected.” Append nothing after the template's last section: no agent name, identity block,
+Write it for a reviewer who was not there. Lead with the result, not the order you worked in ("First
+I…, then I…"). Make the person or thing that acts the subject: "Exports now skip archived invoices",
+not "Archive handling has been improved". Use the names a reviewer knows (the screen, the command,
+the endpoint) and keep private labels and session shorthand out. Name each change; "various fixes"
+and "misc cleanup" tell the reviewer there is something they cannot see. A number is one you
+measured, or it is left out.
+
+Delete generic filler, repeated request text, changed-file inventories, claims such as “works as
+expected,” and stock or inflated phrasing (“not just X, but Y”, “robust”, “seamlessly”,
+“significantly improves”). Append nothing after the template's last section: no agent name, identity block,
 generated-by footer or co-author line. Follow the repository title convention; use an imperative
 title only when no convention exists.
 

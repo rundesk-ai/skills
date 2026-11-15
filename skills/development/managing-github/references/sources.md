@@ -55,6 +55,10 @@ are labeled separately.
   says a change description should explain what changed and why, preserve decisions the code cannot
   show, disclose shortcomings, and remain useful as history. This skill applies that judgment to a
   concise pull-request merge case rather than claiming Google's exact format is universal.
+- Jeanette Sherman, *Why "Slop" Looks So Sloppy* (essay, cited by author and title) identifies
+  abstractions acting as subjects, stock connective phrases and vague claims as the reliable tells of
+  model-written prose. This supports writing pull-request bodies and release notes with the person
+  or thing that acts as the subject, named changes instead of catch-alls, and no stock phrasing.
 
 ## Releases and versions
 
