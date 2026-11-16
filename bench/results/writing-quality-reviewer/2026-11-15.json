@@ -1,0 +1,223 @@
+{
+ "date": "2026-11-15",
+ "subject": "writing-quality-reviewer",
+ "kind": "subagent",
+ "skill_hash": "fca18ea1ac25c4fe",
+ "compared": {
+  "none": "no subagent: the same brief to a plain session",
+  "new": "subagents/writing-quality-reviewer.md on this branch, after one tuning pass on the medium cases"
+ },
+ "score": 0.203,
+ "cases": 8,
+ "cases_version": 1,
+ "cases_run": [
+  "w01-slop-post",
+  "w02-readme-drift",
+  "w03-ui-strings",
+  "w04-memo-no-point",
+  "w05-blog-fidelity",
+  "w06-house-guide",
+  "w07-clean-readme",
+  "w08-clean-post"
+ ],
+ "runs_per_arm": 3,
+ "agents": {
+  "claude": {
+   "version": "2.1.325 (Claude Code)",
+   "model": "claude-sonnet-5-5",
+   "judge": "claude-opus-5-5",
+   "arms": {
+    "none": {
+     "wrongly_approved": "0/18",
+     "wrongly_blocked": "6/6",
+     "recall": 0.925,
+     "noise_per_run": 1.58,
+     "items_per_run": 7.62,
+     "not_worth_fixing_share": 0.208,
+     "precision": 0.739,
+     "tokens_median": 14990
+    },
+    "new": {
+     "wrongly_approved": "0/18",
+     "wrongly_blocked": "2/6",
+     "recall": 1.0,
+     "noise_per_run": 0.5,
+     "items_per_run": 6.54,
+     "not_worth_fixing_share": 0.076,
+     "precision": 0.943,
+     "tokens_median": 23463
+    }
+   },
+   "by_level": {
+    "easy": {
+     "precision_delta": -0.023,
+     "recall_none": 0.967,
+     "recall_new": 1.0
+    },
+    "medium (tuned on)": {
+     "precision_delta": 0.033,
+     "recall_none": 0.9,
+     "recall_new": 1.0
+    },
+    "complex": {
+     "precision_delta": 0.525,
+     "recall_none": 0.917,
+     "recall_new": 1.0
+    }
+   },
+   "by_case": {
+    "w01-slop-post": {
+     "none": {
+      "recall": 0.7,
+      "noise_per_run": 3,
+      "precision": 0.821,
+      "clean": "0/3",
+      "consistency": 0.56,
+      "tokens_median": 21514
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.976,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 34088
+     }
+    },
+    "w02-readme-drift": {
+     "none": {
+      "recall": 0.933,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 0.87,
+      "tokens_median": 21145
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1.33,
+      "precision": 0.884,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 23465
+     }
+    },
+    "w03-ui-strings": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 1.67,
+      "precision": 0.845,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 14924
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 1,
+      "precision": 0.914,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 23461
+     }
+    },
+    "w04-memo-no-point": {
+     "none": {
+      "recall": 0.917,
+      "noise_per_run": 2,
+      "precision": 0.769,
+      "clean": "0/3",
+      "consistency": 0.83,
+      "tokens_median": 15061
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.67,
+      "precision": 0.933,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 23736
+     }
+    },
+    "w05-blog-fidelity": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 14512
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0.67,
+      "precision": 0.833,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 23276
+     }
+    },
+    "w06-house-guide": {
+     "none": {
+      "recall": 1.0,
+      "noise_per_run": 0.33,
+      "precision": 0.889,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 14896
+     },
+     "new": {
+      "recall": 1.0,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "0/3",
+      "consistency": 1.0,
+      "tokens_median": 23013
+     }
+    },
+    "w07-clean-readme": {
+     "none": {
+      "recall": null,
+      "noise_per_run": 3,
+      "precision": 0.589,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 22289
+     },
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "1/3",
+      "consistency": null,
+      "tokens_median": 23784
+     }
+    },
+    "w08-clean-post": {
+     "none": {
+      "recall": null,
+      "noise_per_run": 2.67,
+      "precision": 0.0,
+      "clean": "0/3",
+      "consistency": null,
+      "tokens_median": 14677
+     },
+     "new": {
+      "recall": null,
+      "noise_per_run": 0,
+      "precision": 1.0,
+      "clean": "3/3",
+      "consistency": null,
+      "tokens_median": 22747
+     }
+    }
+   }
+  },
+  "codex": {
+   "skipped": "bench/harness.py runs reviews through claude only"
+  },
+  "grok": {
+   "skipped": "bench/harness.py runs reviews through claude only"
+  }
+ },
+ "notes": "First benchmark of a new subagent, so there is no old arm. Before this run, a pilot of one run per arm on the three medium cases (w01, w05, w06) found the agent reporting the owner's own phrasing and an unstated style point as Minor findings (precision 0.70 against 0.89 with no agent); three general rules were added (a Minor finding must be a pattern that changes how the piece reads; in a blog post the author's own title, closer or repeated point is theirs; where a guide is silent the strings' existing pattern is the style). The medium cases were tuned on, so by_level reports them apart; easy and complex were not seen before this run. score = new precision minus no-agent precision, averaged over cases. Recall 0.925 to 1.0: the plain session missed the post's structural failure (w01 M1 partial, ranked below lesser points, and called the post possibly machine-written) and the memo's capacity comparison. Clean cases: the plain session never returned a clean verdict (0/6), proposing hedges to the owner's claims on w08 in 3 of 3 runs; the agent was clean on w08 3/3 and w07 1/3. The two non-clean w07 runs found a real defect left in the fixture (unclosed front matter raises ValueError while the README says such files are skipped), keyed as extra X1; the next cases_version should close it so w07 is truly clean. Noise per run 1.58 to 0.5. Tokens median 15k to 23k (+57%), mostly the fact-check ledger. 37 judge-unsure findings ruled blind in overrides.json: scope additions (bylines, how-to sections) and inferences stated as fact ruled false; open questions to the author neutral."
+}

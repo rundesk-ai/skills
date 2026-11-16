@@ -1,0 +1,15 @@
+{
+  "settings.retries.label": "How retries are handled",
+  "settings.retries.tooltip": "Retries",
+  "projects.empty": "Oops! There's nothing here right now. Why not create something awesome?",
+  "projects.filtered_empty": "No results.",
+  "projects.delete.title": "Are you sure?",
+  "projects.delete.body": "This action cannot be undone.",
+  "projects.delete.confirm": "OK",
+  "projects.delete.cancel": "Cancel",
+  "projects.selected": "{count} item(s) selected",
+  "workspace.archive.button": "Archive Workspace",
+  "errors.save": "An error has occurred.",
+  "errors.name_taken": "It looks like something with that name may already exist.",
+  "invite.button": "Submit"
+}

@@ -1,0 +1,13 @@
+{
+  "board.create.button": "Create Board",
+  "board.delete.title": "Delete Board?",
+  "board.delete.body": "We'll permanently delete {name} and its 3 lists. You can't undo this.",
+  "board.delete.confirm": "Delete Board",
+  "board.delete.cancel": "Cancel",
+  "board.empty": "No Boards yet. Create one to start tracking work.",
+  "board.save.error": "We couldn't save your changes. Check your connection and try again.",
+  "board.rename.label": "Board Name",
+  "board.rename.help": "Up to 64 characters.",
+  "board.archive.button": "Archive Workspace",
+  "board.archived.toast": "Board archived."
+}

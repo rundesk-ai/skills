@@ -207,7 +207,7 @@ Expand a category to browse its skills. Each link opens the skill's instructions
 
 ## Review subagents
 
-The catalog also includes four focused reviewers. Skills guide an agent's work; subagents define a
+The catalog also includes five focused reviewers. Skills guide an agent's work; subagents define a
 separate reviewer you can delegate a task to in an agent CLI that supports them.
 
 | Subagent | Use it for |
@@ -216,6 +216,7 @@ separate reviewer you can delegate a task to in an agent CLI that supports them.
 | [Simplicity reviewer](subagents/dry-simplicity-reviewer.md) | Finding duplication, redundant logic, and unnecessary complexity. |
 | [Senior code reviewer](subagents/senior-code-reviewer.md) | Reviewing completed changes for defects, security issues, and regressions. |
 | [Test coverage auditor](subagents/test-coverage-auditor.md) | Finding meaningful coverage gaps without writing tests or changing code. |
+| [Writing quality reviewer](subagents/writing-quality-reviewer.md) | Reviewing docs, articles, website copy and interface text for the point, the facts behind each claim, and the sentences. |
 
 Rundesk installs the package's subagents into its subagent library and makes them available to
 supported agent CLIs while its subagents setting is enabled. For manual setup, follow your CLI's
