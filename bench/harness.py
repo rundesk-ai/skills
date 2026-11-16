@@ -139,8 +139,10 @@ def cmd_run(a):
     os.makedirs(out)  # must be new: a run never reuses or clears an earlier one
     os.makedirs(os.path.join(out, "agents"))
     refuse_checkout(out)
-    old = a.old or git("describe", "--tags", "--abbrev=0").strip()
-    agent_json(git("show", f"{old}:{AGENT}"), os.path.join(out, "agents", "old.json"))
+    # A subagent with no release yet has no old version; run it with --arms none,new.
+    old = (a.old or git("describe", "--tags", "--abbrev=0").strip()) if "old" in a.arms else None
+    if old:
+        agent_json(git("show", f"{old}:{AGENT}"), os.path.join(out, "agents", "old.json"))
     agent_json(open(os.path.join(ROOT, AGENT)).read(), os.path.join(out, "agents", "new.json"))
     json.dump({"subject": SUBJECT, "old": old, "new": "working tree", "head": git("rev-parse", "HEAD").strip(),
                "claude": subprocess.run(["claude", "--version"], capture_output=True, text=True).stdout.strip()},
@@ -155,14 +157,14 @@ def cmd_run(a):
             print(line, flush=True)
 
 
-JUDGE = """You grade one code review against an answer key written before the review existed. Grade only what the review says; do not reward length, tone or format.
+JUDGE = """You grade one {kind} review against an answer key written before the review existed. Grade only what the review says; do not reward length, tone or format.
 
 ANSWER KEY
 {key}
 THE REQUEST THE REVIEWER WAS GIVEN
 {brief}
 
-THE CODE THAT WAS REVIEWED
+{material}
 {src}
 
 THE REVIEW
@@ -173,7 +175,7 @@ Instructions:
 - List every decoy (D*) and good-code item (G*) the review reports as a defect or as something to change, at any severity, including optional or minor suggestions.
 - List every taste item (T*) the review reports as a finding or suggestion.
 - List every extra (X*) the review reports.
-- List every other finding or suggestion not matched to the key. For each, judge it against the code: "real" (a genuine defect, or a change with a concrete cost), "false" (wrong, or preference with no cost), or "unsure".
+- List every other finding or suggestion not matched to the key. For each, judge it against the {against}: "real" (a genuine defect, or a change with a concrete cost), "false" (wrong, or preference with no cost), or "unsure".
 - "clean_verdict": true when the review's overall conclusion is that no changes are needed (optional nits listed alongside count as not clean).
 - "severity_ok": false when a must item it found is ranked below a finding that is only an improvement or a style point, or a taste item is ranked as a bug.
 Answer with JSON only, no prose, in this shape:
@@ -194,7 +196,10 @@ def source(fixture):
 
 def grade(out, bid, run):
     fixture, key, brief = read_case(run["case"])
-    prompt = JUDGE.format(key=key, brief=brief, src=source(fixture), review=run["review"])
+    # A writing reviewer's material is text and the sources it must agree with, not code.
+    words = (dict(kind="writing", material="THE TEXT THAT WAS REVIEWED, WITH ITS SOURCES", against="text and its sources")
+             if SUBJECT.startswith("writing-") else dict(kind="code", material="THE CODE THAT WAS REVIEWED", against="code"))
+    prompt = JUDGE.format(key=key, brief=brief, src=source(fixture), review=run["review"], **words)
     proc = subprocess.run(["claude", "-p", prompt, "--model", JUDGE_MODEL, "--restricted", "--strict-mcp-config",
                            "--tools", "", "--output-format", "json"],
                           stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=JUDGE_TIMEOUT)
