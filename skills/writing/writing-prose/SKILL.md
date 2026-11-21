@@ -99,6 +99,18 @@ set". A system with a mind in the prose is a decision nobody owns. A goal the re
 theirs ("we want to learn which leads bind") stays theirs; don't let it drift into a feature. A
 company that learns, as when a seller learns which leads convert, is a real actor and fine.
 
+**Every sentence survives a cold read from the reader's seat.** A person reads each sentence as
+news about their own situation: what they learn, what they can now do or decide, what to expect,
+how it affects them. Read it as that person, who was not there, and ask two things: can they say
+who does what, to what, and what does it tell them about theirs? A sentence that fails makes the
+reader stop and think "what did I just read?", and it is usually an abstraction acting, software
+given a mind, a metaphor standing in for the mechanism ("the scoring service is the brain of the
+platform"), a stack of nouns hiding a process ("routing by learned value"), or a true statement
+about the system's insides that means nothing to this reader. Rewrite it as the plain event and
+what it means for them: "routing sends each lead to the partner whose leads bound most often, so a
+partner's share grows as their leads bind". When you cannot, you do not yet know what happens or
+why it matters to them; find out, or mark the gap.
+
 ## Nouns: the reader's words for concrete things
 
 - **Name the thing, not its category.** "The Export button", "the March invoice run", "the two
@@ -227,6 +239,9 @@ change it needs. A review that lists only phrase-level edits has skipped the par
       things; rewrite each one where an abstraction acts. Then search for learn, know, decide,
       judge, want, understand, think, own and care, and confirm each subject is a person or the
       business, not software.
+- [ ] **Cold read.** Read every sentence as the reader, who was not there. Can they say who
+      does what, to what, and what it means for them? Rewrite each one where they would stop and
+      ask what it means.
 - [ ] **Reader check.** Does the first paragraph give the reader the result, not your process? Is
       every name, label and abbreviation one this reader already knows or is told once? One point
       of view throughout?
