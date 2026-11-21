@@ -124,3 +124,65 @@ to trust the fix, with the identifier dropped because this reader doesn't need i
 improvements" became the one other change, named. "Should significantly enhance" became the
 measured numbers; with none measured, the rewrite would say so rather than promise. The last line
 answers the question the reader would ask next.
+
+## Voice: stiff copy made to sound like a person
+
+Each pair keeps every fact. What changes is who leads, how the facts lean on each other, and the
+rhythm: the three C's, which together are what makes copy sound like a person.
+
+**A product page paragraph.** Stiff:
+
+> Ledgerly sends invoices automatically. Ledgerly sends a reminder three days before the due date.
+> It sends a second reminder when the invoice is overdue. It records each payment. The dashboard
+> displays outstanding invoices.
+
+Like a person:
+
+> Send an invoice once and Ledgerly does the chasing for you. Your client gets a reminder three days
+> before it's due and another if it slips past, so you're not writing awkward follow-up emails. When
+> they pay, the payment is recorded on its own, and your dashboard shows only what's still
+> outstanding.
+
+What changed: "you" leads, and what the reader gets (no chasing) comes before the mechanism.
+Five sentences opening on Ledgerly or It became three of different shapes, joined by so and when.
+Software keeps software verbs (sends, records, shows); "does the chasing for you" is the plain
+event, not a mind.
+
+**A docs paragraph.** Stiff:
+
+> The `deploy` command uploads the build. The upload is resumable. A failed upload restarts from
+> the last completed chunk. The command prints a URL on success. The URL is valid for seven days.
+
+Like a person:
+
+> Run `deploy` and it uploads your build in chunks, so if your connection drops halfway you can run
+> it again and it picks up from the last chunk that made it. When it's done, you'll get a preview
+> URL that works for seven days.
+
+What changed: the reader is the actor, the dropped connection is their moment rather than "a
+failed upload", and each fact hangs off the one before it (so, when) instead of starting cold.
+
+**A natural sentence to leave alone.** Original:
+
+> Your drafts save as you type, so closing the tab by accident costs you nothing.
+
+A stiffening edit:
+
+> Drafts are saved automatically. Closing the tab does not result in data loss.
+
+What went wrong: the original passed every check, and the edit made it worse on two C's. The so that
+linked cause to benefit is gone (cohesion), two flat declaratives replace one sentence that moved
+(cadence), "as you type" lost its detail to "automatically", and "costs you nothing" became the
+formal "does not result in data loss". The right edit was none.
+
+**A real one, from GOV.UK's "Register to vote" page:**
+
+> You normally only need to register once - not for every election. You'll need to register again if
+> you've changed your name, address or nationality. It usually takes about 5 minutes.
+
+What it does: it answers the questions a person arrives with (do I have to do this again? how long
+will it take?) in the order they'd ask them, with "you" leading and contractions throughout. Its
+hedges ("normally", "usually") stay because the doubt is real, and "about 5 minutes" is the
+specific. Plain, warm and exact are one register here, not three.
+
+Contains public sector information licensed under the Open Government Licence v3.0.

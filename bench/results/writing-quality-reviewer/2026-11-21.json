@@ -1,0 +1,126 @@
+{
+  "date": "2026-11-21",
+  "subject": "writing-quality-reviewer",
+  "kind": "subagent",
+  "skill_hash": "8959e655d3488544",
+  "compared": {
+    "old": "subagents/writing-quality-reviewer.md at 1f9ffa2",
+    "new": "the working tree: each C reported pass or fail, a monotone run reported as cadence and cohesion, replacements as the smallest edit that keeps every detail and register and never worsens a C; round 2 adds the voice check under the reader's side, openings that define the system as a finding, and Couldn't in the interface example"
+  },
+  "score": 0.67,
+  "cases": 3,
+  "cases_version": 2,
+  "cases_run": [
+    "w09-natural-install",
+    "w10-terse-errors",
+    "w11-stiff-help"
+  ],
+  "runs_per_arm": 3,
+  "agents": {
+    "claude": {
+      "version": "2.1.330 (Claude Code), subagents given the agent's instructions",
+      "model": "claude-sonnet-5-5",
+      "judge": "claude-opus-5-5, blind",
+      "better": 2,
+      "same": 1,
+      "worse": 0,
+      "round 1": {
+        "w09 natural paragraph": {
+          "must_found": {
+            "old": "3/3",
+            "new": "3/3"
+          },
+          "decoy_hits": {
+            "old": 3,
+            "new": 0
+          },
+          "stiffer_fixes": {
+            "old": 3,
+            "new": 0
+          },
+          "three_cs_reported": {
+            "old": "0/3",
+            "new": "3/3"
+          }
+        },
+        "w10 terse errors": {
+          "must_found": {
+            "old": "9/9",
+            "new": "9/9"
+          },
+          "decoy_hits": {
+            "old": 6,
+            "new": 4
+          },
+          "stiffer_fixes": {
+            "old": 3,
+            "new": 2
+          },
+          "monotone_run_fixed_naturally": {
+            "old": 1.5,
+            "new": 3.0,
+            "of": 3
+          },
+          "three_cs_reported": {
+            "old": "0/3",
+            "new": "3/3"
+          }
+        }
+      },
+      "round 2 (final file)": {
+        "w09 natural paragraph": {
+          "must": "3/3 both",
+          "decoy_hits": {
+            "old": 5,
+            "new": 0
+          },
+          "stiffer_fixes": {
+            "old": 2,
+            "new": 0
+          },
+          "three_cs": {
+            "old": "0/3",
+            "new": "3/3"
+          }
+        },
+        "w10 terse errors": {
+          "must": "12/12 both",
+          "decoy_hits": {
+            "old": 3,
+            "new": 2
+          },
+          "stiffer_fixes": {
+            "old": 5,
+            "new": 2
+          },
+          "monotone_fixed_naturally": {
+            "old": 2.0,
+            "new": 3.0,
+            "of": 3
+          },
+          "three_cs": {
+            "old": "0/3",
+            "new": "3/3"
+          }
+        },
+        "w11 stiff help page, fresh": {
+          "must": "12/12 both",
+          "decoy_hits": {
+            "old": 0,
+            "new": 0
+          },
+          "human_fixes": {
+            "old": 14,
+            "new": 16
+          },
+          "three_cs": {
+            "old": "0/3",
+            "new": "3/3"
+          }
+        }
+      }
+    }
+  },
+  "method": "Run as subagents rather than through bench/harness.py, which starts the agent CLI itself. Each fixture held one real defect its key missed (install.md's opening promises a first folder syncing; the metered string says Wi-Fi where USAGE.md says an unmetered network); the keys were corrected after the run and the judge told to count findings on them as correct. Outputs and scores are kept outside the repository. Round 2 ran on the final file: w11 written fresh before any run; w09 and w10 re-run as a regression check, old arm from the first round's file set, same blind judge.",
+  "notes": "w09: old reviews rewrote the natural notarization sentence, once to 'without a network connection' and once dropping the ticket, both ranked Major; new reviews kept 'even when you're offline' and the ticket in every fix. w10: every review found every planted defect; new reviews fixed the five-'Tidepool' run with joined, natural sentences that kept every fact (old: passive or lost a detail); new reviews still wrote 'Could not' twice where the guide allows a contraction, and the reviewer's own interface example uses 'Could not connect'. Round 2: on the fresh stiff help page both versions found every planted problem (opening that defines the system, monotone run, formal register, dropped details), so the old reviewer could already identify blatant stiffness; the new one names the three C's in every review and writes slightly more natural fixes. On natural text (w09) it stopped stiffening: 0 decoy hits against 5."
+}

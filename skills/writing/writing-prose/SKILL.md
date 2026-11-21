@@ -17,6 +17,12 @@ Scrubbing the tics (the em dashes, "not X, but Y", "honestly?") does not fix thi
 tic removed still reads as machine-made when it has no point, no chain and one rhythm, because those
 live in the structure of the whole piece, not in any sentence.
 
+**The three C's are required, not advice:** a piece that fails any one of them is not done, however
+clean its sentences. Prose that sounds like a person is what passing all three produces: a point
+the reader is led to, a rhythm that moves, and sentences that lean on each other. The stiff run of
+"It does X. It does Y." fails two at once, cadence (one length and shape) and cohesion (facts
+stacked with no so, because or then between them), and no edit may fix one C by worsening another.
+
 ## Before drafting
 
 1. **Write the point in one sentence:** what the reader should believe or do by the end. If you
@@ -67,6 +73,12 @@ you what they are missing, because to you it all reads as obvious.
 - **Hold one point of view.** Where the text speaks to the reader, call them "you" and the writer
   "I" or "we", and keep it. Never call the reader "the user" in text they read, and don't drift
   between "we", "the team" and "one".
+- **Sound like a person talking to them.** Where the text speaks to the reader, write it the way
+  you'd explain it across a desk: "you" leads often, contractions are fine unless the project's
+  style says otherwise, and why it matters to them comes in the same breath as what happens. Plain
+  is not flat: "it opens even when you're offline" beats "it opens without a network connection",
+  because the reader hears a person in the first. Warmth comes from specifics, never from
+  adjectives or exclamation marks.
 - **Start from what they know and end on what is new.** Open a sentence with something the reader
   already has (the thing they asked about, the term from the last sentence), and put the new
   information last, where a reader puts the weight. The first words of each paragraph and heading
@@ -176,6 +188,11 @@ Readers skim long sentences and slow down on short ones. Use that on purpose.
 - **A short sentence or one-line paragraph marks where the reader should stop:** the verdict, the
   surprising number, the decision, the ask. Once or twice in a piece; every line short means none
   is.
+- **Vary the shape, not only the length.** Sentence after sentence with the same subject and build
+  ("It stores X. It sends Y. The app shows Z.") reads as a spec sheet even when every one is true;
+  it fails cadence, and cohesion with it. Join the facts that lean on each other with so, because, then, while or which means, and let
+  another subject, often "you", open the next. Software keeps its software verbs; it just stops
+  being the subject of every sentence.
 - **Let length follow the content.** Explanation, nuance and evidence run long; turns, verdicts and
   asks are short. A brief aside is fine when it serves the point.
 
@@ -202,9 +219,13 @@ The rules hold everywhere; their weight changes with what the reader came to do.
   take a position. Hedging every claim is a coherence failure, not balance. Give the stance, the
   ranked chain behind it, and the objection answered.
 - **Reference and instructions** (docs, a README, a guide, a runbook): the point is what the reader
-  can do, stated first. Put the most-used task before the rare one. Write steps with the reader as
-  the actor ("Run `make test`", "you'll see…") and with exact commands, values and names. "Take a
-  position" applies less: say which option to choose by default and when to choose another.
+  can do, stated first. Open a guide or doc page from the moment the reader is in, then what
+  they'll be able to do, never from a definition of the system: not "The rollback command reverts
+  a deployment to a previous release", but "A deploy just broke checkout and you want the last
+  good release back. This page shows how to roll back with one command and check it worked." Put
+  the most-used task before the rare one. Write steps with the reader as the actor ("Run `make
+  test`", "you'll see…") and with exact commands, values and names. "Take a position" applies
+  less: say which option to choose by default and when to choose another.
 - **Short forms** (release notes, a commit or pull request summary, a status update, an email): one
   point per line or paragraph, with the reader or their users as the actor ("You can now export
   invoices as CSV", not "CSV export functionality has been introduced"). Lead with what changed for
@@ -233,13 +254,21 @@ Work from the outside in, and don't polish a paragraph you may cut.
    the explanation around them run long.
 4. **Then the sentences:** subjects, nouns, perspective, and the performative phrases, last.
 5. **Keep what is the author's:** their point, their facts and their voice. Never add a claim,
-   number or name they did not give; mark the gap instead.
+   number or name they did not give; mark the gap instead. Change only what fails a rule, with the
+   smallest edit that fixes it, and leave a true, natural sentence as it is. An edit keeps every
+   concrete detail and the author's register: "notarized, with its own notarization ticket, so it
+   opens even when you are offline" must not become "notarized, so it opens without a network
+   connection", which drops the ticket and the person.
 
 When asked to review rather than rewrite, report in the same order: whether the piece has a point
 and a chain first, then cadence, then sentence-level fixes, each with the passage quoted and the
-change it needs. A review that lists only phrase-level edits has skipped the part that matters.
+change it needs, offered as a suggestion. A review that lists only phrase-level edits has skipped the part that matters.
 
 ## After drafting, run the checks
+
+The piece passes only when the coherence checks (shuffle, deletion, promise, stance), the cadence
+scan and the cohesion check all pass; fix each failure and run them again. When reviewing, report
+each C by name, pass or fail, with the passage behind it.
 
 - [ ] **Shuffle test.** Could the body paragraphs be reordered without losing meaning? Then they are
       a list; rebuild the chain.
@@ -259,13 +288,19 @@ change it needs. A review that lists only phrase-level edits has skipped the par
       spelling unless the project spells another way.
 - [ ] **Glue scan.** Search for the stock phrases, signposts, empty praise, catch-alls and
       inflated words above, and remove them.
-- [ ] **Cadence scan.** Are sentence lengths actually varied, and does each short line sit at a
-      real point of emphasis?
+- [ ] **Cadence scan.** Are sentence lengths and shapes actually varied, with no run of sentences
+      opening on the same subject, and does each short line sit at a real point of emphasis?
+- [ ] **Cohesion check.** Does each sentence take up something from the one before (a term, a
+      pronoun pointing at one thing, a so, because, then or while) instead of starting a new fact
+      cold? Join the stacked ones.
+- [ ] **Detail check.** When editing existing text, is every concrete detail still there, and did
+      any natural phrase become a more formal one? Put it back.
 - [ ] **Promise check.** Does every setup in the opening pay off?
 - [ ] **Specifics check.** Is every number, name and date real and from your context? Is anything
       vague that could be concrete? Is anything invented?
 - [ ] **Stance check.** When the task was to argue or recommend, does the piece commit?
 
 Read [Examples](references/examples.md) for worked rewrites (an argument, a doc section, release
-notes, a status email and a report of finished work) when rewriting a draft or teaching the
+notes, a status email, a report of finished work, and stiff product and docs copy made to sound
+like a person) before writing or rewriting copy that speaks to the reader, and when teaching the
 difference, and [Sources](references/sources.md) when auditing or changing a rule here.
