@@ -124,6 +124,15 @@ why it matters to them; find out, or mark the gap.
 - **Put the action back in the verb.** "Decide," not "make a decision"; "we migrated the data," not
   "the migration of the data was performed". A noun made from a verb hides both the action and who
   did it.
+- **Spell in American English** unless the project's published copy or the requester spells
+  another way, and keep it even when your notes or sources use British, because a reader who
+  meets both reads two writers. Each British pattern has an American form:
+  colour → color, flavour → flavor, favourite → favorite, behaviour → behavior;
+  organise → organize, customise → customize; analyse → analyze; centre → center;
+  licence → license, defence → defense; cancelled → canceled, travelling → traveling;
+  catalogue → catalog; grey → gray. Write the plain word for the old one: while, not whilst;
+  among, not amongst; will or must, not shall. A name, quote or interface label keeps its own
+  spelling.
 
 ## Cut what performs instead of saying
 
@@ -246,7 +255,8 @@ change it needs. A review that lists only phrase-level edits has skipped the par
       every name, label and abbreviation one this reader already knows or is told once? One point
       of view throughout?
 - [ ] **Noun scan.** Replace each category noun (functionality, process, solution, stakeholders)
-      with the thing it stands for; one term per thing; verbs back out of nouns.
+      with the thing it stands for; one term per thing; verbs back out of nouns; American
+      spelling unless the project spells another way.
 - [ ] **Glue scan.** Search for the stock phrases, signposts, empty praise, catch-alls and
       inflated words above, and remove them.
 - [ ] **Cadence scan.** Are sentence lengths actually varied, and does each short line sit at a
