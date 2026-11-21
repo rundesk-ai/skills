@@ -1,0 +1,6 @@
+{
+  "errors.folder_missing": "folder not found: {path}",
+  "errors.session_unsaved": "The database is not open, so this session is not kept after it stops or the app quits.",
+  "errors.sync_paused_metered": "Sync paused. You're on a metered connection, so Tidepool waits for Wi-Fi. Resume now from the menu bar if you'd rather not wait.",
+  "help.snapshots": "Tidepool takes a snapshot every hour. Tidepool keeps each one for 30 days. Tidepool then keeps one a day for a year. Tidepool stores snapshots on this Mac. Tidepool restores them offline."
+}

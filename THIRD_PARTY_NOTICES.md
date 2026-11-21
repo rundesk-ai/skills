@@ -10,3 +10,4 @@ licences; each skill's `references/sources.md` carries the full notice.
 | `using-mysql` | PlanetScale | MIT |
 | `using-python` | TestMu AI / LambdaTest | MIT |
 | `writing-agent-instructions` | Dietrich Gebert's Ponytail | MIT |
+| `writing-prose` | GOV.UK, a passage quoted in its examples | Open Government Licence v3.0 |
