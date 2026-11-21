@@ -125,10 +125,14 @@ why it matters to them; find out, or mark the gap.
   "the migration of the data was performed". A noun made from a verb hides both the action and who
   did it.
 - **Spell in American English** unless the project's published copy or the requester spells
-  another way: color, organize, behavior, center, license, canceled, catalog. Keep American
-  spelling even when your notes or sources use British, because a reader who meets both reads two
-  writers. Write the plain word for the old one: while, not whilst; among, not amongst; will or
-  must, not shall. A name, quote or interface label keeps its own spelling.
+  another way, and keep it even when your notes or sources use British, because a reader who
+  meets both reads two writers. Each British pattern has an American form:
+  colour → color, flavour → flavor, favourite → favorite, behaviour → behavior;
+  organise → organize, customise → customize; analyse → analyze; centre → center;
+  licence → license, defence → defense; cancelled → canceled, travelling → traveling;
+  catalogue → catalog; grey → gray. Write the plain word for the old one: while, not whilst;
+  among, not amongst; will or must, not shall. A name, quote or interface label keeps its own
+  spelling.
 
 ## Cut what performs instead of saying
 
