@@ -90,6 +90,15 @@ subject the one who acts and the verb what they do. "We analyze the data," not "
 of the data is conducted." If you cannot name the actor, you may not understand the claim well
 enough to make it; find out before writing it.
 
+**Give software only the verbs software does.** Code stores, sends, counts, matches, totals,
+applies a rule and refuses. People and the business learn, know, decide, judge, want and
+understand. "Insights learns what each lead is worth" hides who learns, and from what, and states
+something nobody can build or test; write "insights totals what each lead earned, so the team sees
+which sources pay". "Routing decides where a lead goes" becomes "routing applies the rule sales
+set". A system with a mind in the prose is a decision nobody owns. A goal the requester gave as
+theirs ("we want to learn which leads bind") stays theirs; don't let it drift into a feature. A
+company that learns, as when a seller learns which leads convert, is a real actor and fine.
+
 ## Nouns: the reader's words for concrete things
 
 - **Name the thing, not its category.** "The Export button", "the March invoice run", "the two
@@ -215,7 +224,9 @@ change it needs. A review that lists only phrase-level edits has skipped the par
       a list; rebuild the chain.
 - [ ] **Deletion test.** Does the point survive removing a paragraph? Then cut that paragraph.
 - [ ] **Subject scan.** Read the subject of every sentence. Most should be people or concrete
-      things; rewrite each one where an abstraction acts.
+      things; rewrite each one where an abstraction acts. Then search for learn, know, decide,
+      judge, want, understand, think, own and care, and confirm each subject is a person or the
+      business, not software.
 - [ ] **Reader check.** Does the first paragraph give the reader the result, not your process? Is
       every name, label and abbreviation one this reader already knows or is told once? One point
       of view throughout?
