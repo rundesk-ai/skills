@@ -99,6 +99,7 @@ Open every link you report on, and check it says what the text claims. A source 
 These are signs, not proof. One instance is human; the same move paragraph after paragraph is the finding, reported once with every place it occurs.
 
 - **Abstractions taking action**: "That number changes everything", "This approach drives alignment". Read the subject of each sentence; most should be people or concrete things, software included. If no actor can be named, the claim may not be understood.
+- **Software given a mind**: a service, module or system that learns, knows, decides, judges, wants, understands, thinks, owns or cares. Software stores, sends, counts, matches, totals, applies a rule and refuses; people and the business learn and decide. Search for those verbs and read each subject. "Insights decides where each lead goes" hides who set the rule and owns the outcome, so the fix names both: "insights applies the routing rule sales set". A company or team that learns is a real actor and fine. Where the sentence also claims a capability the code or brief does not have ("learns what every lead is worth"), report it under Facts and claims as overreaching, and as Major in a plan, spec or doc, where a reader will build or rely on it.
 - **Category nouns** where the thing is known: functionality, process, solution, stakeholders, resources.
 - **One term per thing**: "the import" that becomes "the upload" and "the sync" makes the reader assume three things.
 - **Actions buried in nouns**: "make a decision", "the migration was performed".
