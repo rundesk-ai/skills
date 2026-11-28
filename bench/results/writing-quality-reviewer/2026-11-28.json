@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-28",
+  "subject": "writing-quality-reviewer",
+  "kind": "subagent",
+  "skill_hash": "2fd72c486fd184cb",
+  "compared": {
+    "none": "no instructions, same request and folder",
+    "old": "subagents/writing-quality-reviewer.md at 95589de",
+    "new": "the working tree: a Fiction form (continuity, point of view and tense, filter words, the book's own style is not a finding, fixes add nothing), portent and dead-end lines named under Sentences, and fixes and the report itself held to the same cold read"
+  },
+  "cases": 13,
+  "cases_version": 3,
+  "cases_run": ["w01-slop-post", "w02-readme-drift", "w03-ui-strings", "w04-memo-no-point", "w05-blog-fidelity", "w06-house-guide", "w07-clean-readme", "w08-clean-post", "w09-natural-install", "w10-terse-errors", "w11-stiff-help", "w12-fiction-chapter", "w13-portent-post"],
+  "runs_per_arm": "w01-w11: 1 (new, none); w12-w13: 2 (new, old, none)",
+  "agents": {
+    "claude": {
+      "version": "Claude Code, subagents given the agent's instructions",
+      "model": "claude-opus-5-5",
+      "judge": "claude-opus-5-5, blind, one judge per case against the case key",
+      "new vs none": {
+        "judge_average": {"new": 4.73, "none": 4.0},
+        "must_found": {"new": "47/48", "none": "45/48"},
+        "decoy_hits": {"new": 1, "none": 7},
+        "taste_items_raised": {"new": 1, "none": 7},
+        "cases_better": 9, "cases_same": 4, "cases_worse": 0
+      },
+      "w12 fiction chapter": {
+        "judge": {"new": [5, 5], "old": [5, 4], "none": [4, 3]},
+        "must_found": {"new": "8/8", "old": "8/8", "none": "7.5/8"},
+        "invented_lines": {"new": 0, "old": 1, "none": 2}
+      },
+      "w13 portent post": {
+        "judge": {"new": [4, 4], "old": [5, 4], "none": [4, 3]},
+        "must_found": {"new": "5/6", "old": "5.5/6", "none": "5.5/6"},
+        "decoy_hits": {"new": 0, "old": 0, "none": 2}
+      }
+    }
+  },
+  "method": "Run as subagents in scratch folders outside the repository; the new and old arms read the reviewer's instructions from a file, the none arm got only the request. Thresholds written before the runs. skill_hash is bench-status.sh's fingerprint over the subagent file (labelled skill/) and this subagent's cases and fixtures, since bench-status.sh covers skills only.",
+  "notes": "Every arm caught the portent frame in w13, so the old reviewer already handled blatant portent; the new one scored a point lower on one run because its fix for the two dead-end lines only deleted them instead of naming what the reader gets. w12: the new reviewer never wrote a line for the author (old once, none in both runs) and kept the book's unquoted dialogue, fragments and dialect as style. On w01-w11 the new reviewer matched or beat no instructions on every case, with one decoy hit (w10, both arms) against five."
+}
