@@ -1,0 +1,31 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "853d40fcb722f163",
+ "score": 1.0,
+ "cases": 2,
+ "method": "The Rundesk section of references/manuscript-files.md names Rundesk's guide topic `pages` (call it before reordering, moving or retitling), says how to recognise a Rundesk project, and to write the folder's .order rather than ask or rename when the guide is unavailable. Skill arm rerun on q14 x2 and q13 x1; no-skill reused (2026-11-28h). Automatic file check. No Rundesk guide was available in the runs, so this measures the fallback.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "better": 2,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0
+  }
+ },
+ "quality": {
+  "q14-pages-prefix-order": {
+   "verdict": "better",
+   "with": "wrote 02-chapter-one/.order and renamed nothing in both runs, flagged the third-night continuity",
+   "without": "renamed both files (2/2)"
+  },
+  "q13-pages-new-page": {
+   "verdict": "better",
+   "with": "03-chapter-two/03-the-letter.md, no rename, no manual break, timeline link target fixed and listed",
+   "without": "renamed the file (2/2)"
+  }
+ },
+ "notes": "The softer q14 result in 2026-11-28k (one run asked first) is gone."
+}

@@ -1,0 +1,35 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "ee690fd58127ee08",
+ "score": 1.0,
+ "cases": 3,
+ "method": "Rundesk logic moved out of the skill: references/rundesk-pages.md replaced by a generic references/manuscript-files.md that defers to the app's own guidance, with a five-line Rundesk note; SKILL.md no longer names Rundesk. Skill arm rerun on q13, q14, q15 x2; no-skill reused (2026-11-28h, 2026-11-28i). Automatic file check.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "better": 3,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0
+  }
+ },
+ "quality": {
+  "q13-pages-new-page": {
+   "verdict": "better",
+   "with": "no rename, no manual break, link target fixed and listed; one run made 03-chapter-two/, one moved the sheet to the top level and asked about a folder (2/2)"
+  },
+  "q14-pages-prefix-order": {
+   "verdict": "better",
+   "with": "no rename in either run; one run wrote 02-chapter-one/.order, one asked whether to use an order file or rename before changing anything (softer)",
+   "without": "renamed both files (2/2)"
+  },
+  "q15-pages-add-scene-notes": {
+   "verdict": "better",
+   "with": "02a-/02b- sheet, text word for word, no rename, one chapter counted, notes excluded, timeline conflict flagged (2/2)",
+   "without": "renamed 03-the-letter.md (2/2)"
+  }
+ },
+ "notes": "The decoupled wording keeps the decisive behaviour (never rename; fix own links; structure for page breaks). Cost: on a prefix-only folder the skill may now ask before writing an order file, because the generic rule says to ask when the app offers no other way."
+}
