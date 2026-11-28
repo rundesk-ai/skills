@@ -19,8 +19,9 @@ plausible invention.
    what fixes the facts before editing them: a style sheet, a character or world bible, a series
    outline, earlier chapters. Where the project has reference material, it is the truth for names,
    spellings, ages, places and dates, and the chapter is checked against it, not the other way round.
-   When the manuscript lives in Rundesk's Pages tab, read [Rundesk pages](references/rundesk-pages.md)
-   first, and again before you reorder, retitle or format a sheet.
+   When the manuscript is kept as files in a writing app or folder, read
+   [Manuscript files](references/manuscript-files.md) first, and again before you reorder, retitle
+   or format one.
 2. **Read the rest of the story for its style, not only its facts.** Before touching one chapter, find
    and read the chapters around it, at least the one before and the one after when they exist, and
    more when the passage is short. They are not always beside the draft: look through the project for
