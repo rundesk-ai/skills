@@ -1,0 +1,71 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "75e7e69d786840ed",
+ "score": 0.33,
+ "cases": 3,
+ "method": "Targeted rerun after one change (reach a named length with whole cuts, naming any cut detail the writer may need). Skill arm rerun on q06, q07, q09, 2 runs each, in fresh scratch folders via deploy.sh; no-skill outputs reused from the previous run (unchanged inputs). Blind judge per case. Agent-tool subagents, not the CLI harness; codex and grok not run.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "better": 1,
+   "same": 0,
+   "worse": 2,
+   "score": 0.33
+  },
+  "codex": {
+   "skipped": "not run in this session"
+  },
+  "grok": {
+   "skipped": "not run in this session"
+  }
+ },
+ "quality": {
+  "q06-tenser-half": {
+   "with_rubric": 0.88,
+   "with_overall": 3.5,
+   "with_additions": 0,
+   "with_sim": 0.71,
+   "without_rubric": 0.88,
+   "without_overall": 4,
+   "without_additions": 1.5,
+   "without_sim": 0.56,
+   "verdict": "worse",
+   "in_order_kept_share_with": 1.0,
+   "in_order_kept_share_without": [
+    0.758,
+    0.833
+   ]
+  },
+  "q07-book-context": {
+   "with_rubric": 0.95,
+   "with_overall": 4.5,
+   "with_additions": 0,
+   "with_sim": 0.94,
+   "without_rubric": 1.0,
+   "without_overall": 5,
+   "without_additions": 0,
+   "without_sim": 0.9,
+   "verdict": "worse"
+  },
+  "q09-cut-keep-words": {
+   "with_rubric": 0.9,
+   "with_overall": 4.5,
+   "with_additions": 0,
+   "with_sim": 0.83,
+   "without_rubric": 0.6,
+   "without_overall": 2.5,
+   "without_additions": 0,
+   "without_sim": 0.79,
+   "verdict": "better",
+   "in_order_kept_share_with": 1.0,
+   "in_order_kept_share_without": [
+    0.961,
+    0.984
+   ]
+  }
+ },
+ "carried_from": "2026-11-28.json (hash b3604cf2db3160f3) for q01-q05 and q08, whose verdicts were same, better x4 and better; combined over nine cases: 6 better, 1 same, 2 worse",
+ "notes": "q06: both skilled runs now reach half (129-131 of 236 words) by whole cuts, keeping every word in order and every protected phrase, and name the cuts the writer may want back; the judge still rates them 3.5 vs 4 because pure cuts read 'shorter more than tenser', while the no-skill runs gain tension partly by adding 'the dark was total' and similar. Rubric means are equal (0.88). q07: one skilled run applied the no-rewording rule to a line edit and left the stacked 'He was' sentences as a query (judge 4); the other joined them (5). q09: both skilled runs reach about two thirds, every kept word in the writer's order (in-order kept-word share 1.00 vs 0.96-0.98), both cut the protected rocking horse and name it in the list of cuts; judge 4.5 vs 2.5. The q09 trigram >= 0.90 threshold in the earlier result was a flawed design (a pure cut always joins words that were never adjacent); the in-order kept-word share is the measure reported here, and the earlier recorded result is left unchanged."
+}

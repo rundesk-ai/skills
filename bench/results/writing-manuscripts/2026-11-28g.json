@@ -1,0 +1,40 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "90a23081f563e264",
+ "score": 0.0,
+ "cases": 1,
+ "method": "Rewrote references/rundesk-pages.md (ordering via .order, fixed file names, first-line titles, *** breaks at the end of the earlier sheet, book-style paragraphs, keep markdown style, page breaks by structure). New q12-pages-order-format, both arms, 2 runs each, files compared directly (all four results identical, so no judge was needed for the files). Routing proxy on nine requests including r06. Agent-tool subagents, not the CLI harness; no MCP tools allowed in the runs.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "fired": "proxy 5/5",
+   "near_miss_fired": false,
+   "better": 0,
+   "same": 1,
+   "worse": 0,
+   "score": 0.0
+  },
+  "codex": {
+   "skipped": "not run in this session"
+  },
+  "grok": {
+   "skipped": "not run in this session"
+  }
+ },
+ "quality": {
+  "q12-pages-order-format": {
+   "verdict": "same",
+   "with_files": "all checks met: .order edited, no rename, *** at end of harbour sheet, '# The Harbour' first line, typo fixed, market front matter and _italic_ untouched",
+   "without_files": "byte-identical to the skilled runs",
+   "replies": "both skilled replies explained why the break sits at the end of the earlier sheet and raised a continuity query about the new scene order; the no-skill replies did not"
+  }
+ },
+ "routing": {
+  "requests": 9,
+  "correct": 9,
+  "notes": "r06 Pages reorder fired; onboarding-docs reorder did not (went to a prose skill); blog and ad near misses did not fire"
+ },
+ "notes": "The baseline already handles a visible .order and an explicit request; the reference is unproven here and needs a harder case: no .order present with name-prefix order, a move across folders with a link to update, a sheet whose front matter sits above its title, or a request to start a chapter on a new page."
+}

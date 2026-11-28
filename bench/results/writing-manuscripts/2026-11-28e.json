@@ -1,0 +1,105 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "e832b02118336e85",
+ "score": 1.0,
+ "cases": 3,
+ "method": "Rerun after adding 'Your own words' (the report, queries and any added word: diagnosis first, edits by impact, people as actors, no repeated stock phrases, no not-X-it's-Y, no flattery, varied rhythm, plainest joins) and report tells in references/ai-tells.md. Skill arm on q03, q04, q10, 2 runs each; no-skill arm reused from 2026-11-28d. Two blind judges per case: the case rubric against the no-skill arm, and a reply-quality rubric (R1-R6, written before the run) comparing these replies with the previous version's. Agent-tool subagents, not the CLI harness; codex and grok not run.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "better": 3,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0
+  },
+  "codex": {
+   "skipped": "not run in this session"
+  },
+  "grok": {
+   "skipped": "not run in this session"
+  }
+ },
+ "quality": {
+  "q03-line-edit": {
+   "with": {
+    "rubric": 1.0,
+    "overall": 4.5,
+    "additions": 0
+   },
+   "without": {
+    "rubric": 0.85,
+    "overall": 4,
+    "additions": 0
+   }
+  },
+  "q04-rewrite-better": {
+   "without": {
+    "rubric": 0.5,
+    "overall": 2.5,
+    "additions": 9.5
+   },
+   "with": {
+    "rubric": 1.0,
+    "overall": 4,
+    "additions": 0
+   }
+  },
+  "q10-line-craft": {
+   "without": {
+    "rubric": 0.83,
+    "overall": 3,
+    "additions": 1.5
+   },
+   "with": {
+    "rubric": 0.96,
+    "overall": 4.5,
+    "additions": 0
+   }
+  }
+ },
+ "reply_quality_vs_previous_version": {
+  "q03-line-edit": {
+   "v7": {
+    "R_mean": 1.0,
+    "overall": 4.5,
+    "R6": 1
+   },
+   "v6": {
+    "R_mean": 0.5,
+    "overall": 3,
+    "R6": 0.5
+   }
+  },
+  "q04-rewrite-better": {
+   "v6": {
+    "R_mean": 0.58,
+    "overall": 3,
+    "R6": 0.75
+   },
+   "v7": {
+    "R_mean": 0.88,
+    "overall": 4.5,
+    "R6": 0.75
+   }
+  },
+  "q10-line-craft": {
+   "v7": {
+    "R_mean": 0.96,
+    "overall": 4.5,
+    "R6": 1
+   },
+   "v6": {
+    "R_mean": 0.42,
+    "overall": 3,
+    "R6": 1
+   }
+  }
+ },
+ "stock_phrase_count": {
+  "previous_version": 6,
+  "this_version": 0
+ },
+ "notes": "Edits: still better than the no-skill arm on all three (q03 4.5 vs 4, q04 4 vs 2.5, q10 4.5 vs 3), zero additions. Replies: in every case the two new replies ranked first and second of four; reply-quality overall 4.5 vs 3 on each case; the R6 transparency line is not worse (q03 1 vs 0.5, q04 0.75 vs 0.75, q10 1 vs 1). Phrases counted: lands harder, earns its place, every word ... yours, isn't boring, does the heavy lifting, not just, here's the thing, lovely, beautiful."
+}
