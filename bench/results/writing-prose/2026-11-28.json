@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-28",
+  "subject": "writing-prose",
+  "kind": "skill",
+  "skill_hash": "e793f268deb6d26d",
+  "compared": {
+    "without": "no skill",
+    "with": "the working tree: every heading stands alone, and the heading check after drafting"
+  },
+  "cases_run": ["features section of a landing page from confirmed facts", "help page from confirmed facts"],
+  "runs_per_arm": 2,
+  "agents": {
+    "claude": {
+      "model": "claude-opus-5-5",
+      "features section": {
+        "headings_failing_alone": {"with": [0, 0], "without": [2, 3]},
+        "heading_length_words": {"with": "5-11", "without": "2-6"}
+      },
+      "help page": {
+        "headings_failing_alone": {"with": [0, 0], "without": [0, 0]}
+      },
+      "better": 1, "same": 1, "worse": 0
+    }
+  },
+  "method": "Scratch folders outside the repository, skill deployed with scripts/deploy.sh; headings counted by hand against the rule.",
+  "notes": "Without the skill the features section used headings such as 'Just you and the page', 'Hand it to a reader' and 'Ready for readers'; with it every heading named its feature. Trade-off: the brief asked for short headings and the skill's ran 5 to 11 words."
+}
