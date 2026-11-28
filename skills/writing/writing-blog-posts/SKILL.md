@@ -45,6 +45,8 @@ What you may not add, even when it would make the piece "better":
 - A conclusion, lesson, or takeaway the owner didn't state or clearly imply.
 - Facts you looked up. Research goes in the report as a suggestion, not into the post as the owner's words.
 
+When the owner asks you to cut or shorten, cut whole sentences, clauses or phrases and leave every word you keep exactly as they wrote it: rewording what survives is rewriting, and the reworded phrase is often the one they chose.
+
 Models asked only to fix grammar still drift the meaning and neutralize the author's stance, and they tend to rewrite for fluency when a minimal edit was asked for (see [sources](references/sources.md)). So edit at the lowest level that fixes the problem, and keep the owner's distinctive phrasing word for word unless it's actually broken.
 
 ## It has to sound like a person wrote it
@@ -99,7 +101,7 @@ Professional editors don't fill gaps. They ask the author. Do the same.
 
 ## The editor's report
 
-Keep it short and scannable. Use this structure:
+Keep it short and scannable. Open with one or two plain sentences: what held the draft back and what you did about it. List changes by how much they change the read, not in file order. Each reason says what the reader now gets, never a line that only sounds meaningful ("lands harder", "adds weight", "lets it breathe"), and no stock phrase repeats across items. Use this structure:
 
 ```md
 ## Editor's report

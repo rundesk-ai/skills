@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-28",
+  "subject": "writing-blog-posts",
+  "kind": "skill",
+  "skill_hash": "773b4311bff265d4",
+  "compared": {
+    "without": "no skill",
+    "with": "the working tree: cuts take whole sentences, clauses or phrases and keep every surviving word as written; the editor's report opens on the diagnosis, lists changes by impact, and gives no reason that only sounds meaningful"
+  },
+  "cases": 1,
+  "cases_run": ["b01-cut-draft"],
+  "runs_per_arm": 2,
+  "agents": {
+    "claude": {
+      "version": "Claude Code, subagents reading the deployed skill",
+      "model": "claude-opus-5-5",
+      "b01 cut draft": {
+        "words_kept_in_order": {"with": [1.0, 1.0], "without": [0.919, 0.925]},
+        "reworded_or_new_words": {"with": [0, 0], "without": [12, 11]},
+        "length_of_214": {"with": [150, 152], "without": [149, 147]},
+        "front_matter_unchanged": {"with": "2/2", "without": "2/2"},
+        "owner_voice_lol_kept": {"with": "2/2", "without": "0/2"},
+        "dead_end_phrases_in_reply": {"with": 0, "without": 0}
+      },
+      "better": 1, "same": 0, "worse": 0
+    }
+  },
+  "method": "Scratch folders outside the repository, skill deployed with scripts/deploy.sh. Kept-word share is the in-order word match of the edited body against the original body (difflib). Dead-end phrases checked by a fixed pattern list over the reply.",
+  "notes": "Both arms hit two thirds and kept every number. Without the skill both runs reworded surviving sentences and dropped the owner's closing 'lol'; with it both runs cut only, kept every surviving word, and asked before losing the line they were least sure about."
+}
