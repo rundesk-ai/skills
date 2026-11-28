@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-28",
+  "subject": "designing-landing-pages",
+  "kind": "skill",
+  "skill_hash": "7dca1992a46746d4",
+  "compared": {"old": "v1.8.4", "new": "the working tree: every headline, section heading, feature label and table column header says what it covers when read alone"},
+  "cases_run": ["features section with a two-plan table, brief asking for punchy, catchy headings"],
+  "runs_per_arm": 2,
+  "agents": {"claude": {"model": "claude-opus-5-5", "runs_with_labels_failing_alone": {"new": "0/2", "old": "1/2 ('Who it is for'; 'Nothing but the page.' borderline)"}, "better": 1, "same": 0, "worse": 0}},
+  "method": "Scratch folders outside the repository; counted by hand.",
+  "notes": "Small sample. Both new runs said they kept the headings plain because the skill requires it and put the voice in the line under each."
+}

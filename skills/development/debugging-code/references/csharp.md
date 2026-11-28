@@ -86,7 +86,7 @@ behaviour that only appears while observing as a finding about the observation.
 
 Hold code and inputs constant and control the sources of nondeterminism:
 
-| Source | Why it diverges | What to use instead |
+| Source | Why runs diverge | What to use instead |
 |---|---|---|
 | `Dictionary<K,V>` / `HashSet<T>` enumeration | Order depends on hash codes and on insertion *and removal* history, and is explicitly not part of the contract | An ordered collection, or sort a key snapshot before iterating |
 | `string` or object `GetHashCode()` | Randomized per process by default | Never hash-order anything the result depends on |

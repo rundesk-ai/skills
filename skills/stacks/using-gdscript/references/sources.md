@@ -157,7 +157,7 @@ keeps the type; `str_to_var('Object(Node,…)')` builds a live node and `bytes_t
 scripts with one `class_name` resolve silently to one, and the checker reports it; an autoload named like
 a `class_name` fails both.
 
-## Write it once
+## Write code once
 
 The write-once rules come from the cleanup history of a private multi-project C# simulation (2026-10), where about two dozen review rounds found formulas retyped in several files, a lookup copied three times with two tolerances, mirror-image methods, view code re-deriving model rules, outputs published with no reader, and replaced paths left behind, although its instructions already said to search before writing new logic. They are stack-neutral; the tooling line below is this language's.
 

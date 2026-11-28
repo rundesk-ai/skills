@@ -65,7 +65,7 @@ Once the proportions work, decide what deserves independent authoring. Too littl
 reuse and revision hard; too much spends care on pieces nobody sees. **Consider a part when it passes
 one of these:**
 
-| Test | Why it earns a part |
+| Test | Why passing earns a part |
 |---|---|
 | **It repeats** — here, or in an asset that comes later | Authoring once and placing it N times spends one part's care instead of dividing it N ways, and makes all N consistent by construction |
 | **It varies independently** of its neighbors across variants or stages | The variation gets an explicit parameter, and the family declares which combinations it supports |
@@ -99,7 +99,7 @@ different windows unless something makes the second author look for the first.
 Read [modular kits](references/modular-kits.md) once the proportions work and you are writing the
 part table: it holds the parts catalog, pivot policy, manifest, mating arithmetic and variants.
 
-## Prove it
+## Prove the model
 
 1. The whole-model comparison against the named references, at the target camera.
 2. The representative part shown in its assembly, and the family lineup at one physical scale.

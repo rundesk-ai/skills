@@ -6,7 +6,7 @@ style before applying any fallback here.
 
 ## Choose docstring, comment, or neither
 
-| Need | Put it in | Do not put it in |
+| Need | Put in | Do not put in |
 |---|---|---|
 | How a caller uses a public object | Docstring or generated API docs | An implementation comment callers never see |
 | Argument meaning, return semantics, side effects, raised errors, restrictions | Function or method docstring | Types repeated from annotations with no added meaning |

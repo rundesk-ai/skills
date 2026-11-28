@@ -62,7 +62,7 @@ person choosing a project's skills read the catalog the same way, and two skills
 of work cannot hide behind different verbs. Pick the verb whose meaning fits. Add a verb only when
 none here fits the work, and add it to this table in the same change.
 
-| Verb | The work it names |
+| Verb | Work named |
 |---|---|
 | `using-` | working in one technology: a language, framework, engine, data store or tool |
 | `directing-` | steering a generative model's output take by take toward a brief |
@@ -167,7 +167,7 @@ Keep `SKILL.md` under 500 lines. Past that, move conditional detail one level do
 A skill covering several stacks organizes by stack — one reference per stack, named so the agent
 reads only the one it needs — rather than one long page covering all of them.
 
-## Prove it
+## Prove the skill works
 
 A skill is not done when it reads well. It is done when it fires on the right work and improves the
 result.
@@ -186,7 +186,7 @@ result.
 Read [Evaluating](references/evaluating.md) for how to run that comparison and record a result
 worth rereading later.
 
-## Keep it current
+## Keep the skill current
 
 A skill that has sat untouched while its subject moved is worse than no skill, because an agent
 trusts it. When work proves a rule wrong, fix the skill in the same change rather than working

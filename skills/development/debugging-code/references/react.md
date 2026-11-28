@@ -33,7 +33,7 @@ source of false diagnoses in React:
 
 Never ship a fix whose evidence is "it stopped happening after I disabled Strict Mode."
 
-## Is it state, or is it render?
+## Is the bug in state or in rendering?
 
 Separate the two before instrumenting anything:
 

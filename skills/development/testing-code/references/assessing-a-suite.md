@@ -26,7 +26,7 @@ Include the promises that are easy to miss because no single function states the
 For every entry, name the specific case that fails if that behavior breaks. Three outcomes, and they
 are not the same finding:
 
-| Outcome | What it means |
+| Outcome | Meaning |
 |---|---|
 | A case names it and asserts it | Mapped. Move on unless it is load-bearing enough to probe |
 | A case touches the code but asserts something else | The line executes and nothing checks it; this reads as covered and is not |

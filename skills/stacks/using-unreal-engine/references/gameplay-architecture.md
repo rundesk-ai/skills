@@ -5,7 +5,7 @@ choosing tick or timers, or designing a C++/Blueprint boundary.
 
 ## Select by lifetime, authority, and representation
 
-| Type | Lifetime and reach | Use it for | Avoid |
+| Type | Lifetime and reach | Use for | Avoid |
 |---|---|---|---|
 | `UGameInstance` | Process game session; survives map travel | Small coordination state that truly crosses worlds | A universal service locator or replicated state |
 | `UWorldSubsystem` | One `UWorld` | World-scoped services and orchestration | Data that must survive world replacement |

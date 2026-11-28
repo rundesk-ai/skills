@@ -87,7 +87,7 @@ Compatibility do not.
 
 Read [Nodes and lifetime](references/nodes-and-lifetime.md) before writing signal or export code.
 
-## Running it
+## Running the game
 
 **Read [Command line and headless](references/command-line-and-headless.md)** for the flags and a smoke
 run that fails when the game is broken, and

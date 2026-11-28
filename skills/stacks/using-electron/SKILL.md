@@ -51,7 +51,7 @@ change to one of them needs a stated reason in review. Load the app from a custo
 install the navigation guards for every `webContents` — the code is in
 [Security](references/security.md).
 
-## Prove it from the command line
+## Prove the app from the command line
 
 ```sh
 npx electron .                                   # never `electron src/main.js`: the app name becomes "Electron" and userData moves

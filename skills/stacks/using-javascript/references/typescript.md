@@ -30,7 +30,7 @@ each `as`, `any` and non-null `!` as an unchecked claim that needs a reason.
 
 ## Options that change what the compiler catches
 
-| Option | Catches | Without it |
+| Option | Catches | Without the option |
 |---|---|---|
 | `noUncheckedIndexedAccess` | `arr[i]` and `record[key]` typed as possibly `undefined` | `const first: number = list[10]` type-checks and is `undefined` |
 | `exactOptionalPropertyTypes` | assigning `undefined` to an optional property explicitly | `{ retries: undefined }` passes as "not set", and `'retries' in opts` is true |

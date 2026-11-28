@@ -5,7 +5,7 @@ it nothing to do.
 
 ## Where garbage comes from
 
-| Source | Why it allocates | Instead |
+| Source | Why the source allocates | Instead |
 |---|---|---|
 | LINQ in a hot path | An enumerator, a closure, and usually an array; four to five times a loop | A `for` loop; LINQ in load, save and UI refresh |
 | A lambda that captures a local, or only `this` | A closure or delegate per call (64 bytes for `this` alone) | A `static` lambda with state passed as an argument, or a delegate cached in a field |

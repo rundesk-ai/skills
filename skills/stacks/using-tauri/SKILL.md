@@ -58,7 +58,7 @@ Release builds have no devtools (and on Windows no console): add the log plugin 
 in a shipped build, and never ship the `devtools` feature, whose private macOS APIs the App Store
 rejects.
 
-## Prove it from the command line
+## Prove the app from the command line
 
 ```sh
 (cd src-tauri && cargo check)       # also validates config schema, permission names, sidecar paths, Cargo features

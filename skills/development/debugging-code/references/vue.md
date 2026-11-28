@@ -8,7 +8,7 @@ component code.
 
 **Vue DevTools is the primary instrument**, and each tab answers a different question:
 
-| Tab | Question it answers |
+| Tab | Question answered |
 |---|---|
 | Components | What is the tree, and what is this component's actual state right now? |
 | Timeline | What happened in what order — events, renders, performance |
@@ -27,7 +27,7 @@ app.config.errorHandler = (err, instance, info) => { /* every uncaught error, wi
 `errorCaptured` on a parent gives you the same for a subtree, and is how you find which child throws
 when the stack is all framework frames.
 
-## Is it state, or is it render?
+## Is the bug in state or in rendering?
 
 This is the first bisection, and it takes ten seconds:
 

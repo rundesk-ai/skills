@@ -29,7 +29,7 @@ that gives slices of similar size.
 
 ## Traps
 
-| Symptom | Cause | Replacement | Proof it is fixed |
+| Symptom | Cause | Replacement | Proof of the fix |
 |---|---|---|---|
 | Every slice is "done" and nothing can be used | Split by layer or discipline | Re-cut so each slice crosses every layer for one path | The first slice can be demonstrated alone |
 | A slice has no observable result | A task posing as a slice | Merge it into the slice it serves | Each slice names a check someone can run or see |

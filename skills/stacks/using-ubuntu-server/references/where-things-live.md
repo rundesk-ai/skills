@@ -75,7 +75,7 @@ holds Docker and little else, and the usual places are inside containers:
 don't run them where the output is shared. Restarting `docker.service` stops every container,
 proxy included, unless `"live-restore": true` is set.
 
-## Find it on this server
+## Find where things live on this server
 
 ```sh
 systemctl cat nginx                 # the unit, every drop-in, and the binary it runs

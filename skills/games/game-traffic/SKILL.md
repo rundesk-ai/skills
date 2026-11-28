@@ -154,7 +154,7 @@ step, junction entry, gridlock detection, congestion cost and reroute policy, an
 Read [scale and tuning](references/scale-and-tuning.md) for the counters to keep and the figures sources
 report.
 
-## Prove it
+## Prove the traffic simulation
 
 - Build the tools before tuning. Use an overlay coloured by mean speed relative to the limit, not by
   vehicle count: busy roads that flow are not problems. Add follow-one-vehicle logs filtered by vehicle

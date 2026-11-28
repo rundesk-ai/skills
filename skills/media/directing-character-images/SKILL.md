@@ -23,7 +23,7 @@ faces. So the default is to **edit an accepted image**, never to regenerate the 
    quarter, profile, back. Later edits that turn the character use the matching angle as reference
    instead of asking the model to invent the unseen side.
 
-## Generating new: write it like a photograph
+## Generating new: write the prompt like a photograph
 
 Only an image with no parent is generated from a description: the first anchor of an invented
 person, or a new setting the person has never been in. Once an image exists, every later image is

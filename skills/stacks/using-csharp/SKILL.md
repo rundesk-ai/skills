@@ -39,7 +39,7 @@ In a simulation that must replay, iteration order and floating-point accumulatio
 the language's convenient defaults are the wrong ones. **Read
 [Determinism](references/determinism.md) before writing simulation state**; the short version:
 
-| Convenience | What it costs | Instead |
+| Convenience | Cost | Instead |
 |---|---|---|
 | `Dictionary<K,V>` / `HashSet<T>` enumeration | Order is not part of their contract and changes with insertion **and removal** history | An ordered collection, or sort a key snapshot before iterating |
 | `Array.Sort`, `List<T>.Sort` | **Unstable**: past 16 items, equal keys come out in an order that depends on the input order | A comparer that ends in a unique tie-break (`id`), or `OrderBy(...).ThenBy(id)`, which is stable |
@@ -96,7 +96,7 @@ Read [Saves and serialization](references/saves-and-serialization.md) before wri
 
 Read [Anti-patterns](references/anti-patterns.md) for the rest that compile clean and fail later.
 
-## Write it once, for a reader that exists
+## Write code once, for a reader that exists
 
 Duplication and dead code arrive one reasonable edit at a time, often from different agents each
 revising code they did not write, and every copy is a place the next fix misses. A project rule saying

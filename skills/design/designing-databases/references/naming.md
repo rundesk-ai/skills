@@ -10,7 +10,7 @@ guidance; this page covers the forms a schema needs.
 Plurality, casing, key and timestamp forms are ecosystem conventions, and the ecosystems disagree.
 Follow whichever one the stack already uses, and never mix two inside one schema.
 
-| Element | Usual form | Where it comes from, and what it costs |
+| Element | Usual form | Origin and cost |
 |---|---|---|
 | Foreign key | `<singular_parent>_id` — `account_id` | Rails, Laravel, and Django all derive this automatically. A role prefix (`approved_by_user_id`) is right when one table links to the same parent twice, but it breaks that derivation and the relation must be configured by hand. |
 | Primary key | `id` | The three frameworks mandate it; `sqlstyle.guide` argues for `account_id` instead. Pick the one your stack enforces. |

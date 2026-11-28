@@ -54,7 +54,7 @@ Work down this list. An optimization above an unmet requirement is wasted.
 This is the part of SEO that belongs in a repository. Everything here is asserted in a file, and
 verified by an API or a header rather than an opinion.
 
-| Signal | Where it lives in code | How it is verified |
+| Signal | Location in code | How the signal is verified |
 |---|---|---|
 | Indexability | `robots.txt`, `<meta name="robots">`, `X-Robots-Tag` header | URL Inspection; `curl -I` |
 | Canonical | `<link rel="canonical">`, redirects, sitemap entries | URL Inspection reports Google's chosen canonical |

@@ -81,7 +81,7 @@ description: Use when <the work, as a person would describe it, including the in
 - Explain why a rule exists. An agent given the reason applies it to the case you did not foresee.
 - Write no README, no changelog and no record of how the skill came to be.
 
-## 5. Place it in the catalog
+## 5. Place the skill in the catalog
 
 Name it `<verb>-<object>` with a verb from the Name the work table in `writing-skills`; `check.sh`
 refuses any other. A directory under `skills/` that holds `SKILL.md` is a skill; nothing else lists it. Once the gates
@@ -89,7 +89,7 @@ pass, it is committed and merged, and it ships with the next release of this cat
 installs the catalog as a package and updates every project that has the skill. Never create it in
 Rundesk's library first.
 
-## 6. Prove it
+## 6. Prove the skill works
 
 1. **Test the trigger** in fresh sessions: a direct request, an indirect request that never names the
    skill, and a near miss that must not load it. Fix routing by category, never by pasting the

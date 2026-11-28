@@ -133,7 +133,7 @@ for (int c = 0; c < Chunks; c++) total += part[c];
 
 Each chunk reads only state no other chunk writes during the step.
 
-## Proving it
+## Proving determinism
 
 - Two instances, same construction, same steps, same digest; and a run that saves mid-game, loads, and
   keeps stepping both copies (see [Saves and serialization](saves-and-serialization.md)).

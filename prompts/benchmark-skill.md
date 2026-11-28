@@ -37,7 +37,7 @@ invisible on another.
 
 ### Cost, in tokens
 
-| Paid | When | How it is read |
+| Paid | When | How the cost is read |
 |---|---|---|
 | **Standing** | every session, whether or not the skill fires | the same trivial prompt in a directory with the skill and one without; the difference in input tokens is the description |
 | **Load** | when it fires | the body, from the file |
@@ -153,7 +153,7 @@ The `orders` endpoint sometimes returns a total that is a cent short. Add a test
 - **Write the rubric before the first run.** A rubric written after reading the output grades the
   output it was written from.
 
-## Run it
+## Run the benchmark
 
 For each agent, for each case, run both arms:
 
@@ -173,7 +173,7 @@ For each agent, for each case, run both arms:
 it loads; for `codex` and `grok`, look for the skill's own words and steps in the run. Where an agent
 gives no way to tell, record `unknown` rather than a guess.
 
-## Grade it
+## Grade the runs
 
 Grade with a judge that is given the rubric and both outputs **with the arms unlabeled**, so it
 cannot reward the one it expects to win. For each case and agent, record better, same or worse, and
@@ -190,7 +190,7 @@ Three outcomes, and each means something different:
 - **The skilled run is worse.** Usually over-specification: a rule stated without its reason, applied
   literally to a case it was never meant for.
 
-## Record it
+## Record the results
 
 Write one file per run to `bench/results/<skill>/<YYYY-MM-DD>.json`. `date`, `score` and
 `skill_hash` are the keys every later reader of the results relies on, so they are the contract.

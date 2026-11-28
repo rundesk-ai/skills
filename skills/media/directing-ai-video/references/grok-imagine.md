@@ -16,7 +16,7 @@ before a run, and trust it over this page when they disagree.
 
 The `-lite` model has no frame pinning or references, so it cannot keep a chain or a loop.
 
-## Map the workflow onto its controls
+## Map the workflow onto Grok Imagine's controls
 
 - **Start frame** → `image`. Image-to-video output always takes the input image's aspect ratio and
   ignores `aspect_ratio`, so make every keyframe at the delivery aspect ratio.

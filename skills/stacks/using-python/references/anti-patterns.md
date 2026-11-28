@@ -101,7 +101,7 @@ language-neutral concern.
 | Reach for concurrency to make it faster | Establish the workload is I/O-bound | CPU-bound threads add contention and no throughput |
 | Load an entire file or query result to count it | Stream, or aggregate at the source | Memory scales with the input, and the input grows |
 
-## How to report these
+## How to report anti-patterns
 
 1. Name the concrete cost — the change this makes hard, the bug it invites.
 2. Say it is a design finding, not a defect, and rank it below anything from

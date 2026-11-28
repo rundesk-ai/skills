@@ -129,7 +129,7 @@ held claims, and the commitment window. Generate player-facing explanations from
 stored prose. Designers debugging a utility system and players reading a colonist's thought both depend
 on it.
 
-## Prove it
+## Prove the behavior
 
 - Two-agent fixtures reproduce most behaviour bugs. Use headless tests that wait until a condition
   holds within N ticks, so a stuck agent fails the test instead of hanging it.

@@ -46,6 +46,9 @@ personal preference or current aesthetic trend into a user requirement.
 Decide what a control is called while designing it, not in a copy pass afterwards: a control the
 user cannot name is usually one whose behavior is not decided. Follow the product's interface-
 language conventions for titles, labels, column headers, empty states, errors, and confirmations.
+Each title, label, column header, tab and navigation item makes sense read alone, because a
+scanning user reads little else: it names its subject, with no pronoun whose noun is elsewhere
+(`What it does` becomes `Description`) and no riddle the screen has to decode.
 
 Read [interaction-and-actions.md](references/interaction-and-actions.md) when building or reviewing
 buttons, links, clickable cards, menus, dialogs, icon controls, destructive actions, cursor behavior,

@@ -8,7 +8,7 @@ bad tests come from replacing the wrong thing rather than from replacing too muc
 The words are used loosely and the differences are behavioral. Use them precisely, because "we
 mocked it" hides which of these actually happened:
 
-| Double | What it does | Use when |
+| Double | Behavior | Use when |
 |---|---|---|
 | **Dummy** | Fills a parameter, never used | The signature demands a value the path never touches |
 | **Stub** | Returns canned answers to calls | You need the collaborator to supply an input |

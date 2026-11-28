@@ -52,6 +52,8 @@ specific capability, concrete offer, credible proof, useful comparison, or timel
 Match it to awareness. Someone naming a product category needs clarity and difference; someone
 naming a problem needs recognition and a credible bridge; someone naming the brand may need the
 exact offer or next action. Do not pretend copy can repair a weak offer or mismatched destination.
+A headline is often shown or read alone, so it names the offer or capability itself; a line whose
+"it" or riddle needs the description to decode loses the person who reads only the headline.
 
 Keep persuasion ethical. Use specificity, relevance, proof, and reduced uncertainty. Do not use
 false urgency, shame, fear, identity pressure, manufactured consensus, disguised advertising,
