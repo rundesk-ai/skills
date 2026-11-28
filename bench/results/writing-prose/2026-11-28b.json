@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-28",
+  "subject": "writing-prose",
+  "kind": "skill",
+  "skill_hash": "3be14326aa6d6239",
+  "compared": {
+    "old": "skills/writing/writing-prose at v1.8.3",
+    "new": "the working tree: the heading rule names table column headers, list labels, buttons and navigation titles, with 'What it does' becoming 'Description'"
+  },
+  "cases_run": ["pricing section with a plan table and a labeled feature list, from confirmed facts, with a brief inviting pronoun headers"],
+  "runs_per_arm": 2,
+  "agents": {
+    "claude": {
+      "model": "claude-opus-5-5",
+      "pricing section": {
+        "pronoun_column_headers": {"new": "0/2", "old": "1/2 ('Who it suits')"},
+        "list_labels_failing_alone": {"new": 0, "old": 0}
+      },
+      "better": 1, "same": 0, "worse": 0
+    }
+  },
+  "method": "Scratch folders outside the repository; new arm deployed with scripts/deploy.sh, old arm from git archive v1.8.3. Headers and labels counted by hand.",
+  "notes": "Both new runs named the columns 'Features included' and 'Best for' and one said it avoided 'Who it suits' because 'it' names nothing. Two runs per arm is a small sample: one v1.8.3 run already wrote 'Who the plan suits'."
+}
