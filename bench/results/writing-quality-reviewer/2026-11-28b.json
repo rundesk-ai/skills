@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-28",
+  "subject": "writing-quality-reviewer",
+  "kind": "subagent",
+  "skill_hash": "230ea30f7e1c6a90",
+  "compared": {
+    "old": "subagents/writing-quality-reviewer.md at 7e8b10a (v1.8.2)",
+    "new": "the working tree: a Headings and titles pass reading every title, heading, subtitle, link and first sentence alone, each failure reported with a replacement"
+  },
+  "cases_run": ["w14-features-headings", "a help page with three failing headings (not kept as a case)"],
+  "runs_per_arm": 2,
+  "agents": {
+    "claude": {
+      "model": "claude-opus-5-5",
+      "w14 features page": {
+        "clever_headings_flagged_of_6": {"new": [5, 6], "old": [0, 0]},
+        "leaning_first_sentence_flagged": {"new": "2/2", "old": "1/2, as a minor pronoun"},
+        "replacements_adding_claims": {"new": 0, "old": 0}
+      },
+      "help page": {
+        "failing_headings_flagged_of_3": {"new": [3, 3], "old": [3, 3]},
+        "click_here_flagged": {"new": "2/2", "old": "2/2"}
+      },
+      "better": 1, "same": 1, "worse": 0
+    }
+  },
+  "method": "Subagent runs in scratch folders; both arms read their instructions from a file. Counted by hand from the reviews. The w14 key was written after these runs from the planted headings, so this result is a first measurement, not a blind benchmark of the case.",
+  "notes": "On plain help-page headings the old reviewer already caught every one. On landing-page feature headings it passed all six as fitting a feature grid; the new pass flagged five or six with replacements from each section's own body, and also caught 'Take it anywhere' implying sync."
+}
