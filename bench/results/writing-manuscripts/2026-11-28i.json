@@ -1,0 +1,31 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "aece9ff4eca980c1",
+ "score": 1.0,
+ "cases": 2,
+ "method": "After adding 'How writers usually lay out a book' to rundesk-pages.md. New q15-pages-add-scene-notes both arms x2; skill arm rerun on q13 x2 (no-skill reused from 2026-11-28h). Same automatic file check.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "better": 2,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0
+  }
+ },
+ "quality": {
+  "q15-pages-add-scene-notes": {
+   "verdict": "better",
+   "with": "new 02b-the-lamp.md (one run also wrote a .order), text word for word, renamed nothing, counted one chapter with the title page and 90-notes excluded, flagged the timeline/folder conflict (2/2)",
+   "without": "renamed 03-the-letter.md to 04-the-letter.md to fit 03-the-lamp.md, fixed the link it broke, counted one chapter correctly (2/2)"
+  },
+  "q13-pages-new-page": {
+   "verdict": "better",
+   "with": "now makes a top-level 03-chapter-two folder (the chapter-as-folder pattern) holding 03-the-letter.md unrenamed, no manual break, front matter intact, link reported (2/2)",
+   "without": "as in 2026-11-28h"
+  }
+ },
+ "notes": "Neither arm treated the notes folder as a chapter, so that part of q15 does not separate them; the rename trap does."
+}

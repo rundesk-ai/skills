@@ -1,0 +1,140 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "b3604cf2db3160f3",
+ "score": 0.67,
+ "cases": 14,
+ "method": "Agent-tool subagents in fresh scratch folders (deploy.sh for the skill arm; both arms told to load no other skill). Skill arm rerun on all 9 quality cases, 2 runs each; the no-skill arm was rerun only for the new q08 and q09, and its earlier outputs for q01-q07 were reused because nothing they depend on changed. Blind judge per case against the rubric; fidelity from word-level similarity, in-order kept-word share, protected strings and the judges' additions list. Routing is a proxy: one agent choosing from all 74 catalog descriptions. Not the CLI harness; codex and grok not run.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "fired": "proxy 4/4",
+   "near_miss_fired": false,
+   "better": 6,
+   "same": 1,
+   "worse": 2,
+   "score": 0.67
+  },
+  "codex": {
+   "skipped": "not run in this session"
+  },
+  "grok": {
+   "skipped": "not run in this session"
+  }
+ },
+ "quality": {
+  "q01-proofread": {
+   "with_rubric": 1.0,
+   "with_overall": 5,
+   "with_additions": 0,
+   "with_sim": 0.97,
+   "without_rubric": 1.0,
+   "without_overall": 5,
+   "without_additions": 0,
+   "without_sim": 0.97,
+   "verdict": "same"
+  },
+  "q02-copyedit": {
+   "with_rubric": 1.0,
+   "with_overall": 5,
+   "with_additions": 1,
+   "with_sim": 0.95,
+   "without_rubric": 0.92,
+   "without_overall": 4,
+   "without_additions": 2,
+   "without_sim": 0.95,
+   "verdict": "better"
+  },
+  "q03-line-edit": {
+   "with_rubric": 1.0,
+   "with_overall": 4.5,
+   "with_additions": 0,
+   "with_sim": 0.9,
+   "without_rubric": 0.8,
+   "without_overall": 4,
+   "without_additions": 0,
+   "without_sim": 0.81,
+   "verdict": "better"
+  },
+  "q04-rewrite-better": {
+   "with_rubric": 0.92,
+   "with_overall": 4,
+   "with_additions": 0,
+   "with_sim": 0.98,
+   "without_rubric": 0.5,
+   "without_overall": 2.5,
+   "without_additions": 11,
+   "without_sim": 0.57,
+   "verdict": "better"
+  },
+  "q05-next-scene": {
+   "with_rubric": 1.0,
+   "with_overall": 5,
+   "with_additions": 0,
+   "with_sim": 1.0,
+   "without_rubric": 0.25,
+   "without_overall": 1,
+   "without_additions": 8,
+   "without_sim": 1.0,
+   "verdict": "better"
+  },
+  "q06-tenser-half": {
+   "with_rubric": 0.88,
+   "with_overall": 3.5,
+   "with_additions": 0,
+   "with_sim": 0.78,
+   "without_rubric": 0.88,
+   "without_overall": 4,
+   "without_additions": 1.5,
+   "without_sim": 0.56,
+   "verdict": "worse"
+  },
+  "q07-book-context": {
+   "with_rubric": 0.9,
+   "with_overall": 4,
+   "with_additions": 0,
+   "with_sim": 0.93,
+   "without_rubric": 1.0,
+   "without_overall": 5,
+   "without_additions": 0,
+   "without_sim": 0.9,
+   "verdict": "worse"
+  },
+  "q08-book-elsewhere": {
+   "with_rubric": 1.0,
+   "with_overall": 5,
+   "with_additions": 0,
+   "with_sim": 0.95,
+   "without_rubric": 0.79,
+   "without_overall": 3.5,
+   "without_additions": 0,
+   "without_sim": 0.85,
+   "verdict": "better"
+  },
+  "q09-cut-keep-words": {
+   "with_rubric": 0.9,
+   "with_overall": 4,
+   "with_additions": 0,
+   "with_sim": 0.81,
+   "without_rubric": 0.7,
+   "without_overall": 2.5,
+   "without_additions": 0,
+   "without_sim": 0.79,
+   "verdict": "better"
+  }
+ },
+ "means": {
+  "with": {
+   "rubric": 0.96,
+   "overall": 4.44,
+   "additions": 0.11
+  },
+  "without": {
+   "rubric": 0.76,
+   "overall": 3.5,
+   "additions": 2.5
+  }
+ },
+ "notes": "q08 (rest of the book in another folder, a no-contraction narrator, request says 'stiff'): with 5/5 both runs, expanding both narration contractions; without 3.5, one run missing the no-contraction rule and both rewording more. q09 (cut to two thirds): with kept 100% of surviving words in the writer's order in both runs (without 96-98%, rewording 'nearly evening', 'She waited on the ladder'), but both skilled runs cut the protected rocking horse and asked about it. q06 regressed from 5/5 under the previous version to 3.5: under the new no-rewording cut rule both skilled runs stopped at 144-156 words of 236 instead of half and asked before cutting further; without reached half with small additions. q07 worse by one judge point (4 vs 5) on a leftover 'looking ... look up' echo; rubric 0.9 vs 1.0. Thresholds set before the run: q08 beats baseline met; description <= ~135 tokens met (~130); routing 7/7 met; q09 protected 100% missed (rocking horse) and q09 trigram >= 0.90 missed (0.88/0.90; the trigram test cannot be met by pure cuts, which join words that were never adjacent; in-order kept-word share is 1.00); better-or-same on every case missed (q06, q07)."
+}

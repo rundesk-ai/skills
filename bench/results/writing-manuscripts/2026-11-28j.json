@@ -1,0 +1,26 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "9a6550b8feff2d4b",
+ "score": 1.0,
+ "cases": 1,
+ "method": "Added to rundesk-pages.md: when the skill moves a sheet or chapter it fixes the links that move broke (target only, listed for undo); broken links it didn't cause are reported. Rerun skill arm on q13 x2; no-skill reused from 2026-11-28h. Automatic file check.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "better": 1,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0
+  }
+ },
+ "quality": {
+  "q13-pages-new-page": {
+   "verdict": "better",
+   "with": "03-chapter-two/03-the-letter.md (no rename), timeline link fixed with only the path changed and listed under 'Link fixed by the move', no manual break, front matter intact (2/2)",
+   "without": "renamed the file to 01-the-letter.md, fixed the link (2/2)"
+  }
+ },
+ "notes": "The one gap the baseline had over the skill (it fixed the link) is closed; the skill still never renames."
+}

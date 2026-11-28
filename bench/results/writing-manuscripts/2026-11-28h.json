@@ -1,0 +1,31 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "43c7b7efd69daac1",
+ "score": 1.0,
+ "cases": 2,
+ "method": "Harder Pages cases on the lighthouse fixture (no .order, 01- prefixes, front matter above titles, a notes folder linking a sheet). Both arms x2; graded by an automatic file check (renames, .order, manual page breaks, front matter, link state, reply mentions) plus reading the replies; no blind judge, because the rubric lines are mechanical. Agent-tool subagents, no MCP tools.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "better": 2,
+   "same": 0,
+   "worse": 0,
+   "score": 1.0
+  }
+ },
+ "quality": {
+  "q13-pages-new-page": {
+   "verdict": "better",
+   "with": "kept 03-the-letter.md, moved it to the top level, no manual break, front matter intact, link reported not fixed (2/2)",
+   "without": "renamed 03-the-letter.md to 01-the-letter.md inside a new 03-chapter-two folder, fixed the link, offered a page-break marker if the export needed one (2/2)"
+  },
+  "q14-pages-prefix-order": {
+   "verdict": "better",
+   "with": "added 02-chapter-one/.order, renamed nothing, flagged the third-night continuity (2/2)",
+   "without": "swapped the 01-/02- prefixes, renaming both files (2/2)"
+  }
+ },
+ "notes": "The no-skill arm handles the link better (fixes it); the skill arm reports it and leaves the notes untouched."
+}

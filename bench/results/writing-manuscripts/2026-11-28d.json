@@ -1,0 +1,85 @@
+{
+ "date": "2026-11-28",
+ "skill": "writing-manuscripts",
+ "skill_hash": "5c2268c702312d38",
+ "score": 0.8,
+ "cases": 5,
+ "method": "Rerun after adding 'What a line edit tightens' (filter words, padding and vague words, actor and verb, one name per thing, grammar, cadence and tension through rhythm) and 'when asked, apply every edit you would recommend'. Skill arm on q03, q04, q06, q07 and the new q10, 2 runs each; no-skill arm new for q10, reused from 2026-11-28 for the rest. Blind judge per case. Agent-tool subagents, not the CLI harness; codex and grok not run.",
+ "agents": {
+  "claude": {
+   "version": "2.1.332",
+   "model": "claude-opus-5-5",
+   "better": 4,
+   "same": 0,
+   "worse": 1,
+   "score": 0.8
+  },
+  "codex": {
+   "skipped": "not run in this session"
+  },
+  "grok": {
+   "skipped": "not run in this session"
+  }
+ },
+ "quality": {
+  "q03-line-edit": {
+   "with_rubric": 0.95,
+   "with_overall": 4.5,
+   "with_additions": 0,
+   "with_sim": 0.86,
+   "without_rubric": 0.85,
+   "without_overall": 4,
+   "without_additions": 0,
+   "without_sim": 0.81,
+   "verdict": "better"
+  },
+  "q04-rewrite-better": {
+   "with_rubric": 0.96,
+   "with_overall": 4,
+   "with_additions": 0,
+   "with_sim": 0.96,
+   "without_rubric": 0.5,
+   "without_overall": 1.5,
+   "without_additions": 11,
+   "without_sim": 0.57,
+   "verdict": "better"
+  },
+  "q06-tenser-half": {
+   "with_rubric": 0.94,
+   "with_overall": 3.5,
+   "with_additions": 0,
+   "with_sim": 0.71,
+   "without_rubric": 0.75,
+   "without_overall": 4,
+   "without_additions": 1.5,
+   "without_sim": 0.56,
+   "verdict": "worse"
+  },
+  "q07-book-context": {
+   "with_rubric": 1.0,
+   "with_overall": 5,
+   "with_additions": 0,
+   "with_sim": 0.93,
+   "without_rubric": 1.0,
+   "without_overall": 4.5,
+   "without_additions": 0,
+   "without_sim": 0.9,
+   "verdict": "better"
+  },
+  "q10-line-craft": {
+   "with_rubric": 0.92,
+   "with_overall": 4.5,
+   "with_additions": 0,
+   "with_sim": 0.82,
+   "without_rubric": 0.71,
+   "without_overall": 3,
+   "without_additions": 1.5,
+   "without_sim": 0.73,
+   "verdict": "better"
+  }
+ },
+ "known_gaps": {
+  "q06-tenser-half": "Deliberate, accepted by the owner: judge overall 3.5 vs 4 while the rubric favors the skill (0.94 vs 0.75); the skill adds nothing, the baseline gains tension partly by invention. One skilled run cut 'and then go back the way they had come', which changes what happens, and flagged it."
+ },
+ "notes": "q07 now better (5 vs 4.5): both skilled runs joined the stacked 'He was' sentences. q10 (new: filter, padding, vague, nominalisation, dangling modifier, name variation): with 4.5 vs 3; both no-skill runs cut the protected 'Then she realised' and one added words; both skilled runs kept it, left 'something' vague, and flagged the dropped 'widow' detail instead of silently cutting it. q04 with 4 vs 1.5 (no-skill: 11 invented details). q03 with 4.5 vs 4. Zero additions in any skilled run."
+}
