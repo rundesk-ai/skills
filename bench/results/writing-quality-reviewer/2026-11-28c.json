@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-28",
+  "subject": "writing-quality-reviewer",
+  "kind": "subagent",
+  "skill_hash": "eace0e708560d068",
+  "compared": {
+    "old": "subagents/writing-quality-reviewer.md at v1.8.3",
+    "new": "the working tree: the headings pass names table column headers, list labels, buttons and navigation titles, with 'What it does' becoming 'Description'"
+  },
+  "cases_run": ["w14-features-headings, with the plan table added"],
+  "runs_per_arm": 2,
+  "agents": {
+    "claude": {
+      "model": "claude-opus-5-5",
+      "w14 features page": {
+        "pronoun_column_headers_flagged": {"new": "2/2", "old": "0/2"},
+        "clever_headings_flagged": {"new": "2/2", "old": "2/2"},
+        "standalone_labels_wrongly_flagged": {"new": 0, "old": 0}
+      },
+      "better": 1, "same": 0, "worse": 0
+    }
+  },
+  "method": "Subagent runs in a scratch folder outside the repository; both arms read their instructions from a file; counted by hand against the w14 key, whose M4 was written before these runs.",
+  "notes": "The owner found the reviewer passing 'What it does' as a column header. v1.8.3 caught the clever section headings but in both runs passed the table's 'What it does' and 'Who it's for'; one run listed the table as verified. The new pass flagged both in both runs and left 'Plan' and 'Compare plans' alone."
+}

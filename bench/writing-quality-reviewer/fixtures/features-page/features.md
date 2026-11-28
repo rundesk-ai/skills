@@ -23,3 +23,10 @@ Export the whole book or a single chapter as PDF or EPUB.
 ## Yours, always
 
 It works offline, and your files are plain Markdown on your own disk.
+
+## Compare plans
+
+| Plan | What it does | Who it's for |
+|---|---|---|
+| Free | Chapters, live word count and distraction-free mode | Trying Inkwell on one book |
+| Writer | Everything in Free, plus 90 days of version history and PDF and EPUB export | Finishing and sharing a book |

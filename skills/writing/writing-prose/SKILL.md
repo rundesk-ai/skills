@@ -83,14 +83,16 @@ you what they are missing, because to you it all reads as obvious.
   already has (the thing they asked about, the term from the last sentence), and put the new
   information last, where a reader puts the weight. The first words of each paragraph and heading
   carry the point, because a skimming reader reads little else.
-- **Every heading stands alone.** A headline, title, subtitle, section heading or link is often
-  all a skimming reader sees, so a reader who sees only that line knows what the section offers.
+- **Every heading stands alone.** A headline, title, subtitle, section heading, table column
+  header, list label, button, navigation title or link is often all a skimming reader sees, so a
+  reader who sees only that line knows what it labels.
   It names its subject: no pronoun ("it", "this", "they") unless its noun is in the same line,
   and nothing borrowed from the line before or the page around it. Its verb is the action, not a
   vague stand-in, and it needs no body to decode: "Shape it chapter by chapter." fails twice,
   because "shape" names no action and "it" names nothing; "Know how long it runs, and how long it
-  reads." is a riddle; "See your word count and reading time." works. The section's first
-  sentence stands alone too, without leaning on the heading above it.
+  reads." is a riddle; "See your word count and reading time." works. A column header names
+  what the column holds, not the row's subject by pronoun: "What it does" becomes "Description". The
+  section's first sentence stands alone too, without leaning on the heading above it.
 - **Write for the least-informed reader you are writing for.** Define a term the first time it
   appears, or replace it with the plain words it stands for.
 
@@ -291,8 +293,9 @@ each C by name, pass or fail, with the passage behind it.
 - [ ] **Reader check.** Does the first paragraph give the reader the result, not your process? Is
       every name, label and abbreviation one this reader already knows or is told once? One point
       of view throughout?
-- [ ] **Heading check.** Read each headline, title, subtitle, heading and link alone, with
-      nothing around it. Would a skimmer know what the section offers? Rewrite each one that
+- [ ] **Heading check.** Read each headline, title, subtitle, heading, column header, list
+      label, button, navigation title and link alone, with nothing around it. Would a skimmer
+      know what it labels? Rewrite each one that
       leans on a pronoun, a vague verb, wordplay or the text around it, and check the first
       sentence under it the same way.
 - [ ] **Noun scan.** Replace each category noun (functionality, process, solution, stakeholders)
