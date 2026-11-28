@@ -22,7 +22,7 @@ regression test that nobody watched fail is an assumption.
 
 ## Read the assertions, not the test count
 
-| Signal in the diff | What it usually means |
+| Signal in the diff | What the signal usually means |
 |---|---|
 | Asserts a mock was called, with no state assertion | Interaction pinned; behavior unproven, and brittle to refactoring |
 | Asserts `not None`, `truthy`, or that nothing threw | The weakest possible claim; almost any implementation passes |
@@ -75,7 +75,7 @@ stronger signal than any coverage number.
 A gap is easier to act on when it is classified, because the classification implies the case that
 closes it:
 
-| Kind | What is missing | The case that closes it |
+| Kind | What is missing | The case that closes the gap |
 |---|---|---|
 | Unexercised unit | The change adds a module, class, or command with no test at all | One case per behavior it decides |
 | Unexercised entry point | A tested file gained a public function, endpoint, or handler nothing calls in a test | A case at the boundary a caller uses |
@@ -95,7 +95,7 @@ Some absences are not gaps, and reporting them costs the report its authority:
 - An input so unusual that no producer in the system can emit it.
 - A case that would assert what an existing case already asserts.
 
-## Report it as a finding, not as a preference
+## Report a test gap as a finding, not as a preference
 
 Test gaps follow the same evidence bar as any other finding: name the behavior, the path that reaches
 it, what goes wrong undetected, and the smallest test that would catch it.

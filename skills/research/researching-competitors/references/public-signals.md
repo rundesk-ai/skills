@@ -78,7 +78,7 @@ built rather than what they want you to believe. Read them for:
 Do not read them for roadmap dates, priorities, or relative investment. Cadence is a fact about a
 team's process.
 
-## The rule that covers all of them
+## The rule that covers every public signal
 
 Every signal here is a by-product of something the company did for another reason. That is why it is
 credible about configuration and intent, and why it is worthless about outcome and scale. Write down

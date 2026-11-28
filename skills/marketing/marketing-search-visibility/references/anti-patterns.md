@@ -10,7 +10,7 @@ only the first also causes damage.
 Violating these can remove a site from results entirely or demote it. From
 [Spam policies for Google web search](https://developers.google.com/search/docs/essentials/spam-policies):
 
-| Policy | What it is |
+| Policy | Description |
 |---|---|
 | **Cloaking** | Showing different content to users and search engines to manipulate rankings |
 | **Doorway abuse** | Multiple near-identical pages or sites targeting query variations, funnelling to one destination |
@@ -61,7 +61,7 @@ results disappearing in 2026 was a product withdrawal, not a penalty. See
 
 Not penalties — just work that does not produce the claimed result.
 
-| Tactic | Why it fails |
+| Tactic | Why the tactic fails |
 |---|---|
 | `llms.txt` for AI visibility | Almost never requested, and Google does not use it — see [AI search](ai-search.md). Harmless, but not a deliverable |
 | Chunking content for AI | "There's no requirement to break your content into tiny pieces" |

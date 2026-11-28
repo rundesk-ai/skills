@@ -103,7 +103,7 @@ API), getters and setters on every field become plain data, and null becomes `Op
 
 The rest are in the references below, each with its reproduction.
 
-## Write it once, for a reader that exists
+## Write code once, for a reader that exists
 
 Duplication and dead code arrive one reasonable edit at a time, often from different agents each
 revising code they did not write, and every copy is a place the next fix misses:

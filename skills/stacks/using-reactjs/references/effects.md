@@ -5,7 +5,7 @@
 The lint rules now flag an effect that only copies props or state into state (`set-state-in-effect`).
 These cases they do not catch:
 
-| Effect used for | Replace with | Failure it causes |
+| Effect used for | Replace with | Failure caused |
 |---|---|---|
 | Responding to a user action that already happened (state changed, so submit) | the event handler | the logic runs whenever the state changes, including on load, and the reason is lost |
 | Notifying a parent after state changed | call the callback in the same handler that sets state | an extra render pass per change, and the parent sees the change a commit late |

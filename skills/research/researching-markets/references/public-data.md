@@ -86,7 +86,7 @@ different businesses are not identical.
 
 **So: a filing bounds a market. It does not let you compare two companies' slices of one.**
 
-## Choosing between them
+## Choosing between the data sources
 
 - Need a **denominator** — how many buyers, establishments, or employees exist: establishment and
   employment programs.

@@ -95,6 +95,8 @@ volatility, Retainer Panels, pooling, animation strategy, or UI performance inst
   safe zones, narrow/wide aspect ratios, and UI scale.
 - Format numbers, dates, times, plurals, and currencies through culture-aware `FText` APIs. Do not
   concatenate sentence fragments or convert display text through `FString` and lose text history.
+- Name each menu item, tab, label and column header for what it holds, readable alone: no pronoun
+  whose noun sits elsewhere (`What it does` becomes `Description`).
 - Critical meaning cannot rely on color, hover, sound, or animation alone. Keep focus visible and
   navigation complete without a mouse.
 - Screen-reader support is experimental and platform-limited in Epic's 5.8 documentation; implement

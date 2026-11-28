@@ -56,7 +56,7 @@ also touches the databases, so in CI give it the test database.
   the symptom is 403s everywhere else. Derive only when the source field changed, or compute it as a
   property, and test the explicit path.
 
-## Write it once, leave nothing unused
+## Write code once, leave nothing unused
 
 Duplication and dead code arrive one reasonable change at a time, often from different agents each
 revising code they did not write, and every copy is a place the next fix misses:

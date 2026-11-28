@@ -105,6 +105,11 @@ Use one visually dominant action in each decision region and label its truthful 
 `See my quote options` or `Book a 20-minute demo`, not `Submit` or a result the next screen cannot
 deliver. Keep its meaning consistent through activation, pending, acceptance, and confirmation.
 
+A visitor scanning the page reads the headings and little else, so every headline, section heading,
+feature label and table column header says what it covers when read alone. Name the feature, not a
+slogan whose pronoun or riddle the body must decode: `Take it anywhere` becomes `Export to PDF or
+EPUB`, and a column `What it does` becomes `Includes`.
+
 For a product page, preserve the advertised product, variant, price, terms, availability, and actual
 purchase path. For a lead page, justify every field by the fulfillment, qualification, routing,
 contact, or compliance decision it serves. Make loading, errors, duplicate protection, backend

@@ -132,7 +132,7 @@ The path is a plan. Movement is a separate layer.
 - Move a group as one virtual leader on one shared route, with members steering around it at no more
   than the slowest member's speed.
 
-## Prove it
+## Prove the pathfinding
 
 - A* matches the Dijkstra oracle in cost and legality, on fixtures and on public benchmark maps
   (grid maps with scenario files that list optimal lengths).

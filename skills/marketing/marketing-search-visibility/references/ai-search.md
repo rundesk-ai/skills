@@ -299,7 +299,7 @@ In order, and the first four are just SEO done properly:
   documented requirement is an SEO requirement, and the one experimental result points at citation
   quality, which the dependency ladder already ranks last-but-most-durable.
 
-## Measuring it
+## Measuring AI visibility
 
 Read [measurement](measurement.md) before reporting any AI-visibility number: it covers the Search
 Console generative-AI report (impressions only, not in the API), Bing's AI Performance report, AI

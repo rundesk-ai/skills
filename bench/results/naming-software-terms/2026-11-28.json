@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-28",
+  "subject": "naming-software-terms",
+  "kind": "skill",
+  "skill_hash": "421b7d2c58b36eca",
+  "compared": {"old": "v1.8.4", "new": "the working tree: a label, column header, title or navigation item never leans on a pronoun whose noun is elsewhere, with 'What it does' becoming 'Description'"},
+  "cases_run": ["integrations table on an admin screen, brief phrased 'what the integration does', 'who can use the integration'"],
+  "runs_per_arm": 2,
+  "agents": {"claude": {"model": "claude-opus-5-5", "pronoun_column_headers": {"new": "0/2", "old": "0/2"}, "better": 0, "same": 1, "worse": 0}},
+  "method": "Scratch folders outside the repository; counted by hand.",
+  "notes": "No difference: v1.8.4 already names columns by their value ('Purpose', 'Access', 'Last used'). The added line and example row cost a few words and keep the rule stated where interface labels are named."
+}

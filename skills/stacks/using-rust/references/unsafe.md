@@ -37,7 +37,7 @@ Tests pass straight through it, which is why the checks below exist.
 | `unsafe impl Send` to fix a spawn | restructure so the non-`Send` value is not held across an await |
 | a raw pointer into a `Vec` kept across a push | an index; a push may reallocate and leave the pointer dangling |
 
-## Prove it
+## Prove the unsafe code
 
 ```sh
 cargo clippy --all-targets -- -W clippy::undocumented_unsafe_blocks -W clippy::multiple_unsafe_ops_per_block

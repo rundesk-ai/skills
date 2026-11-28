@@ -61,7 +61,7 @@ After:  She raises her right hand to shoulder height and gives two quick waves, 
         all in about two seconds.
 ```
 
-## It reads as a still
+## The take reads as a still
 
 The loop or rest hold looks like a photograph, or the generator jumps to sudden motion to fill the
 time. The prompt asked for nothing, or for "no movement".

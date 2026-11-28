@@ -132,7 +132,7 @@ other structures still hold its id (a ban list, an index, a cache, a selection) 
 that later code trusts. When you write the removal, list every structure that stores the id and
 clear it there too, and add a test that removes one and uses what referred to it.
 
-## Built ahead of its reader
+## Code built ahead of its reader
 
 ```csharp
 // Bad: computed every rebuild, published, tested, and read by nothing in the game.

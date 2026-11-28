@@ -33,6 +33,7 @@ A value or entity name states what it represents. An operation name states the o
 | Layer | Mechanism (wrong) | Meaning (right) |
 |---|---|---|
 | Column header | `How retries are handled` | `Retry limit` |
+| Column header | `What it does` | `Description` |
 | Field label | `Why is this archived?` | `Reason` |
 | DB column | `retry_mode_flag_2` | `retry_limit` |
 | Function | `processData()` | `normalizeAddress()` |
@@ -48,7 +49,7 @@ Assume you are about to commit one of these and check explicitly.
 `How retries are handled` → `Retry limit`. `handleUserStuff()` → `deactivateUser()`. The name describes the process rather than identifying the thing.
 
 **2. Question words and sentences where value names or compact labels belong.**
-`Why` → `Reason`. `Who asked` → `Requester`. `did_the_user_confirm` → `is_confirmed`. Name values and entities with noun phrases or established state terms; name actions with verbs. A form journey may deliberately use a direct question when that pattern helps the user.
+`Why` → `Reason`. `Who asked` → `Requester`. `did_the_user_confirm` → `is_confirmed`. Name values and entities with noun phrases or established state terms; name actions with verbs. A form journey may deliberately use a direct question when that pattern helps the user. A label, column header, title or navigation item is often read alone, so it never leans on a pronoun whose noun is elsewhere: `What it does` names nothing a scanning reader can see; `Description` names what the column holds.
 
 **3. Blending two jobs into one string.**
 A label trying to also be an explanation. A function name trying to describe its whole algorithm. A column name carrying its own documentation. Split it: the noun stays, the explanation moves to a tooltip, a docstring, or a comment.

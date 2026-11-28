@@ -9,7 +9,7 @@ The largest published study of flaky-test fixes — 201 commits across 51 Apache
 root causes into ten categories. Three dominate, and they are worth checking in this order because
 the distribution is that lopsided:
 
-| Category | Share of classified commits | What it looks like |
+| Category | Share of classified commits | What the flake looks like |
 |---|---|---|
 | Async wait | 74 of 201 | The test asserts before the work it triggered has finished |
 | Concurrency | 32 of 201 | Two threads race on shared memory |
@@ -52,7 +52,7 @@ If the rate is zero in isolation, that is itself a result — go straight to ord
 
 Vary exactly one thing at a time. Each result eliminates a category.
 
-| Run | If it now fails | If it still passes |
+| Run | If the test now fails | If the test still passes |
 |---|---|---|
 | The test alone, repeatedly | Not order-dependent — look at async, concurrency, or time | Order dependency; find the polluting test |
 | The suite in a fixed order, repeatedly | Non-determinism inside the test | Order or shared state |

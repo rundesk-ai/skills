@@ -76,7 +76,7 @@ link out of the skill's own directory, and twenty skills here link
 - no other skill named, because the project receiving this one may not take that one;
 - every link inside the skill resolves to a file the skill ships.
 
-## 5. Record it
+## 5. Record the check in sources.md
 
 Update `references/sources.md` in place: correct entries, remove dead ones, and end the file with a
 single line saying when it was last checked and against what. Leave a source you could not open in

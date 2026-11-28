@@ -91,7 +91,7 @@ anonymous summary, or unsupported project anecdote is not evidence.
   contributors, is the practitioner basis for introducing warnings, analyzers, sanitizers, and
   optimized-build measurement as a coherent quality ratchet.
 
-## Write it once
+## Write code once
 
 The write-once rules come from the cleanup history of a private multi-project C# simulation (2026-10), where about two dozen review rounds found formulas retyped in several files, a lookup copied three times with two tolerances, mirror-image methods, view code re-deriving model rules, outputs published with no reader, and replaced paths left behind, although its instructions already said to search before writing new logic. They are stack-neutral; the tooling line below is this language's.
 

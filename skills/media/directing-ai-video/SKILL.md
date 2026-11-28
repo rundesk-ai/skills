@@ -144,7 +144,7 @@ Good: She shifts her weight onto her left foot and takes two unhurried steps tow
 Bad:  She gracefully glides to the window.
 ```
 
-## Keep it subtle and human
+## Keep motion subtle and human
 
 Generators exaggerate: a smile becomes a grin, a glance becomes a head swing, a nod becomes a bow,
 a step becomes a stride. Exaggeration is what makes footage read as generated, and a face pulled
@@ -243,7 +243,7 @@ API or an agent's built-in video tool.
 Read [frames and assembly](references/frames-and-assembly.md) for the commands before extracting a
 frame, sampling a clip or joining clips.
 
-## QC before calling it done
+## QC before calling the footage done
 
 - [ ] Every clip had a plain brief (motion, route, camera, keep); a reel's shot list preceded it.
 - [ ] The log has every take, with a reason for each rejection.

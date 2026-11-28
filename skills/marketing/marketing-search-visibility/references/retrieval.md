@@ -42,7 +42,7 @@ A `robots.txt` served as `4xx` is treated by crawlers as absent, so **file-exist
 Every page inspection returns these, in this order, or says which could not be established and why.
 An audit missing a row is incomplete, not concise.
 
-| Field | How it is retrieved |
+| Field | Retrieval method |
 |---|---|
 | Final status and redirect chain | `curl -sSI -L`, reading every hop, not only the last |
 | `Location` form on each hop | absolute or relative — a relative target resolves against the current directory |

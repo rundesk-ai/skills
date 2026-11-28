@@ -43,7 +43,7 @@ it into CMake. Do not introduce a newer language feature or raise the floor with
 | separate build directories for concurrent/configuration-specific work | concurrent writers in one Ninja tree | duplicated commands and shared build-state races |
 | compiler, sanitizer, or failing-test evidence | “this looks wrong” | speculative review findings |
 
-## Write it once, for a reader that exists
+## Write code once, for a reader that exists
 
 Duplication and dead code arrive one reasonable edit at a time, often from different agents each
 revising code they did not write, and every copy is a place the next fix misses:

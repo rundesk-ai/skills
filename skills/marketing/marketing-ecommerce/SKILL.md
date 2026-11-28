@@ -59,6 +59,9 @@ Treat these as distinct discovery jobs:
 
 Keep active filters and sort visible, preserve state across back navigation, and provide a useful
 zero-results recovery path. Never silently substitute unrelated products and imply they match.
+Name every menu item, category, filter, comparison-table column and product-page section for what
+it holds, readable alone: a shopper scanning sees only the label, so `What it does` becomes
+`Description` and `Made for you` becomes the category's own name.
 
 Read [discovery-merchandising-and-products.md](references/discovery-merchandising-and-products.md)
 when specifying the homepage, navigation, catalog taxonomy, onsite search, autocomplete, product

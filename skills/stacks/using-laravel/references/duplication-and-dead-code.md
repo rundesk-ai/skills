@@ -10,7 +10,7 @@ Laravel calls most code by convention or by string, so a search for the method n
 readers. Before writing a rule, search for its existing home this way; before deleting anything,
 search for its readers this way.
 
-| The code | Its readers appear as |
+| The code | Readers appear as |
 | --- | --- |
 | Scope `active` (`#[Scope] active()` or legacy `scopeActive()`) | `->active(`, `::active(` |
 | Accessor `totalWithVatCents()` returning `Attribute`, or legacy `getTotalWithVatCentsAttribute()` | `total_with_vat_cents` in PHP, Blade, `$appends`, API resources and front-end code |
@@ -132,7 +132,7 @@ Correct — one Form Request, injected wherever the input arrives:
 public function store(StoreOrderRequest $request) { ... }
 ```
 
-## Built ahead of its reader
+## Code built ahead of its reader
 
 Incorrect — data handed to a view that never shows it, an accessor appended to every serialization
 for a screen that does not exist yet, an event with no listener:
@@ -166,7 +166,7 @@ translation keys only they used, and the tests that only covered them, until not
 - **Artisan commands run by cron, by hand or by a deploy script**, and routes linked from outside the
   app (emails, other services).
 
-## The tools see little of it
+## The tools see little dead code
 
 PHP reports no unused code, and Laravel calls most code by string or convention, so static analysis
 cannot prove a controller, view, job or listener unused. `php artisan route:list`, `event:list` and

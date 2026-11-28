@@ -21,7 +21,7 @@ php artisan route:list --path=orders
 
 ## See what actually happened
 
-| Question | Where it is already recorded |
+| Question | Where the answer is already recorded |
 |---|---|
 | What was the exception, and where | `storage/logs/laravel.log`, or your log channel |
 | What queries ran for this request | Telescope, Debugbar, or `DB::listen` |

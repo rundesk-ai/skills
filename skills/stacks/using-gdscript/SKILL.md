@@ -102,7 +102,7 @@ Read [Simulation scale](references/simulation-scale.md) before writing a grid, a
 or a chunked world, and [Determinism and saves](references/determinism-and-saves.md) before a replay, a
 save format or anything seeded.
 
-## Write it once, for a reader that exists
+## Write code once, for a reader that exists
 
 Duplication and dead code arrive one reasonable edit at a time, often from different agents each
 revising code they did not write, and every copy is a place the next fix misses:
@@ -130,7 +130,7 @@ default on an unused variable, parameter, signal and `_`-prefixed member variabl
 unused function, and one called by name (`call`, a string `connect`, a connection saved in a scene) is
 found only by searching the `.tscn` and `.tres` files too.
 
-## Prove it
+## Prove a change
 
 Warnings never reach a headless run, and errors rarely reach the exit code, so prove a change in three
 steps:

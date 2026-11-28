@@ -4,7 +4,7 @@ Read this before planning footage that must play as one unbroken view: a person 
 looping and leaving with no visible cut. Every clip starts on the real last frame of the clip
 before it, so the joins are identical frames and the eye sees one shot.
 
-## The rules that make it continuous
+## The rules that make a chain continuous
 
 - **Start every clip on the real last frame** of the accepted clip before it, extracted exactly,
   never on a regenerated look-alike. A look-alike differs in a hundred small places, and every one

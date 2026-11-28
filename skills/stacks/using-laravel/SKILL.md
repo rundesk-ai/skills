@@ -65,7 +65,7 @@ Cross-cutting changes often need more than one rule file.
 | Code-review triage across Laravel concerns | [`references/review-triage.md`](references/review-triage.md) |
 | Finding an existing rule before writing one; removing what a change left unused | [`references/duplication-and-dead-code.md`](references/duplication-and-dead-code.md) |
 
-## Write It Once, Leave Nothing Unused
+## Write Code Once, Leave Nothing Unused
 
 Duplication and dead code arrive one reasonable change at a time, often from different agents each
 revising code they did not write, and every copy is a place the next fix misses:

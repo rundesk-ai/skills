@@ -38,7 +38,7 @@ must reach: callers, tests, fixtures, configuration, exports, documentation. Tha
 scope; a feature nobody asked for is not. Ask the owner only when the answer cannot be found and
 would change the outcome or the authority — a gap in a ticket goes back as a question, not a guess.
 
-## 2. Size it
+## 2. Size the work
 
 Decide this before choosing a solution, because it decides whether the work is sliced at all:
 
@@ -56,7 +56,7 @@ Decide this before choosing a solution, because it decides whether the work is s
 - **Discovery** — one unknown that changes the approach: ask the one question, read only what
   answers it, and stop.
 
-## 3. Find the least work that solves it
+## 3. Find the least work that solves the problem
 
 Take the first rung that fully works, and record which one and why:
 
@@ -84,7 +84,7 @@ Code you move or merge keeps its own: a consolidation that drops a guard is a re
 Shape a large request before cutting it: find what is going wrong today, set what the outcome is
 worth, and split a grab-bag ("redesign X", "v2") into separate outcomes, each with its own contract.
 
-## 4. Slice it
+## 4. Slice the work
 
 Slice vertically: each slice is a thin path that works end to end and can be observed. Never slice
 by layer — schema, then API, then interface leaves everything nearly done and nothing usable. Start
@@ -147,7 +147,7 @@ few-step change yourself: writing the handoff and checking what returns cost mor
   public contracts, concurrency. Read [Coordination](references/coordination.md) for the risk
   responses.
 
-## 8. Prove it and hand it over
+## 8. Prove the work and hand it over
 
 Done means every **Done when** line traced to observed evidence: focused checks and the repository's
 gate passed, a representative path produced the expected result, named risks have their proof, and

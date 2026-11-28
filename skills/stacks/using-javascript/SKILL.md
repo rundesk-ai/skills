@@ -101,7 +101,7 @@ TypeScript checks nothing at run time, and Node and most bundlers strip types wi
 Validate data where it enters, and run the type check as its own step (the command is below). Read
 [TypeScript](references/typescript.md) for the compiler options that decide what it catches.
 
-## Write it once, for a reader that exists
+## Write code once, for a reader that exists
 
 Duplication and dead code arrive one reasonable edit at a time, often from different agents each
 revising code they did not write, and every copy is a place the next fix misses:
@@ -129,7 +129,7 @@ and `noUnusedParameters` report an unexported declaration and a parameter, never
 imports: keep a helper unexported until a second module needs it, and before adding or keeping an
 export, search every importer, dynamic imports and string-keyed registries included.
 
-## Prove it
+## Prove a change
 
 ```sh
 node --test                                # built-in runner; fails a file that leaves a floating rejection

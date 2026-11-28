@@ -262,7 +262,7 @@ A repository whose floor is a Python version past end of life (check
 <https://devguide.python.org/versions/>) is worth flagging — but do not raise its floor without being
 asked.
 
-## Review order for these
+## Review order for documented traps
 
 1. Anything that silently produces a wrong value — shared mutable state, late binding, naive datetimes.
 2. Anything that hides a failure — bare `except`, `try/except/pass`, `finally` returns.

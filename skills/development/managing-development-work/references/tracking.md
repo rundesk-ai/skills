@@ -12,7 +12,7 @@ this turn, or when an existing tracker already holds the scope, state, next acti
 When a ticket or plan exists, link it and keep only the execution state it does not hold; a stale
 brief never overrides its source.
 
-## Where it lives
+## Where the brief lives
 
 A brief exists for the next session, so it must be somewhere that session will look. A scratch
 directory tied to the current session is gone by then. Take the first of these that exists:
@@ -45,7 +45,7 @@ Name it `YYYY-MM-DD-<outcome>.md`; one brief per outcome, updated in place.
 Write current facts. **Slices** is the slice list with each one's rung, state and observed proof.
 **Decisions** holds only choices a later session must not reopen.
 
-## When to update it
+## When to update the brief
 
 After a slice is proven, a decision changes, a delegation goes out or comes back, a blocker appears,
 or before ending a turn with work unfinished — then make **Next action** executable. Do not record

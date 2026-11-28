@@ -19,7 +19,7 @@ first requirement that moves one of them proves it.
 The question is never whether two places look alike. It is: **when this rule changes, must both
 places change together?**
 
-| In the change | Why it is a finding |
+| In the change | Why the pattern is a finding |
 |---|---|
 | A block copied to a second module with a value or two altered | One rule, two homes; the next correction lands in one of them |
 | A conditional chain repeated per case, gaining a branch with each new case | The shape is a lookup written out longhand; every addition edits the same chain |
@@ -50,7 +50,7 @@ Use the working definition of *too complex* in
 [quality-and-conventions.md](quality-and-conventions.md#where-naming-size-and-structure-become-findings):
 code the people who will read it cannot understand quickly. The reviewer is one of those readers.
 
-| In the change | The question it fails |
+| In the change | The question the pattern fails |
 |---|---|
 | An interface, base class, strategy, or factory with one implementation and no second caller | What does the indirection buy that a direct call does not? |
 | A wrapper around a wrapper, each adding a name and no behavior | Which layer would a reader have to open to find the rule? |
@@ -78,7 +78,7 @@ makes every later change to that area more expensive to read and modify, and if 
 wrong the work is repaid twice — once to build and once to unpick. The middle two costs land even
 when the guess turns out right.
 
-| In the change | The evidence it is unneeded |
+| In the change | The evidence the code is unneeded |
 |---|---|
 | A parameter or option every call site passes the same value for | One value, no second caller |
 | A function, endpoint, component, or command nothing invokes | No reference anywhere in the tree |

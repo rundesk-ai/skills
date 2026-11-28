@@ -95,7 +95,7 @@ a `static` or global cache grows without end, and state set for one request is s
 Read [Performance and memory](references/performance-and-memory.md) before optimizing or running PHP
 that way.
 
-## Write it once, for a reader that exists
+## Write code once, for a reader that exists
 
 Duplication and dead code arrive one reasonable edit at a time, often from different agents each
 revising code they did not write, and every copy is a place the next fix misses:
@@ -122,7 +122,7 @@ Two or three repeated lines, or one number meaning two things, are not duplicati
 no unused code: keep members `private` so a search of one class proves them unused, and for anything
 public search every caller, string callables, container configuration and templates included.
 
-## Prove it
+## Prove the change
 
 ```sh
 php -l src/File.php                                       # with the lowest PHP the code must run on

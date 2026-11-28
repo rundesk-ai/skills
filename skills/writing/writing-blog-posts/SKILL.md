@@ -20,7 +20,7 @@ This matters more here than in most places. The owner writes for developers and 
    - Notes or bullets: structural edit. Find the point the owner is making, then order their points so each leads to the next and the post builds to it; when you can't tell what the point is, ask in the report rather than picking one. Turn them into flowing paragraphs in their voice, with headings only if it's a post a reader navigates (see [Notes should become prose](#notes-should-become-prose-not-tidied-bullets)). The sentences can be new; the content can't.
    - Devlog notes: see [devlogs](references/devlogs.md).
 
-4. **Edit.** Follow [the one rule](#the-one-rule-add-nothing-the-owner-didnt-give-you) and [sound like a person](#it-has-to-sound-like-a-person-wrote-it) below. Keep their stance at the same strength. Remove the AI tells in [AI tells](references/ai-tells.md). Follow the voice guide's rules.
+4. **Edit.** Follow [the one rule](#the-one-rule-add-nothing-the-owner-didnt-give-you) and [sound like a person](#the-post-has-to-sound-like-a-person-wrote-it) below. Keep their stance at the same strength. Remove the AI tells in [AI tells](references/ai-tells.md). Follow the voice guide's rules.
 
 5. **Check facts the owner stated.** You may research to verify the owner's own claims. If one looks wrong or outdated, don't silently fix it; flag it in the report with the source. If a claim would benefit from a link, suggest the link in the report and let the owner decide. Only suggest a link you actually opened and confirmed says what you claim it says. A URL from memory is a guess, and a guess handed to the owner as a source is the same kind of invention this skill exists to prevent. If you can't verify one, leave it out. The same goes for the owner's own posts: only suggest linking one that is published, not a draft, because a draft's link would break.
 
@@ -49,7 +49,7 @@ When the owner asks you to cut or shorten, cut whole sentences, clauses or phras
 
 Models asked only to fix grammar still drift the meaning and neutralize the author's stance, and they tend to rewrite for fluency when a minimal edit was asked for (see [sources](references/sources.md)). So edit at the lowest level that fixes the problem, and keep the owner's distinctive phrasing word for word unless it's actually broken.
 
-## It has to sound like a person wrote it
+## The post has to sound like a person wrote it
 
 Faithful content isn't enough. If the piece reads like AI wrote it, readers will assume AI wrote it, and the owner loses the trust the post was meant to build. The finished piece should sound like the owner talking to a friend who builds things too: personal, warm, a little opinionated, sometimes rough. Never clinical, cold, corporate, or polished to the point of sounding like a press release.
 
@@ -69,7 +69,7 @@ Faithful isn't the same as finished. A common miss is keeping one sentence per l
 - Vary the rhythm: a longer sentence that carries the reasoning, then a short one that lands it. One-line paragraphs are for emphasis, not the default: one or two in a whole post. If most of your paragraphs are a single sentence or map one-to-one onto the owner's bullets, merge again.
 - Short notes make a short post, and that's fine. Short isn't the problem; choppy is. A 250-word post in three real paragraphs reads better than the same words in nine fragments.
 - Headings only where they help a reader navigate. An opinion or story post (the owner sharing a take, a frustration, a lesson) gets no headings by default: it runs as one piece, joined by spoken transitions built from the owner's lines ("And PRs are where I notice it most"), with at most one `---` before the closing thought. Headings belong in posts a reader jumps around in: tutorials, comparisons, reference lists, long build stories, postmortems. A heading every couple of paragraphs makes a blog post read like a website with sections, and each one resets the voice. Never put a heading over a single short paragraph, and don't add headings to a draft the owner already wrote as flowing prose.
-- When a heading earns its place, write it in sentence case and label what the section actually holds, so a reader skimming knows what's there. "How I fixed it with skills" says something; "How I push it to do better" doesn't.
+- When a heading earns its place, write it in sentence case and label what the section actually holds, so a reader skimming knows what's there. "How I fixed flaky tests with skills" says something; "How I push it to do better" doesn't. A heading or table column header with a pronoun whose noun isn't on the same line ("What it does") names nothing to a skimmer; name the thing ("Description").
 - Keep each point next to the point it supports. Reorder to improve flow, but don't move a line away from the idea the owner tied it to (a story about scale belongs beside the lesson it illustrates, not in the intro).
 
 Here's the difference, using notes that say "the feel of a game is the whole thing. you cant prompt your way to a jump that feels good. you have to play it 100 times and tweak" and "been making games since flash. my first ones were terrible lol":

@@ -82,7 +82,7 @@ message that it worked seamlessly with all user files with no material limitatio
 size, length, or number — and required some claims be modified or discontinued. **Implied capability
 breadth is itself a claim requiring support.**
 
-## What this means for your analysis
+## What the claim standards mean for your analysis
 
 - **Never repeat a competitor's superlative as a fact.** Write "they claim X" and state whether a
   basis was published. If their "#1" rests on a review platform, the precedent above says that is

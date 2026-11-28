@@ -72,7 +72,7 @@ solidify of 1 cm is three different thicknesses. The geometry looks deliberate a
 - **Density follows the camera.** Geometry smaller than a few pixels at the target distance is cost with
   no return; put that detail in the surface treatment instead.
 
-## Before it leaves Blender
+## Before the model leaves Blender
 
 - Apply the transforms, or know exactly which the exporter will apply for you.
 - Apply or bake the modifier stack, or export with modifier evaluation on — and be able to say which.

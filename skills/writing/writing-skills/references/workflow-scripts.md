@@ -5,7 +5,7 @@ every time than described in prose for an agent to reinterpret. Prose describing
 is a script that has not been written yet, and every agent that reads it reconstructs it slightly
 differently.
 
-## Make it earn its place
+## Make a script earn its place
 
 Ship a script when it replaces work an agent would otherwise redo each time: a transformation with
 one correct answer, a validation with a fixed rule, an assembly step with an exact order.

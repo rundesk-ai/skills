@@ -211,7 +211,7 @@ Expand a category to browse its skills. Each link opens the skill's instructions
 The catalog also includes five focused reviewers. Skills guide an agent's work; subagents define a
 separate reviewer you can delegate a task to in an agent CLI that supports them.
 
-| Subagent | Use it for |
+| Subagent | Used for |
 |---|---|
 | [Code quality reviewer](subagents/code-quality-reviewer.md) | Auditing existing code for bugs, convention violations, and improvements worth making. |
 | [Simplicity reviewer](subagents/dry-simplicity-reviewer.md) | Finding duplication, redundant logic, and unnecessary complexity. |

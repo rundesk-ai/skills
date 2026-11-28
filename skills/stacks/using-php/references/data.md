@@ -11,7 +11,7 @@ what went in.
 
 ## Numbers and money
 
-| Code | Result | Why it matters |
+| Code | Result | Why the result matters |
 |---|---|---|
 | `PHP_INT_MAX + 1` | a float, and `PHP_INT_MAX + 1 == PHP_INT_MAX` is true | silent overflow; counters and ids stop changing |
 | `(int)(PHP_INT_MAX + 1)` | `PHP_INT_MIN` | an out-of-range cast wraps silently (8.5 warns) |

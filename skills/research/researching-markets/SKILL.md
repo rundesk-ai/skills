@@ -68,7 +68,7 @@ evidence, and it is the most common way a market estimate becomes falsely certai
 
 ## Say what kind of number you produced
 
-| Label it | When |
+| Label | When |
 |---|---|
 | Counted | Every input came from a statistical or audited source at the stated scope |
 | Estimated | Counted inputs plus stated assumptions, reported as a range |

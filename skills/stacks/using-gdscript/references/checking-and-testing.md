@@ -37,7 +37,7 @@ Use them only where the project already does — `gdformat` rewrites every file 
 project that never used it the diff is the whole codebase. Its naming rules match the official style
 guide; `gdlint -d` prints the configuration, and a `gdlintrc` in the project overrides it.
 
-## Run it with a verdict
+## Run the game with a verdict
 
 ```sh
 "$GODOT" --headless --path . --log-file run.log --quit-after 300 -- --smoke

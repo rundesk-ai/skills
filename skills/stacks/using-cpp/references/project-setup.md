@@ -13,7 +13,7 @@ target_compile_features(simcore PUBLIC cxx_std_20)
 target_link_libraries(simcore PRIVATE fmt::fmt)
 ```
 
-| Scope | Target uses it | Consumers inherit it |
+| Scope | Used by the target | Inherited by consumers |
 |---|---:|---:|
 | `PRIVATE` | yes | no |
 | `PUBLIC` | yes | yes |

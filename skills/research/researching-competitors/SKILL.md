@@ -28,7 +28,7 @@ Reading a competitor's pricing page as one published source is research. Auditin
 canonical, indexing, or field performance is not. When a request needs both, say so and treat them as
 two pieces of work with different evidence standards.
 
-## Start with what they were obliged to file
+## Start with what competitors were obliged to file
 
 Ranked by how hard it is to lie in:
 
@@ -60,7 +60,7 @@ So a pricing page establishes the **published offer**, its packaging, and its me
 establish what anyone paid. `references/pricing-and-claims.md` covers where filings disclose the
 price-versus-volume split, and what published pricing structures can and cannot tell you.
 
-## Their claims — and yours — have a legal standard
+## Competitors' claims — and yours — have a legal standard
 
 Comparative advertising is encouraged, not discouraged: the FTC's policy statement encourages naming or
 referring to competitors, but requires clarity and, where necessary, disclosure to avoid deception,

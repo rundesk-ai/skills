@@ -15,6 +15,9 @@ Before coding, identify the page size, audience, content hierarchy, brand colors
 and final filename from the request and available files. When details are absent, use a
 restrained document system: Letter or A4 as context suggests, 0.65-0.8 inch margins, one
 body typeface, one heading family, and a small color palette with strong contrast.
+Write each heading and table column header so a reader who skims only it knows what the section or
+column holds: it names the content, with no pronoun whose noun is elsewhere (`What it does`
+becomes `Description`).
 
 Inspect the local toolchain:
 
